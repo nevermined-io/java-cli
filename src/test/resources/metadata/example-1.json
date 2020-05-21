@@ -1,0 +1,57 @@
+{
+  "base": {
+    "name": "UK Weather information 2011",
+    "type": "dataset",
+    "description": "Weather information of UK including temperature and humidity",
+    "dateCreated": "2012-10-10T17:00:000Z",
+    "author": "Met Office",
+    "license": "CC-BY",
+    "copyrightHolder": "Met Office",
+    "workExample": "423432fsd,51.509865,-0.118092,2011-01-01T10:55:11+00:00,7.2,68",
+    "files": [
+            {
+              "url": "https://keyko.io/privacy-policy",
+              "index": 0,
+              "checksum": "efb2c764274b745f5fc37f97c6b0e761",
+              "contentLength": "4535431",
+              "contentType": "text/csv",
+              "encoding": "UTF-8",
+              "compression": "zip",
+              "resourceId": "access-log2018-02-13-15-17-29-18386C502CAEA932"
+            }
+        ],
+    "links": [
+      {
+        "url": "http://data.ceda.ac.uk/badc/ukcp09/data/gridded-land-obs/gridded-land-obs-daily/"
+      },
+      {
+        "url": "http://data.ceda.ac.uk/badc/ukcp09/data/gridded-land-obs/gridded-land-obs-averages-25km/"
+      },
+      {
+        "url": "http://data.ceda.ac.uk/badc/ukcp09/"
+      }
+    ],
+    "inLanguage": "en",
+    "tags": ["weather", "uk", "2011", "temperature", "humidity"],
+    "price": "10"
+
+  },
+  "curation": {
+    "rating": 0.93,
+    "numVotes": 123,
+    "schema": "Binary Votting",
+    "isListed": true
+  },
+  "additionalInformation": {
+    "updateFrecuency": "yearly",
+    "structuredMarkup": [{
+      "uri": "http://skos.um.es/unescothes/C01194/jsonld",
+      "mediaType": "application/ld+json"
+    },
+      {
+        "uri": "http://skos.um.es/unescothes/C01194/turtle",
+        "mediaType": "text/turtle"
+      }
+    ]
+  }
+}

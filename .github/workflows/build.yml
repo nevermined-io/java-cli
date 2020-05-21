@@ -1,0 +1,30 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Starting Nevermined Tools
+        run: |
+          git clone https://github.com/keyko-io/nevermined-tools
+          rm -rf ~/.nevermined/nevermined-contracts/artifacts
+          cd nevermined-tools
+          sudo bash -x start_nevermined.sh --no-commons --no-faucet --no-dashboard --latest 2>&1 > start_nevermined.log &
+          cd ..
+
+      - name: Install Java and Maven
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Run tests
+        run: |
+
+          mvn clean verify -P integration-test

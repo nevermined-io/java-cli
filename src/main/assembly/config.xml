@@ -1,0 +1,17 @@
+<assembly>
+    <id>config</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <directory>src/main/resources</directory>
+            <outputDirectory>${file.separator}</outputDirectory>
+            <includes>
+                <include>**/*.properties</include>
+                <include>**/*.conf</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</assembly>
