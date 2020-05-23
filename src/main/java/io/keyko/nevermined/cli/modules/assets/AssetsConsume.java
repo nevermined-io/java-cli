@@ -1,13 +1,11 @@
 package io.keyko.nevermined.cli.modules.assets;
 
-import io.keyko.nevermined.cli.AssetsCLI;
+import io.keyko.nevermined.cli.AssetsCommand;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
 import io.keyko.nevermined.exceptions.ConsumeServiceException;
 import io.keyko.nevermined.exceptions.DIDFormatException;
 import io.keyko.nevermined.models.DID;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
@@ -17,13 +15,11 @@ import java.util.concurrent.Callable;
         description = "Download a previously ordered asset given a DID")
 public class AssetsConsume implements Callable {
 
-    private static final Logger log = LogManager.getLogger(AssetsConsume.class);
-
     @CommandLine.ParentCommand
-    AssetsCLI parent;
+    AssetsCommand command;
 
-    @CommandLine.Spec
-    public CommandLine.Model.CommandSpec spec;
+    @CommandLine.Mixin
+    io.keyko.nevermined.cli.helpers.Logger logger;
 
 
     @CommandLine.Parameters(index = "0")
@@ -42,26 +38,28 @@ public class AssetsConsume implements Callable {
     CommandResult consume() throws CLIException {
         try {
             if (null == path || path.isEmpty())
-                path= parent.cli.getMainConfig().getString("consume.basePath");
+                path= command.cli.getMainConfig().getString("consume.basePath");
 
-            parent.spec.commandLine().getOut().println("Downloading asset with DID " + did);
+            command.println("Downloading asset with DID " + did);
 
             DID assetDid= new DID(did);
 
-            parent.cli.progressBar.start();
+            command.cli.progressBar.start();
 
-            Boolean status = parent.cli.getNeverminedAPI().getAssetsAPI()
+            Boolean status = command.cli.getNeverminedAPI().getAssetsAPI()
                     .consume(serviceAgreementId, assetDid, serviceIndex, path);
 
             if (status)
-                parent.spec.commandLine().getOut().println("Files downloaded to " + path);
+                command.println("Files downloaded to " + path);
             else
                 throw new CLIException("Unable to download files to " + path);
 
         } catch (DIDFormatException | ConsumeServiceException e) {
-            throw new CLIException(e.getMessage());
+            command.printError("Unable to access to files");
+            logger.debug(e.getMessage());
+            return CommandResult.errorResult();
         } finally {
-            parent.cli.progressBar.doStop();
+            command.cli.progressBar.doStop();
         }
         return CommandResult.successResult();
     }

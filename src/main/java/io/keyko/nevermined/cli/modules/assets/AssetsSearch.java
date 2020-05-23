@@ -1,6 +1,7 @@
 package io.keyko.nevermined.cli.modules.assets;
 
-import io.keyko.nevermined.cli.AssetsCLI;
+import io.keyko.nevermined.cli.AssetsCommand;
+import io.keyko.nevermined.cli.helpers.Logger;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
 import io.keyko.nevermined.exceptions.DDOException;
@@ -16,11 +17,10 @@ import java.util.concurrent.Callable;
 public class AssetsSearch implements Callable {
 
     @CommandLine.ParentCommand
-    AssetsCLI parent;
+    AssetsCommand command;
 
-    @CommandLine.Spec
-    public CommandLine.Model.CommandSpec spec;
-
+    @CommandLine.Mixin
+    Logger logger;
 
     @CommandLine.Parameters(index = "0")
     String query;
@@ -35,24 +35,26 @@ public class AssetsSearch implements Callable {
 
         SearchResult searchResult;
         try {
-            parent.spec.commandLine().getOut().println("Searching for: " + query);
+            command.println("Searching for: " + query);
 
-            parent.cli.progressBar.start();
+            command.cli.progressBar.start();
 
-            searchResult= parent.cli.getNeverminedAPI().getAssetsAPI()
+            searchResult= command.cli.getNeverminedAPI().getAssetsAPI()
                     .search(query, offset, page);
 
-            parent.spec.commandLine().getOut().println("\nTotal results: " + searchResult.total_results
+            command.println("\nTotal results: " + searchResult.total_results
                     + " - page: " + searchResult.page
                     + " - total pages: " + searchResult.total_pages);
 
             searchResult.getResults().forEach( ddo -> printSimplifiedDDO(ddo));
 
         } catch (DDOException e) {
-            throw new CLIException("Error with DDO " + e.getMessage());
+            command.printError("Error processing DDO");
+            logger.debug(e.getMessage());
+            return CommandResult.errorResult();
 
         } finally {
-            parent.cli.progressBar.doStop();
+            command.cli.progressBar.doStop();
         }
 
         return CommandResult.successResult().setResult(searchResult);
@@ -60,7 +62,7 @@ public class AssetsSearch implements Callable {
     }
 
     private void printSimplifiedDDO(DDO ddo)    {
-        parent.spec.commandLine().getOut().println("{" +
+        command.println("{" +
                 "\n\t\"did\": \"" + ddo.id + "\", " +
                 "\n\t\"title\": \"" + ddo.getMetadataService().attributes.main.name  + "\", " +
                 "\n\t\"price\": \"" + ddo.getMetadataService().attributes.main.price  + "\" " +

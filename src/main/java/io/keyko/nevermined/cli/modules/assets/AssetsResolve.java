@@ -1,10 +1,11 @@
 package io.keyko.nevermined.cli.modules.assets;
 
-import io.keyko.nevermined.cli.AssetsCLI;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.keyko.nevermined.cli.AssetsCommand;
+import io.keyko.nevermined.cli.helpers.CommandLineHelper;
+import io.keyko.nevermined.cli.helpers.Logger;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
-import io.keyko.nevermined.cli.helpers.CommandLineHelper;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.keyko.nevermined.exceptions.DDOException;
 import io.keyko.nevermined.exceptions.DIDFormatException;
 import io.keyko.nevermined.exceptions.EthereumException;
@@ -20,11 +21,10 @@ import java.util.concurrent.Callable;
 public class AssetsResolve implements Callable {
 
     @CommandLine.ParentCommand
-    AssetsCLI parent;
+    AssetsCommand command;
 
-    @CommandLine.Spec
-    public CommandLine.Model.CommandSpec spec;
-
+    @CommandLine.Mixin
+    Logger logger;
 
     @CommandLine.Parameters(index = "0")
     String did;
@@ -33,20 +33,22 @@ public class AssetsResolve implements Callable {
 
         DDO ddo;
         try {
-            parent.spec.commandLine().getOut().println("Resolving " + did);
+            command.println("Resolving " + did);
 
-            parent.cli.progressBar.start();
+            command.cli.progressBar.start();
 
-            ddo = parent.cli.getNeverminedAPI().getAssetsAPI()
+            ddo = command.cli.getNeverminedAPI().getAssetsAPI()
                     .resolve(new DID(did));
 
-            parent.spec.commandLine().getOut().println();
-            parent.spec.commandLine().getOut().println(CommandLineHelper.prettyJson(ddo.getMetadataService().toJson()));
+            command.println();
+            command.println(CommandLineHelper.prettyJson(ddo.getMetadataService().toJson()));
 
         } catch (DDOException | DIDFormatException | EthereumException | JsonProcessingException e) {
-            throw new CLIException("Error resolving DDO: " + e.getMessage());
+            command.printError("Error resolving asset");
+            logger.debug(e.getMessage());
+            return CommandResult.errorResult();
         } finally {
-            parent.cli.progressBar.doStop();
+            command.cli.progressBar.doStop();
         }
         return CommandResult.successResult().setResult(ddo);
     }

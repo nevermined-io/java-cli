@@ -5,7 +5,7 @@ import picocli.CommandLine;
 
 import java.io.PrintWriter;
 
-public class NeverminedCommand {
+public class NeverminedBaseCommand {
 
     public static final String ERROR_PREFIX = "@|bold,red Error:|@\n";
     public static final String SUCCESS_MESSAGE = "@|bold,green Success [✔] |@";
@@ -17,6 +17,10 @@ public class NeverminedCommand {
 
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;
+
+    public void println()   {
+        println("");
+    }
 
     public void println(String line)   {
         getOut().println(

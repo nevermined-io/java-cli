@@ -1,9 +1,9 @@
 package io.keyko.nevermined.cli.modules.assets;
 
-import io.keyko.nevermined.cli.models.CommandResult;
-import io.keyko.nevermined.cli.AssetsCLI;
-import io.keyko.nevermined.cli.models.exceptions.CLIException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import io.keyko.nevermined.cli.AssetsCommand;
+import io.keyko.nevermined.cli.models.CommandResult;
+import io.keyko.nevermined.cli.models.exceptions.CLIException;
 import io.keyko.nevermined.exceptions.DDOException;
 import io.keyko.nevermined.models.DDO;
 import io.keyko.nevermined.models.asset.AssetMetadata;
@@ -24,10 +24,10 @@ public class AssetsImport implements Callable {
     private static final Logger log = LogManager.getLogger(AssetsImport.class);
 
     @CommandLine.ParentCommand
-    AssetsCLI parent;
+    AssetsCommand command;
 
-    @CommandLine.Spec
-    public CommandLine.Model.CommandSpec spec;
+    @CommandLine.Mixin
+    io.keyko.nevermined.cli.helpers.Logger logger;
 
     @CommandLine.Parameters(index = "0")
     String metadataFile;
@@ -36,21 +36,25 @@ public class AssetsImport implements Callable {
 
         DDO ddo;
         try {
-            parent.spec.commandLine().getOut().println("Importing asset using file " + metadataFile);
+            command.println("Importing asset using file " + metadataFile);
 
-            parent.cli.progressBar.start();
+            command.cli.progressBar.start();
 
-            ddo = parent.cli.getNeverminedAPI().getAssetsAPI()
-                    .create(assetMetadataBuilder(metadataFile), parent.serviceEndpointsBuilder());
+            ddo = command.cli.getNeverminedAPI().getAssetsAPI()
+                    .create(assetMetadataBuilder(metadataFile), command.serviceEndpointsBuilder());
 
-            parent.spec.commandLine().getOut().println("Asset Created: " + ddo.getDid().toString());
+            command.println("Asset Created: " + ddo.getDid().toString());
 
         } catch (IOException e) {
-            throw new CLIException("Error parsing metadata " + e.getMessage());
+            command.printError("Error parsing metadata");
+            logger.debug(e.getMessage());
+            return CommandResult.errorResult();
         } catch (DDOException e) {
-            throw new CLIException("Error with DDO " + e.getMessage());
+            command.printError("Error with DDO");
+            logger.debug(e.getMessage());
+            return CommandResult.errorResult();
         } finally {
-            parent.cli.progressBar.doStop();
+            command.cli.progressBar.doStop();
         }
         return CommandResult.successResult().setResult(ddo);
 

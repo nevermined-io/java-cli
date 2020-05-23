@@ -9,7 +9,7 @@ import picocli.CommandLine;
         name = "accounts",
         subcommands = {AccountsNew.class, AccountsList.class, AccountsBalance.class},
         description = "Allowing to interact with the accounts.")
-public class AccountsCLI extends NeverminedCommand implements Runnable {
+public class AccountsCommand extends NeverminedBaseCommand implements Runnable {
 
     @Override
     public void run() {

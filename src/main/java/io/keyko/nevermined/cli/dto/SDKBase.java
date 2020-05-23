@@ -1,4 +1,4 @@
-package io.keyko.nevermined.dto;
+package io.keyko.nevermined.cli.dto;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -30,7 +30,7 @@ public class SDKBase {
 
 
     public SDKBase() throws CLIException {
-        this(Constants.configFolder);
+        this(Constants.CONFIG_FOLDER);
     }
 
     public SDKBase(String configFolder) throws CLIException {
@@ -96,25 +96,25 @@ public class SDKBase {
     }
 
     private boolean initializeBaseConfig() throws CLIException {
-        if (!fileExists(Constants.configFolder))    {
-            boolean success = (new File(Constants.configFolder)).mkdirs();
+        if (!fileExists(Constants.CONFIG_FOLDER))    {
+            boolean success = (new File(Constants.CONFIG_FOLDER)).mkdirs();
             if (!success) {
-                log.error("Unable to create main config folder " + Constants.configFolder);
-                throw new CLIException("Unable to create main config folder " + Constants.configFolder);
+                log.error("Unable to create main config folder " + Constants.CONFIG_FOLDER);
+                throw new CLIException("Unable to create main config folder " + Constants.CONFIG_FOLDER);
             }
 
         }
 
-        if (!fileExists(Constants.accountsFolder))    {
-            boolean success = (new File(Constants.accountsFolder)).mkdirs();
+        if (!fileExists(Constants.ACCOUNTS_FOLDER))    {
+            boolean success = (new File(Constants.ACCOUNTS_FOLDER)).mkdirs();
         }
 
-        if (!fileExists(Constants.logsConfigFile))    {
-            copyResourceFileToPath("src/main/resources/log4j2.properties", Constants.logsConfigFile);
+        if (!fileExists(Constants.LOGS_CONFIG_FILE))    {
+            copyResourceFileToPath("src/main/resources/log4j2.properties", Constants.LOGS_CONFIG_FILE);
         }
 
-        if (!fileExists(Constants.mainConfigFile))    {
-            copyResourceFileToPath("src/main/resources/application.conf", Constants.mainConfigFile);
+        if (!fileExists(Constants.MAIN_CONFIG_FILE))    {
+            copyResourceFileToPath("src/main/resources/application.conf", Constants.MAIN_CONFIG_FILE);
         }
         return true;
     }

@@ -11,7 +11,7 @@ import picocli.CommandLine;
                 ContractDescribe.class
         },
         description = "Nevermined Smart Contracts interface")
-public class NetworkCLI extends NeverminedCommand implements Runnable {
+public class NetworkCommand extends NeverminedBaseCommand implements Runnable {
 
     @Override
     public void run() {

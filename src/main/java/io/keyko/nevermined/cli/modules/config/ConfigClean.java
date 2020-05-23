@@ -1,6 +1,6 @@
 package io.keyko.nevermined.cli.modules.config;
 
-import io.keyko.nevermined.cli.ConfigCLI;
+import io.keyko.nevermined.cli.ConfigCommand;
 import io.keyko.nevermined.cli.helpers.Constants;
 import io.keyko.nevermined.cli.helpers.Logger;
 import io.keyko.nevermined.cli.models.CommandResult;
@@ -16,7 +16,7 @@ import java.io.IOException;
 public class ConfigClean implements Runnable {
 
     @CommandLine.ParentCommand
-    ConfigCLI command;
+    ConfigCommand command;
 
     @CommandLine.Mixin
     Logger logger;
@@ -25,9 +25,9 @@ public class ConfigClean implements Runnable {
         command.println("Cleaning existing config ...");
 
         try {
-            FileUtils.deleteDirectory(new File(Constants.configFolder));
+            FileUtils.deleteDirectory(new File(Constants.CONFIG_FOLDER));
         } catch (IOException e) {
-            command.printError("Unable to delete config folder " + Constants.configFolder);
+            command.printError("Unable to delete config folder " + Constants.CONFIG_FOLDER);
             logger.debug(e.getMessage());
             return CommandResult.errorResult();
         }

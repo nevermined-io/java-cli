@@ -1,16 +1,13 @@
 package io.keyko.nevermined;
 
 import io.keyko.nevermined.cli.*;
-import io.keyko.nevermined.cli.helpers.ConsoleColors;
 import io.keyko.nevermined.cli.helpers.Version;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
-import io.keyko.nevermined.dto.SDKBase;
+import io.keyko.nevermined.cli.dto.SDKBase;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
 import java.util.concurrent.Callable;
-
-import static io.keyko.nevermined.NeverminedCLI.getVersion;
 
 
 @Command(name = "ncli",
@@ -21,12 +18,12 @@ import static io.keyko.nevermined.NeverminedCLI.getVersion;
                 ""},
         footer = "\nbuilt by Keyko GmbH (https://keyko.io)\n",
         subcommands = {
-            ConfigCLI.class,
-            AccountsCLI.class,
-            TokensCLI.class,
-            AssetsCLI.class,
-            UtilsCLI.class,
-            NetworkCLI.class
+            ConfigCommand.class,
+            AccountsCommand.class,
+            TokensCommand.class,
+            AssetsCommand.class,
+            UtilsCommand.class,
+            NetworkCommand.class
         })
 public class NeverminedCLI extends SDKBase implements Callable {
 

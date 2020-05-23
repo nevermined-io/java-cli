@@ -1,10 +1,9 @@
 package io.keyko.nevermined.cli.modules.contract;
 
-import io.keyko.nevermined.cli.NetworkCLI;
+import io.keyko.nevermined.cli.NetworkCommand;
 import io.keyko.nevermined.cli.helpers.ContractsReflections;
 import io.keyko.nevermined.cli.helpers.Logger;
 import io.keyko.nevermined.cli.models.CommandResult;
-import io.keyko.nevermined.cli.models.exceptions.CLIException;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
@@ -15,7 +14,7 @@ import java.util.concurrent.Callable;
 public class ContractDescribe implements Callable {
 
     @CommandLine.ParentCommand
-    NetworkCLI command;
+    NetworkCommand command;
 
     @CommandLine.Mixin
     Logger logger;

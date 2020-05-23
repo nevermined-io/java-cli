@@ -1,7 +1,6 @@
 package io.keyko.nevermined.cli.modules.tokens;
 
-import io.keyko.nevermined.cli.NeverminedCommand;
-import io.keyko.nevermined.cli.TokensCLI;
+import io.keyko.nevermined.cli.TokensCommand;
 import io.keyko.nevermined.cli.helpers.Logger;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
@@ -11,7 +10,7 @@ import picocli.CommandLine;
 import java.math.BigInteger;
 import java.util.concurrent.Callable;
 
-import static io.keyko.nevermined.cli.helpers.Constants.TransactionSuccess;
+import static io.keyko.nevermined.cli.helpers.Constants.TRANSACTION_SUCCESS;
 
 @CommandLine.Command(
         name = "request",
@@ -19,7 +18,7 @@ import static io.keyko.nevermined.cli.helpers.Constants.TransactionSuccess;
 public class TokensRequest implements Callable {
 
     @CommandLine.ParentCommand
-    TokensCLI command;
+    TokensCommand command;
 
     @CommandLine.Mixin
     Logger logger;
@@ -39,7 +38,7 @@ public class TokensRequest implements Callable {
                     .request(numberTokens)
                     .getStatus();
 
-            if (status.equals(TransactionSuccess))
+            if (status.equals(TRANSACTION_SUCCESS))
                 command.printSuccess();
 
         } catch (EthereumException e) {

@@ -1,6 +1,6 @@
 package io.keyko.nevermined.cli.modules.accounts;
 
-import io.keyko.nevermined.cli.AccountsCLI;
+import io.keyko.nevermined.cli.AccountsCommand;
 import io.keyko.nevermined.cli.helpers.Logger;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
@@ -17,7 +17,7 @@ import java.util.concurrent.Callable;
 public class AccountsList implements Callable {
 
     @CommandLine.ParentCommand
-    AccountsCLI command;
+    AccountsCommand command;
 
     @CommandLine.Mixin
     Logger logger;

@@ -8,7 +8,7 @@ import picocli.CommandLine;
         name = "config",
         subcommands = {ConfigClean.class, ConfigShow.class},
         description = "Reading and setting application config")
-public class ConfigCLI extends NeverminedCommand implements Runnable {
+public class ConfigCommand extends NeverminedBaseCommand implements Runnable {
 
     @Override
     public void run() {

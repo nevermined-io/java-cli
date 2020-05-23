@@ -10,13 +10,13 @@ import picocli.CommandLine;
 
 import static org.junit.Assert.*;
 
-public class AssetsIT {
+public class AssetsIT extends TestsBase {
 
 
     @Test
     public void assetsImport() throws CLIException {
         String[] args= {"assets", "import", "src/test/resources/metadata/example-1.json"};
-        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(), args);
+        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
         assertTrue(result.isSuccess());
         assertTrue(!((DDO) result.getResult()).id.isEmpty());
 
@@ -25,7 +25,7 @@ public class AssetsIT {
     @Test(expected = CommandLine.ExecutionException.class)
     public void assetsImportError() throws CLIException {
         String[] args= {"assets", "import", "dksal/xxxx.json"};
-        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(), args);
+        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
         assertTrue(result.isSuccess());
     }
 
@@ -41,13 +41,13 @@ public class AssetsIT {
                 "--price", "10",
                 "--url", "https://keyko.io/privacy-policy"};
 
-        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(), args);
+        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
         assertTrue(result.isSuccess());
         String did= ((DDO) result.getResult()).id;
         assertTrue(!did.isEmpty());
 
         String[] argsResolve= {"assets", "resolve", did};
-        result = (CommandResult) CommandLine.call(new NeverminedCLI(), argsResolve);
+        result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), argsResolve);
         assertTrue(result.isSuccess());
         assertEquals(did, ((DDO) result.getResult()).id);
 
@@ -57,19 +57,19 @@ public class AssetsIT {
     @Test
     public void assetsImportAndConsume() throws CLIException {
         String[] args= {"assets", "import", "src/test/resources/metadata/example-1.json"};
-        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(), args);
+        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
         assertTrue(result.isSuccess());
         String did= ((DDO) result.getResult()).id;
         assertTrue(!did.isEmpty());
 
         String[] argsOrder= {"assets", "order", did, "-s", "1"};
-        result = (CommandResult) CommandLine.call(new NeverminedCLI(), argsOrder);
+        result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), argsOrder);
         String saId= ((OrderResult) result.getResult()).getServiceAgreementId();
 
         assertTrue(result.isSuccess());
 
         String[] argsConsume= {"assets", "consume", did, "-a", saId, "-s", "1"};
-        result = (CommandResult) CommandLine.call(new NeverminedCLI(), argsConsume);
+        result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), argsConsume);
         assertTrue(result.isSuccess());
 
     }
@@ -85,7 +85,7 @@ public class AssetsIT {
                 "--price", "10",
                 "--url", "https://keyko.io/privacy-policy"};
 
-        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(), args);
+        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
         assertTrue(result.isSuccess());
     }
 
@@ -93,7 +93,7 @@ public class AssetsIT {
     public void assetsResolveError() throws CLIException {
         String[] args= {"assets", "resolve", "did:op:1234"};
 
-        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(), args);
+        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
         assertTrue(result.isSuccess());
     }
 

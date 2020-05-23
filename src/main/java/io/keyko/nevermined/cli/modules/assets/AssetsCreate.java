@@ -1,6 +1,6 @@
 package io.keyko.nevermined.cli.modules.assets;
 
-import io.keyko.nevermined.cli.AssetsCLI;
+import io.keyko.nevermined.cli.AssetsCommand;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
 import io.keyko.nevermined.exceptions.DDOException;
@@ -21,10 +21,10 @@ import java.util.concurrent.Callable;
 public class AssetsCreate implements Callable {
 
     @CommandLine.ParentCommand
-    AssetsCLI parent;
+    AssetsCommand command;
 
-    @CommandLine.Spec
-    public CommandLine.Model.CommandSpec spec;
+    @CommandLine.Mixin
+    io.keyko.nevermined.cli.helpers.Logger logger;
 
 
     // $ ncli assets create --title title --dateCreated 2012-10-10T17:00:000Z
@@ -58,22 +58,26 @@ public class AssetsCreate implements Callable {
 
         DDO ddo;
         try {
-            parent.spec.commandLine().getOut().println("Creating a new asset");
+            command.println("Creating a new asset");
 
-            parent.cli.progressBar.start();
+            command.cli.progressBar.start();
 
-            ddo = parent.cli.getNeverminedAPI().getAssetsAPI()
-                    .create(assetMetadataBuilder(), parent.serviceEndpointsBuilder());
+            ddo = command.cli.getNeverminedAPI().getAssetsAPI()
+                    .create(assetMetadataBuilder(), command.serviceEndpointsBuilder());
 
-            parent.spec.commandLine().getOut().println();
-            parent.spec.commandLine().getOut().println("Asset Created: " + ddo.getDid().toString());
+            command.println();
+            command.println("Asset Created: " + ddo.getDid().toString());
 
         } catch (ParseException e) {
-            throw new CLIException("Error parsing date. Expected format: " + DDO.DATE_PATTERN + "\n" + e.getMessage());
+            command.printError("Error parsing date. Expected format: " + DDO.DATE_PATTERN);
+            logger.debug(e.getMessage());
+            return CommandResult.errorResult();
         } catch (DDOException e) {
-            throw new CLIException("Error with DDO " + e.getMessage());
+            command.printError("Error with DDO");
+            logger.debug(e.getMessage());
+            return CommandResult.errorResult();
         } finally {
-            parent.cli.progressBar.doStop();
+            command.cli.progressBar.doStop();
         }
 
         return CommandResult.successResult().setResult(ddo);

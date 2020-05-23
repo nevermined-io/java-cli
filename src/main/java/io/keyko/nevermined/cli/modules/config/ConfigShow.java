@@ -1,6 +1,6 @@
 package io.keyko.nevermined.cli.modules.config;
 
-import io.keyko.nevermined.cli.ConfigCLI;
+import io.keyko.nevermined.cli.ConfigCommand;
 import io.keyko.nevermined.cli.models.CommandResult;
 import picocli.CommandLine;
 
@@ -12,7 +12,7 @@ import java.util.concurrent.Callable;
 public class ConfigShow implements Callable {
 
     @CommandLine.ParentCommand
-    ConfigCLI command;
+    ConfigCommand command;
 
     CommandResult showConfig() {
         command.println("\n@|bold,blue,underline Main Config:|@\n");

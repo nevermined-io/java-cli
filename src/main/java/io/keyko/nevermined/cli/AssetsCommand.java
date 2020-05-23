@@ -1,12 +1,9 @@
 package io.keyko.nevermined.cli;
 
-import io.keyko.nevermined.NeverminedCLI;
 import io.keyko.nevermined.cli.helpers.Constants;
 import io.keyko.nevermined.cli.modules.assets.*;
 import io.keyko.nevermined.models.service.ProviderConfig;
 import picocli.CommandLine;
-
-import java.util.concurrent.Callable;
 
 @CommandLine.Command(
         name = "assets",
@@ -18,27 +15,22 @@ import java.util.concurrent.Callable;
                 AssetsOrder.class,
                 AssetsConsume.class},
         description = "Assets handler")
-public class AssetsCLI extends NeverminedCommand implements Callable {
-
-    @CommandLine.ParentCommand
-    public NeverminedCLI cli;
-
-    @CommandLine.Spec
-    public CommandLine.Model.CommandSpec spec;
+public class AssetsCommand extends NeverminedBaseCommand implements Runnable {
 
 
     @Override
-    public Object call() {
+    public void run() {
         spec.commandLine().usage(System.out);
-        return null;
     }
+
 
     public ProviderConfig serviceEndpointsBuilder()  {
 
         return new ProviderConfig(
-                cli.getNetworkConfig().getString("gateway.url") + Constants.consumeUri,
-                cli.getNetworkConfig().getString("gateway.url") + Constants.initializeUri,
-                cli.getNetworkConfig().getString("metadata-internal.url") + Constants.metadataUri,
+                cli.getNetworkConfig().getString("gateway.url") + Constants.CONSUME_URI,
+                cli.getNetworkConfig().getString("metadata-internal.url") + Constants.METADATA_URI,
+                cli.getNetworkConfig().getString("gateway.url"),
+                cli.getNetworkConfig().getString("metadata-internal.url") + Constants.PROVENANCE_URI,
                 cli.getNetworkConfig().getString("secretstore.url"),
                 cli.getNetworkConfig().getString("provider.address")
         );

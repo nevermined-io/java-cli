@@ -1,6 +1,6 @@
 package io.keyko.nevermined.cli.modules.accounts;
 
-import io.keyko.nevermined.cli.AccountsCLI;
+import io.keyko.nevermined.cli.AccountsCommand;
 import io.keyko.nevermined.cli.helpers.AccountsHelper;
 import io.keyko.nevermined.cli.helpers.Constants;
 import io.keyko.nevermined.cli.models.CommandResult;
@@ -23,7 +23,7 @@ import java.util.concurrent.Callable;
 public class AccountsNew implements Callable {
 
     @CommandLine.ParentCommand
-    AccountsCLI command;
+    AccountsCommand command;
 
     @CommandLine.Option(names = { "-p", "--password" }, description = "new account password, if it's not given will be auto-generated")
     String password;
@@ -39,7 +39,7 @@ public class AccountsNew implements Callable {
 
         try {
             if (null == filePath || filePath.isEmpty())
-                filePath= Constants.accountsFolder;
+                filePath= Constants.ACCOUNTS_FOLDER;
 
             String accountPath= AccountsHelper.createAccount(password, filePath);
             String address= AccountsHelper.getAddressFromFilePath(accountPath);
@@ -52,7 +52,7 @@ public class AccountsNew implements Callable {
                     command.getErr().println("Unable to setup account " + address + " as default in the configuration");
                     return CommandResult.errorResult();
                 }
-                command.println("New account " + address + " added as default account in the configuration " + Constants.mainConfigFile);
+                command.println("New account " + address + " added as default account in the configuration " + Constants.MAIN_CONFIG_FILE);
             }
 
         } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException | CipherException | IOException e) {
@@ -71,13 +71,13 @@ public class AccountsNew implements Callable {
     private boolean setupNewAccountAsDefault(String address, String password, String filePath)  {
 
         try {
-            String defaultConfigContent= FileUtils.readFileToString(new File(Constants.mainConfigFile), Charsets.UTF_8);
+            String defaultConfigContent= FileUtils.readFileToString(new File(Constants.MAIN_CONFIG_FILE), Charsets.UTF_8);
             String newConfigContent= defaultConfigContent
                     .replaceAll("account.main.address=\"(.*?)\"", "account.main.address=\""+ address +"\"")
                     .replaceAll("account.main.password=\"(.*?)\"", "account.main.password=\""+ password +"\"")
                     .replaceAll("account.main.credentialsFile=\"(.*?)\"", "account.main.credentialsFile=\""+ filePath +"\"");
 
-            FileUtils.writeStringToFile(new File(Constants.mainConfigFile), newConfigContent, Charsets.UTF_8);
+            FileUtils.writeStringToFile(new File(Constants.MAIN_CONFIG_FILE), newConfigContent, Charsets.UTF_8);
 
             return true;
         } catch (IOException ex)    {

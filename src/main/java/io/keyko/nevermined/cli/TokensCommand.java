@@ -8,7 +8,7 @@ import picocli.CommandLine;
         name = "tokens",
         subcommands = {TokensRequest.class, TokensTransfer.class},
         description = "Allows to request Tokens and transfer to other accounts.")
-public class TokensCLI extends NeverminedCommand implements Runnable {
+public class TokensCommand extends NeverminedBaseCommand implements Runnable {
 
     @Override
     public void run() {

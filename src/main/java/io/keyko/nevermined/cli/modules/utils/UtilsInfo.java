@@ -1,6 +1,6 @@
 package io.keyko.nevermined.cli.modules.utils;
 
-import io.keyko.nevermined.cli.UtilsCLI;
+import io.keyko.nevermined.cli.UtilsCommand;
 import io.keyko.nevermined.cli.helpers.CommandLineHelper;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
@@ -21,22 +21,22 @@ import java.util.concurrent.Callable;
 public class UtilsInfo implements Callable {
 
     @CommandLine.ParentCommand
-    UtilsCLI parent;
+    UtilsCommand command;
 
-    @CommandLine.Spec
-    public CommandLine.Model.CommandSpec spec;
+    @CommandLine.Mixin
+    io.keyko.nevermined.cli.helpers.Logger logger;
 
     @CommandLine.Parameters(index = "0")
     String url= null;
 
-    CommandResult info() throws CLIException {
+    CommandResult info() {
 
         AssetMetadata.File file;
 
         try {
-            parent.spec.commandLine().getOut().println("Querying resource: " + url);
+            command.println("Querying resource: " + url);
 
-            parent.cli.progressBar.start();
+            command.cli.progressBar.start();
 
             Header[] responseHeaders= getHttpHeadHeaders(url);
 
@@ -45,15 +45,16 @@ public class UtilsInfo implements Callable {
 
             file= convertResponseHeadersToAssetsMetadataFile(responseHeaders, url);
 
-            parent.spec.commandLine().getOut().println();
-            parent.spec.commandLine().getOut().println(CommandLineHelper.prettyJson(metadataFileToJson(file)));
+            command.println();
+            command.println(CommandLineHelper.prettyJson(metadataFileToJson(file)));
 
 
         } catch (Exception e) {
-            throw new CLIException(e.getMessage());
-
+            command.printError("Unable to retrieve information from URL " + url);
+            logger.debug(e.getMessage());
+            return CommandResult.errorResult();
         } finally {
-            parent.cli.progressBar.doStop();
+            command.cli.progressBar.doStop();
         }
 
         return CommandResult.successResult();
