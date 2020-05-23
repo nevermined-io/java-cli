@@ -2,7 +2,7 @@
 
 # Nevermined Command Line Interface (CLI)
 
-> 🦑 CLI for interacting with Nevermined Data Platform
+> CLI for interacting with Nevermined Data Platform
 > [keyko.io](https://keyko.io)
 
 ![Java Maven CI](https://github.com/keyko-io/nevermined-cli/workflows/Java%20Maven%20CI/badge.svg)
@@ -11,23 +11,18 @@
 
 ## Table of Contents
 
-   * [Keyko Java API for Ocean](#keyko-java-api-for-ocean)
+
+   * [Nevermined Command Line Interface (CLI)](#nevermined-command-line-interface-cli)
       * [Table of Contents](#table-of-contents)
       * [Features](#features)
-      * [Installation](#installation)
-      * [Configuration](#configuration)
-         * [Using Squid-Java with Barge](#using-squid-java-with-barge)
-         * [Dealing with Flowables](#dealing-with-flowables)
-      * [Documentation](#documentation)
-      * [Testing](#testing)
-         * [Unit Tests](#unit-tests)
-         * [Integration Tests](#integration-tests)
-         * [Documentation](#documentation-1)
-         * [All the tests](#all-the-tests)
-         * [Code Coverage](#code-coverage)
-      * [New Release](#new-release)
-      * [Attribution](#attribution)
+         * [Compiling](#compiling)
+         * [Installation](#installation)
+         * [Running the Nevermined CLI](#running-the-nevermined-cli)
+            * [Connecting to a different network](#connecting-to-a-different-network)
+            * [Using a different logging config file](#using-a-different-logging-config-file)
       * [License](#license)
+
+
 
 ---
 
