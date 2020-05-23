@@ -47,7 +47,13 @@ public class NeverminedCLI extends SDKBase implements Callable {
             description = "Display version info")
     boolean versionInfoRequested;
 
-    public NeverminedCLI() throws CLIException {}
+    public NeverminedCLI() throws CLIException {
+        super();
+    }
+
+    public NeverminedCLI(final String configFolder) throws CLIException {
+        super(configFolder);
+    }
 
     public static String getVersion() {
         return "Nevermined CLI v" + Version.VERSION;

@@ -7,7 +7,10 @@ import java.io.PrintWriter;
 
 public class NeverminedCommand {
 
-    private static final String ERROR_PREFIX = "@|bold,red Error:|@\n";
+    public static final String ERROR_PREFIX = "@|bold,red Error:|@\n";
+    public static final String SUCCESS_MESSAGE = "@|bold,green Success [✔] |@";
+    public static final String ERROR_MESSAGE = "@|bold,red Error [✘] |@";
+
 
     @CommandLine.ParentCommand
     public NeverminedCLI cli;
@@ -27,6 +30,9 @@ public class NeverminedCommand {
         );
     }
 
+    public void printSuccess()  {
+        println(SUCCESS_MESSAGE);
+    }
 
     public PrintWriter getOut() {
         return spec.commandLine().getOut();

@@ -12,20 +12,20 @@ import java.util.concurrent.Callable;
 public class ConfigShow implements Callable {
 
     @CommandLine.ParentCommand
-    ConfigCLI parent;
+    ConfigCLI command;
 
     CommandResult showConfig() {
-        parent.println("\n@|bold,blue,underline Main Config:|@\n");
+        command.println("\n@|bold,blue,underline Main Config:|@\n");
 
-        parent.cli.getMainConfig().entrySet().forEach(e ->{
-            parent.println("\t@|bold,yellow " + e.getKey() + ":|@ " + e.getValue().render());
+        command.cli.getMainConfig().entrySet().forEach(e ->{
+            command.println("\t@|bold,yellow " + e.getKey() + ":|@ " + e.getValue().render());
         });
 
-        parent.println("\n@|bold,blue,underline Network Config:|@\n");
-        parent.cli.getNetworkConfig().entrySet().forEach(e -> {
-            parent.println("\t@|bold,yellow " + e.getKey() + ":|@ " + e.getValue().render());
+        command.println("\n@|bold,blue,underline Network Config:|@\n");
+        command.cli.getNetworkConfig().entrySet().forEach(e -> {
+            command.println("\t@|bold,yellow " + e.getKey() + ":|@ " + e.getValue().render());
         });
-        parent.println("");
+        command.println("");
         return CommandResult.successResult();
     }
 

@@ -33,7 +33,7 @@
 
 ## Features
 
-Command Line Interface (CLI) tool allowing to interact with the Nevermined Data Sharing platform
+Command Line Interface (CLI) tool allowing to interact with the Nevermined Data Sharing platform.
 
 ### Compiling
 

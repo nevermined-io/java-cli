@@ -28,14 +28,20 @@ public class SDKBase {
 
     public ProgressBar progressBar= new ProgressBar();
 
+
     public SDKBase() throws CLIException {
+        this(Constants.configFolder);
+    }
+
+    public SDKBase(String configFolder) throws CLIException {
+
+        final String pathMainConfigFile = configFolder + File.separator + "application.conf";
+        final String pathNetworkFolder = configFolder +  File.separator + "networks";
 
         try {
             initializeBaseConfig();
 
-//            mainConfig=  ConfigFactory.load();
-
-            mainConfig= ConfigFactory.parseFile(new File(Constants.mainConfigFile));
+            mainConfig= ConfigFactory.parseFile(new File(pathMainConfigFile));
 
             progressBar.setSpinner(mainConfig.getInt("spinner.id"));
 
@@ -47,7 +53,7 @@ public class SDKBase {
         try {
 
             networkName= mainConfig.getString("network");
-            String networkFile= Constants.networkFolder + File.separator + networkName + ".conf";
+            String networkFile= pathNetworkFolder + File.separator + networkName + ".conf";
             if (!fileExists(networkFile))    {
                 copyResourceFileToPath("src/main/resources/networks/" + networkName + ".conf", networkFile);
             }
