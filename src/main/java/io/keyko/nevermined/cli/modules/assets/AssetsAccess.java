@@ -13,14 +13,13 @@ import java.util.concurrent.Callable;
 @CommandLine.Command(
         name = "consume",
         description = "Download a previously ordered asset given a DID")
-public class AssetsConsume implements Callable {
+public class AssetsAccess implements Callable {
 
     @CommandLine.ParentCommand
     AssetsCommand command;
 
     @CommandLine.Mixin
     io.keyko.nevermined.cli.helpers.Logger logger;
-
 
     @CommandLine.Parameters(index = "0")
     String did;
@@ -35,12 +34,12 @@ public class AssetsConsume implements Callable {
     @CommandLine.Option(names = { "-p", "--path" }, required = false, description = "path where to download the asset")
     String path= "";
 
-    CommandResult consume() throws CLIException {
+    CommandResult access() throws CLIException {
         try {
             if (null == path || path.isEmpty())
                 path= command.cli.getMainConfig().getString("consume.basePath");
 
-            command.println("Downloading asset with DID " + did);
+            command.println("Downloading asset: " + did);
 
             DID assetDid= new DID(did);
 
@@ -67,6 +66,6 @@ public class AssetsConsume implements Callable {
 
     @Override
     public CommandResult call() throws CLIException {
-        return consume();
+        return access();
     }
 }

@@ -5,13 +5,15 @@ import io.keyko.nevermined.cli.helpers.Logger;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
 import io.keyko.nevermined.exceptions.DIDFormatException;
+import io.keyko.nevermined.exceptions.EscrowRewardException;
 import io.keyko.nevermined.exceptions.OrderException;
+import io.keyko.nevermined.exceptions.ServiceException;
 import io.keyko.nevermined.models.DID;
 import io.keyko.nevermined.models.asset.OrderResult;
-import io.reactivex.Flowable;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
+
 
 @CommandLine.Command(
         name = "order",
@@ -27,35 +29,35 @@ public class AssetsOrder implements Callable {
     @CommandLine.Parameters(index = "0")
     String did;
 
-    @CommandLine.Option(names = { "-s", "--serviceIndex" }, required = false, description = "service index to order")
+    @CommandLine.Option(names = { "-s", "--serviceIndex" }, description = "service index to order")
     int serviceIndex = 0;
 
     CommandResult order() throws CLIException {
 
         OrderResult orderResult;
         try {
-            command.println("Ordering did " + did);
+            command.println("Ordering Asset: " + did);
 
             command.cli.progressBar.start();
 
             DID assetDid= new DID(did);
 
-            Flowable<OrderResult> response = command.cli.getNeverminedAPI().getAssetsAPI()
-                    .order(assetDid, serviceIndex);
+            orderResult = command.cli.getNeverminedAPI().getAssetsAPI()
+                    .orderDirect(assetDid, serviceIndex);
 
-            orderResult = response.blockingFirst();
-
-            if (null == orderResult.getServiceAgreementId()) {
-                throw new CLIException("Unable to initialize order");
+            if (!orderResult.isAccessGranted()) {
+                command.printError("Access not granted");
+                return CommandResult.errorResult();
             }
 
             if (orderResult.isAccessGranted())
                 command.println("Access Granted. ServiceAgreementId: " + orderResult.getServiceAgreementId());
-            else
-                throw new CLIException("Access Not Granted. ServiceAgreementId: " + orderResult.getServiceAgreementId());
+            else {
+                command.printError("Access not granted");
+                return CommandResult.errorResult();
+            }
 
-
-        } catch (DIDFormatException | OrderException e) {
+        } catch (DIDFormatException | OrderException | EscrowRewardException | ServiceException e) {
             command.printError("Error ordering asset");
             logger.debug(e.getMessage());
             return CommandResult.errorResult();

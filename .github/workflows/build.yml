@@ -26,5 +26,5 @@ jobs:
 
       - name: Run tests
         run: |
-
+          bash src/main/bash/updateConfAddresses.sh src/test/resources/networks/spree.conf
           mvn clean verify -P integration-test

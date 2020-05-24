@@ -13,7 +13,7 @@ import picocli.CommandLine;
                 AssetsResolve.class,
                 AssetsSearch.class,
                 AssetsOrder.class,
-                AssetsConsume.class},
+                AssetsAccess.class},
         description = "Assets handler")
 public class AssetsCommand extends NeverminedBaseCommand implements Runnable {
 

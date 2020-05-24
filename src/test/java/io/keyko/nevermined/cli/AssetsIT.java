@@ -22,11 +22,11 @@ public class AssetsIT extends TestsBase {
 
     }
 
-    @Test(expected = CommandLine.ExecutionException.class)
+    @Test
     public void assetsImportError() throws CLIException {
         String[] args= {"assets", "import", "dksal/xxxx.json"};
         CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
-        assertTrue(result.isSuccess());
+        assertFalse(result.isSuccess());
     }
 
     @Test
@@ -55,26 +55,26 @@ public class AssetsIT extends TestsBase {
 
 
     @Test
-    public void assetsImportAndConsume() throws CLIException {
+    public void assetsImportAndAccess() throws CLIException {
         String[] args= {"assets", "import", "src/test/resources/metadata/example-1.json"};
         CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
         assertTrue(result.isSuccess());
         String did= ((DDO) result.getResult()).id;
         assertTrue(!did.isEmpty());
 
-        String[] argsOrder= {"assets", "order", did, "-s", "1"};
+        String[] argsOrder= {"assets", "order", did, "-s", "3"};
         result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), argsOrder);
         String saId= ((OrderResult) result.getResult()).getServiceAgreementId();
 
         assertTrue(result.isSuccess());
 
-        String[] argsConsume= {"assets", "consume", did, "-a", saId, "-s", "1"};
+        String[] argsConsume= {"assets", "consume", did, "-a", saId, "-s", "3"};
         result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), argsConsume);
         assertTrue(result.isSuccess());
 
     }
 
-    @Test(expected = CommandLine.ExecutionException.class)
+    @Test
     public void assetsCreateError() throws CLIException {
         String[] args= {"assets", "create",
                 "--title", "title",
@@ -86,15 +86,15 @@ public class AssetsIT extends TestsBase {
                 "--url", "https://keyko.io/privacy-policy"};
 
         CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
-        assertTrue(result.isSuccess());
+        assertFalse(result.isSuccess());
     }
 
-    @Test(expected = CommandLine.ExecutionException.class)
+    @Test
     public void assetsResolveError() throws CLIException {
         String[] args= {"assets", "resolve", "did:op:1234"};
 
         CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
-        assertTrue(result.isSuccess());
+        assertFalse(result.isSuccess());
     }
 
 }
