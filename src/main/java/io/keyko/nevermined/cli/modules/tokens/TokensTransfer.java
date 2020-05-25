@@ -13,7 +13,7 @@ import static io.keyko.nevermined.cli.helpers.Constants.TRANSACTION_SUCCESS;
 
 @CommandLine.Command(
         name = "transfer",
-        description = "Transfer Token between accounts")
+        description = "Tokens transfer between accounts")
 public class TokensTransfer implements Callable {
 
     @CommandLine.ParentCommand
@@ -30,6 +30,7 @@ public class TokensTransfer implements Callable {
 
     CommandResult transfer() throws CLIException {
         try {
+            command.printHeader("Tokens transfer between accounts:");
             command.println("Transferring " + drops.longValue() +
                     " Token drops from " + command.cli.getNeverminedAPI().getMainAccount().getAddress() +
                     " to " + receiverAddress);

@@ -15,17 +15,17 @@ public class ConfigShow implements Callable {
     ConfigCommand command;
 
     CommandResult showConfig() {
-        command.println("\n@|bold,blue,underline Main Config:|@\n");
+        command.printHeader("Main Config:");
 
         command.cli.getMainConfig().entrySet().forEach(e ->{
-            command.println("\t@|bold,yellow " + e.getKey() + ":|@ " + e.getValue().render());
+            command.printKeyValue(e.getKey(), e.getValue().render());
         });
 
-        command.println("\n@|bold,blue,underline Network Config:|@\n");
+        command.printHeader("Network Config:");
         command.cli.getNetworkConfig().entrySet().forEach(e -> {
-            command.println("\t@|bold,yellow " + e.getKey() + ":|@ " + e.getValue().render());
+            command.printKeyValue(e.getKey(), e.getValue().render());
         });
-        command.println("");
+        command.println();
         return CommandResult.successResult();
     }
 

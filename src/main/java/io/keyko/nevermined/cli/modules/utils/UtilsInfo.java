@@ -34,7 +34,8 @@ public class UtilsInfo implements Callable {
         AssetMetadata.File file;
 
         try {
-            command.println("Querying resource: " + url);
+            command.printHeader("Querying resource:");
+            command.printSubHeader(url);
 
             command.cli.progressBar.start();
 

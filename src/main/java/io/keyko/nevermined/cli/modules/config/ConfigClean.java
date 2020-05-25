@@ -22,7 +22,7 @@ public class ConfigClean implements Runnable {
     Logger logger;
 
     CommandResult clean() {
-        command.println("Cleaning existing config ...");
+        command.printHeader("Cleaning existing config");
 
         try {
             FileUtils.deleteDirectory(new File(Constants.CONFIG_FOLDER));
@@ -31,6 +31,7 @@ public class ConfigClean implements Runnable {
             logger.debug(e.getMessage());
             return CommandResult.errorResult();
         }
+        command.printSuccess();
         return CommandResult.successResult();
     }
 

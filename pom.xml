@@ -251,8 +251,9 @@
                         </goals>
                         <configuration>
                             <!-- Sets the VM argument line used when integration tests are run. -->
+                            <!--   -Dconfig.file=src/test/resources/application.conf --> 
                             <argLine>
-                                --illegal-access=permit
+								--illegal-access=permit
                             </argLine>
                             <!--
                                 Skips integration tests if the value of skip.integration.tests property

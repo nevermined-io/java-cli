@@ -33,7 +33,8 @@ public class AssetsResolve implements Callable {
 
         DDO ddo;
         try {
-            command.println("Resolving " + did);
+            command.printHeader("Resolving DID:");
+            command.printSubHeader(did);
 
             command.cli.progressBar.start();
 

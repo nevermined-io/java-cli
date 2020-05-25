@@ -23,11 +23,11 @@ public class ContractList implements Callable {
     CommandResult list() {
 
         try {
-            command.println("\n@|bold,blue,underline List of Nevermined Contracts:|@\n");
+            command.printHeader("List of Nevermined Contracts:");
 
             Collection<Class> constructors = ContractsReflections.getConstructors();
             constructors.forEach(m -> {
-                command.println("\t@|bold,yellow " + m.getSimpleName() + " |@ ");
+                command.printItem("\t" + m.getSimpleName());
             });
         } catch (Exception e) {
             command.printError("Unable to retrieve contracts information");

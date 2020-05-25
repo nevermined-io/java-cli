@@ -58,15 +58,15 @@ public class AssetsCreate implements Callable {
 
         DDO ddo;
         try {
-            command.println("Creating a new asset");
+            command.printHeader("Creating a new asset:");
 
             command.cli.progressBar.start();
 
             ddo = command.cli.getNeverminedAPI().getAssetsAPI()
                     .create(assetMetadataBuilder(), command.serviceEndpointsBuilder());
 
-            command.println();
-            command.println("Asset Created: " + ddo.getDid().toString());
+            command.printSuccess();
+            command.println("Asset Created: " + command.getItem(ddo.getDid().toString()));
 
         } catch (ParseException e) {
             command.printError("Error parsing date. Expected format: " + DDO.DATE_PATTERN);

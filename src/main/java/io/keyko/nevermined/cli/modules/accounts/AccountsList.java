@@ -24,7 +24,7 @@ public class AccountsList implements Callable {
 
 
     CommandResult list() {
-        command.println("\n@|bold,blue,underline Listing Accounts:|@\n");
+        command.printHeader("Listing Accounts:");
 
         List<Account> accounts;
         try {
@@ -36,7 +36,7 @@ public class AccountsList implements Callable {
         }
 
         for (Account account: accounts) {
-            command.println("\t@|bold,yellow " + account.getAddress() + ":|@ ");
+            command.printItem(account.getAddress());
         }
         return CommandResult.successResult();
     }

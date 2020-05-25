@@ -21,10 +21,10 @@ public class SDKBase {
 
     private static final Logger log = LogManager.getLogger(SDKBase.class);
 
-    private static Config mainConfig;
-    private static Config networkConfig= null;
-    private static String networkName;
-    private static NeverminedAPI neverminedAPI = null;
+    private Config mainConfig;
+    private Config networkConfig= null;
+    private String networkName;
+    private NeverminedAPI neverminedAPI = null;
 
     public ProgressBar progressBar= new ProgressBar();
 
@@ -39,7 +39,7 @@ public class SDKBase {
         final String pathNetworkFolder = configFolder +  File.separator + "networks";
 
         try {
-            initializeBaseConfig();
+            initializeBaseConfig(configFolder);
 
             mainConfig= ConfigFactory.parseFile(new File(pathMainConfigFile));
 
@@ -82,11 +82,11 @@ public class SDKBase {
         return neverminedAPI;
     }
 
-    public static Config getNetworkConfig()    {
+    public Config getNetworkConfig()    {
         return networkConfig;
     }
 
-    public static Config getMainConfig()    {
+    public Config getMainConfig()    {
         return mainConfig;
     }
 
@@ -95,26 +95,30 @@ public class SDKBase {
         return configFile.exists();
     }
 
-    private boolean initializeBaseConfig() throws CLIException {
-        if (!fileExists(Constants.CONFIG_FOLDER))    {
-            boolean success = (new File(Constants.CONFIG_FOLDER)).mkdirs();
+    private boolean initializeBaseConfig(final String configFolder) throws CLIException {
+        if (!fileExists(configFolder))    {
+            boolean success = (new File(configFolder)).mkdirs();
             if (!success) {
-                log.error("Unable to create main config folder " + Constants.CONFIG_FOLDER);
-                throw new CLIException("Unable to create main config folder " + Constants.CONFIG_FOLDER);
+                log.error("Unable to create main config folder " + configFolder);
+                throw new CLIException("Unable to create main config folder " + configFolder);
             }
 
         }
 
-        if (!fileExists(Constants.ACCOUNTS_FOLDER))    {
-            boolean success = (new File(Constants.ACCOUNTS_FOLDER)).mkdirs();
+        final String accountsFolder = configFolder + File.separator + "accounts" + File.separator;
+        final String logsConfigFile = configFolder + File.separator + "log4j2.properties";
+        final String mainConfigFile = configFolder + File.separator + "application.conf";
+
+        if (!fileExists(accountsFolder))    {
+            boolean success = (new File(accountsFolder)).mkdirs();
         }
 
-        if (!fileExists(Constants.LOGS_CONFIG_FILE))    {
-            copyResourceFileToPath("src/main/resources/log4j2.properties", Constants.LOGS_CONFIG_FILE);
+        if (!fileExists(logsConfigFile))    {
+            copyResourceFileToPath("src/main/resources/log4j2.properties", logsConfigFile);
         }
 
-        if (!fileExists(Constants.MAIN_CONFIG_FILE))    {
-            copyResourceFileToPath("src/main/resources/application.conf", Constants.MAIN_CONFIG_FILE);
+        if (!fileExists(mainConfigFile))    {
+            copyResourceFileToPath("src/main/resources/application.conf", mainConfigFile);
         }
         return true;
     }

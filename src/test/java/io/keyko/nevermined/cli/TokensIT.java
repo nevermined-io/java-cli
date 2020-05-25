@@ -5,6 +5,7 @@ import com.typesafe.config.ConfigFactory;
 import io.keyko.nevermined.NeverminedCLI;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import picocli.CommandLine;
 
@@ -12,8 +13,13 @@ import static org.junit.Assert.assertTrue;
 
 public class TokensIT extends TestsBase {
 
-    Config config = ConfigFactory.load();
 
+    @BeforeClass
+    public static void setup()  {
+        logger.debug("Main account address: " + config.getString("account.main.address"));
+        logger.debug("Main test address: " + config.getString("account.test.address"));
+
+    }
 
     @Test
     public void tokensRequest() throws CLIException {

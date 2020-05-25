@@ -7,9 +7,14 @@ import java.io.PrintWriter;
 
 public class NeverminedBaseCommand {
 
-    public static final String ERROR_PREFIX = "@|bold,red Error:|@\n";
-    public static final String SUCCESS_MESSAGE = "@|bold,green Success [✔] |@";
-    public static final String ERROR_MESSAGE = "@|bold,red Error [✘] |@";
+    public static final String COLOR_PREFIX = "@|";
+    public static final String COLOR_SUFFIX = "|@ ";
+    public static final String ERROR_PREFIX = COLOR_PREFIX + "bold,red Error:" + COLOR_SUFFIX + "\n";
+    public static final String SUCCESS_MESSAGE = COLOR_PREFIX + "bold,green Success [✔] " + COLOR_SUFFIX;
+    public static final String ERROR_MESSAGE = COLOR_PREFIX + "bold,red Error [✘] " + COLOR_SUFFIX;
+    public static final String HEADER_PREFIX = COLOR_PREFIX + "bold,blue ";
+    public static final String SUBHEADER_PREFIX = COLOR_PREFIX + "bold,yellow ";
+    public static final String ITEM_PREFIX = COLOR_PREFIX + "yellow ";
 
 
     @CommandLine.ParentCommand
@@ -23,9 +28,32 @@ public class NeverminedBaseCommand {
     }
 
     public void println(String line)   {
-        getOut().println(
+        if (!line.contains(COLOR_PREFIX))
+            getOut().println(line);
+        else
+            getOut().println(
                 CommandLine.Help.Ansi.AUTO.string(line)
-        );
+            );
+    }
+
+    public void printHeader(String header)  {
+        println("\n" + HEADER_PREFIX + header + COLOR_SUFFIX + "\n");
+    }
+
+    public void printSubHeader(String text)  {
+        println("\t" + SUBHEADER_PREFIX + text + COLOR_SUFFIX + "\n");
+    }
+
+    public void printItem(String text)  {
+        println(getItem(text));
+    }
+
+    public void printKeyValue(String key, String value)  {
+        println(getItem(key) + ":" + value);
+    }
+
+    public String getItem(String text)  {
+        return ITEM_PREFIX + text + COLOR_SUFFIX;
     }
 
     public void printError(String line)   {

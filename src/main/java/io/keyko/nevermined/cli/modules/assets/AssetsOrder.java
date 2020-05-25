@@ -36,7 +36,8 @@ public class AssetsOrder implements Callable {
 
         OrderResult orderResult;
         try {
-            command.println("Ordering Asset: " + did);
+            command.printHeader("Ordering Asset:");
+            command.printSubHeader(did);
 
             command.cli.progressBar.start();
 
@@ -49,13 +50,9 @@ public class AssetsOrder implements Callable {
                 command.printError("Access not granted");
                 return CommandResult.errorResult();
             }
-
-            if (orderResult.isAccessGranted())
-                command.println("Access Granted. ServiceAgreementId: " + orderResult.getServiceAgreementId());
-            else {
-                command.printError("Access not granted");
-                return CommandResult.errorResult();
-            }
+            command.printSuccess();
+            command.println("Access Granted. ServiceAgreementId: "
+                    + command.getItem(orderResult.getServiceAgreementId()));
 
         } catch (DIDFormatException | OrderException | EscrowRewardException | ServiceException e) {
             command.printError("Error ordering asset");

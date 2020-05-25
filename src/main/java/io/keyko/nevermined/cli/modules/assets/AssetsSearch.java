@@ -35,16 +35,17 @@ public class AssetsSearch implements Callable {
 
         SearchResult searchResult;
         try {
-            command.println("Searching for: " + query);
+            command.printHeader("Searching for:");
+            command.printSubHeader(query);
 
             command.cli.progressBar.start();
 
             searchResult= command.cli.getNeverminedAPI().getAssetsAPI()
                     .search(query, offset, page);
 
-            command.println("\nTotal results: " + searchResult.total_results
-                    + " - page: " + searchResult.page
-                    + " - total pages: " + searchResult.total_pages);
+            command.println("\nTotal results: " + command.getItem(String.valueOf(searchResult.total_results))
+                    + " - page: " + command.getItem(String.valueOf(searchResult.page))
+                    + " - total pages: " + command.getItem(String.valueOf(searchResult.total_pages)));
 
             searchResult.getResults().forEach( ddo -> printSimplifiedDDO(ddo));
 

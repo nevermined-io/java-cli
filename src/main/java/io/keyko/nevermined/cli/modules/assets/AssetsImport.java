@@ -36,14 +36,16 @@ public class AssetsImport implements Callable {
 
         DDO ddo;
         try {
-            command.println("Importing asset using file " + metadataFile);
+            command.printHeader("Importing asset");
+            command.printSubHeader("Using file " + metadataFile);
 
             command.cli.progressBar.start();
 
             ddo = command.cli.getNeverminedAPI().getAssetsAPI()
                     .create(assetMetadataBuilder(metadataFile), command.serviceEndpointsBuilder());
 
-            command.println("Asset Created: " + ddo.getDid().toString());
+            command.printSuccess();
+            command.println("Asset Created: " + command.getItem(ddo.getDid().toString()));
 
         } catch (IOException e) {
             command.printError("Error parsing metadata");

@@ -39,7 +39,8 @@ public class AssetsAccess implements Callable {
             if (null == path || path.isEmpty())
                 path= command.cli.getMainConfig().getString("consume.basePath");
 
-            command.println("Downloading asset: " + did);
+            command.printHeader("Downloading asset: ");
+            command.printSubHeader(did);
 
             DID assetDid= new DID(did);
 
@@ -48,10 +49,13 @@ public class AssetsAccess implements Callable {
             Boolean status = command.cli.getNeverminedAPI().getAssetsAPI()
                     .consume(serviceAgreementId, assetDid, serviceIndex, path);
 
-            if (status)
-                command.println("Files downloaded to " + path);
-            else
-                throw new CLIException("Unable to download files to " + path);
+            if (status) {
+                command.printSuccess();
+                command.println("Files downloaded to " + command.getItem(path));
+            } else  {
+                command.printError("Unable to download files to " + path);
+                return CommandResult.errorResult();
+            }
 
         } catch (DIDFormatException | ConsumeServiceException e) {
             command.printError("Unable to access to files");

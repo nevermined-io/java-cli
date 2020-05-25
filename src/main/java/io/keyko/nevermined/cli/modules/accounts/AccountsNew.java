@@ -3,6 +3,7 @@ package io.keyko.nevermined.cli.modules.accounts;
 import io.keyko.nevermined.cli.AccountsCommand;
 import io.keyko.nevermined.cli.helpers.AccountsHelper;
 import io.keyko.nevermined.cli.helpers.Constants;
+import io.keyko.nevermined.cli.helpers.Logger;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
 import com.google.common.base.Charsets;
@@ -25,6 +26,9 @@ public class AccountsNew implements Callable {
     @CommandLine.ParentCommand
     AccountsCommand command;
 
+    @CommandLine.Mixin
+    Logger logger;
+
     @CommandLine.Option(names = { "-p", "--password" }, description = "new account password, if it's not given will be auto-generated")
     String password;
 
@@ -35,7 +39,7 @@ public class AccountsNew implements Callable {
     boolean makeMainAccount;
 
     CommandResult newAccount() throws CLIException {
-        command.println("Creating new account:");
+        command.printHeader("Creating new account:");
 
         try {
             if (null == filePath || filePath.isEmpty())
@@ -52,12 +56,15 @@ public class AccountsNew implements Callable {
                     command.getErr().println("Unable to setup account " + address + " as default in the configuration");
                     return CommandResult.errorResult();
                 }
-                command.println("New account " + address + " added as default account in the configuration " + Constants.MAIN_CONFIG_FILE);
+                command.printSuccess();
+                command.println("New account " + command.getItem(address) + " added as default account in the configuration "
+                        + command.getItem(Constants.MAIN_CONFIG_FILE));
             }
 
         } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException | CipherException | IOException e) {
             command.printError("Unable to create account: " + e.getMessage());
-            throw new CLIException("Unable to create account: " + e.getMessage());
+            logger.debug(e.getMessage());
+            return CommandResult.errorResult();
         }
 
         return CommandResult.successResult();

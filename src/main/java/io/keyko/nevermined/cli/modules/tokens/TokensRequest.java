@@ -28,6 +28,7 @@ public class TokensRequest implements Callable {
 
     CommandResult request() throws CLIException {
         try {
+            command.printHeader("Requesting Tokens:");
             command.println("Requesting " + numberTokens.longValue() +
                     " Token/s for " + command.cli.getNeverminedAPI().getMainAccount().getAddress() +
                     " address");

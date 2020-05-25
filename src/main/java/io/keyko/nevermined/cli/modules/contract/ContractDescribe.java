@@ -32,7 +32,7 @@ public class ContractDescribe implements Callable {
                 return CommandResult.errorResult();
             }
 
-            command.println("\n@|bold,blue,underline Description of Contract:|@\n");
+            command.printHeader("Description of Contract:");
 
             Class clazz= ContractsReflections.getContractClass(contractName);
             ContractsReflections.printClassInformation(clazz, command.getOut());

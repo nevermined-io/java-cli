@@ -28,14 +28,15 @@ public class AccountsBalance implements Callable {
     CommandResult balance() throws CLIException {
         Balance balance;
         try {
-            command.println("\n@|bold,blue,underline Account Balance:|@");
-            command.println("\t@|bold,yellow " + accountAddress + " |@\n");
+            command.printHeader("Account Balance:");
+            command.printSubHeader(accountAddress);
 
             balance = command.cli.getNeverminedAPI().getAccountsAPI()
                     .balance(new Account(accountAddress, null));
 
-            command.println("\tPOA Ether: @|bold,yellow " + balance.getEth() + " |@ ETH"
-                    + "\n\tTokens: @|bold,yellow " + balance.getOceanTokens() + " |@ Tokens = @|bold,yellow " + balance.getDrops() + " |@ drops");
+            command.println("\tPOA Ether: " + command.getItem(String.valueOf(balance.getEth())) + " ETH");
+            command.println("\tTokens: " + command.getItem(String.valueOf(balance.getOceanTokens()))
+                    + " Tokens = " + command.getItem(String.valueOf(balance.getDrops()) + " drops"));
 
         } catch (EthereumException e) {
             command.printError("Unable to get account balance");
