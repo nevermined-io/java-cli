@@ -29,9 +29,6 @@ target
 /.settings/
 /.classpath
 
-# Avoiding to upload credentials
-src/test/resources/accounts/
-src/test/resources/networks/
 
 keeper/src/main/java/
 keeper/src/main/resources/
