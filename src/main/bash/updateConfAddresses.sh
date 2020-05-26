@@ -27,13 +27,13 @@ declare -a contracts=(
     "EscrowComputeExecutionTemplate"
 )
 
-until [ $COMMAND_STATUS -eq 0 ] || [ $RETRY_COUNT -eq 120 ]; do
+until [ $COMMAND_STATUS -eq 0 ] || [ $RETRY_COUNT -eq 240 ]; do
   cat ~/.nevermined/nevermined-contracts/artifacts/ready
   COMMAND_STATUS=$?
   if [ $COMMAND_STATUS -eq 0 ]; then
     break
   fi
-  sleep 5
+  sleep 3
   let RETRY_COUNT=RETRY_COUNT+1
 done
 

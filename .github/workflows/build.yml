@@ -16,7 +16,7 @@ jobs:
           git clone https://github.com/keyko-io/nevermined-tools
           rm -rf ~/.nevermined/nevermined-contracts/artifacts
           cd nevermined-tools
-          sudo bash -x bash start_nevermined.sh --latest --no-commons --no-dashboard  2>&1 > start_nevermined.log &
+          sudo bash -x start_nevermined.sh --latest --no-commons --no-dashboard  2>&1 > start_nevermined.log &
           cd ..
 
       - name: Install Java and Maven
