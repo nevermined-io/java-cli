@@ -5,6 +5,7 @@ import io.keyko.nevermined.NeverminedCLI;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
 import io.keyko.nevermined.models.DDO;
 import io.keyko.nevermined.models.asset.OrderResult;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import picocli.CommandLine;
 
@@ -12,6 +13,15 @@ import static org.junit.Assert.*;
 
 public class AssetsIT extends TestsBase {
 
+    @BeforeClass
+    public static void setup() throws CLIException {
+        logger.info("Requesting for some tokens before running the tests");
+
+        String[] args= {"tokens", "request", "10"};
+        CommandResult result = (CommandResult) CommandLine.call(
+                new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
+        assertTrue(result.isSuccess());
+    }
 
     @Test
     public void assetsImport() throws CLIException {

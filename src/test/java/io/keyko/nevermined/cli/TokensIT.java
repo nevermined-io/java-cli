@@ -22,19 +22,16 @@ public class TokensIT extends TestsBase {
     }
 
     @Test
-    public void tokensRequest() throws CLIException {
+    public void tokenAndtransferRequest() throws CLIException {
         String[] args= {"tokens", "request", "1"};
         CommandResult result = (CommandResult) CommandLine.call(
                 new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
         assertTrue(result.isSuccess());
-    }
 
-    @Test
-    public void transferRequest() throws CLIException {
-        String[] args= {"tokens", "transfer", config.getString("account.test.address"), "1"};
-        CommandResult result = (CommandResult) CommandLine.call(
-                new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
-        assertTrue(result.isSuccess());
+        String[] argsTransfer= {"tokens", "transfer", config.getString("account.test.address"), "1"};
+        CommandResult resultTransfer = (CommandResult) CommandLine.call(
+                new NeverminedCLI(TESTS_CONFIG_FOLDER), argsTransfer);
+        assertTrue(resultTransfer.isSuccess());
     }
 
 }
