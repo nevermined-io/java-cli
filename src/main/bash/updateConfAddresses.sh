@@ -1,7 +1,7 @@
 #!/bin/bash
 
 FILE_CONFIG=$1
-network="spree"
+NETWORK=${2:-"spree"}
 
 RETRY_COUNT=0
 COMMAND_STATUS=1
@@ -44,7 +44,7 @@ fi
 
 for c in "${contracts[@]}"
 do
-   address=$(jq -r .address "${HOME}/.nevermined/nevermined-contracts/artifacts/$c.$network.json")
+   address=$(jq -r .address "${HOME}/.nevermined/nevermined-contracts/artifacts/$c.$NETWORK.json")
    echo "Setting up $c address to $address"
    sed -i  "s/contract.$c.address=.*/contract.$c.address=\"$address\"/g" $FILE_CONFIG
 
