@@ -5,7 +5,7 @@
 > CLI for interacting with Nevermined Data Platform
 > [keyko.io](https://keyko.io)
 
-![Java Maven CI](https://github.com/keyko-io/nevermined-cli/workflows/Java%20Maven%20CI/badge.svg)
+![Build](https://github.com/keyko-io/nevermined-cli/workflows/Build/badge.svg)
 
 ---
 
