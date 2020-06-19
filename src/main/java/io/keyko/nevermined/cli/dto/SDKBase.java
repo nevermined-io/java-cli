@@ -69,6 +69,33 @@ public class SDKBase {
         } catch (Exception e) {
             throw new CLIException("Unable to initialize Nevermined connections: " + e.getMessage());
         }
+
+        try {
+            String mainAddress = mainConfig.getString("account.main.address");
+            String credentialsFile = mainConfig.getString("account.main.credentialsFile");
+            if (null == mainAddress || null == credentialsFile) {
+                String errorMessage = "We couldn'f find a proper account configuration";
+                printNoValidAccountMessage(errorMessage);
+            } else if (!fileExists(credentialsFile))   {
+                String errorMessage= "We couldn'f find the credentials file in the path given: " + credentialsFile;
+                printNoValidAccountMessage(errorMessage);
+            } else if (mainAddress.length() != 42) {
+                String errorMessage= "Invalid account provided in the configuration: " + mainAddress;
+                printNoValidAccountMessage(errorMessage);
+            }
+        } catch (Exception ex)  {
+            String errorMessage= "Unexpected error: " + ex.getMessage();
+            printNoValidAccountMessage(errorMessage);
+            throw new CLIException(errorMessage);
+        }
+    }
+
+    private void printNoValidAccountMessage(String errorMessage)    {
+        log.error("WARNING:\nIt looks the existing configuration doesn't include a valid account. " +
+                "You can create a new account running:\n" +
+                "ncli accounts new -m --password PASSWORD\n\n" +
+                "That command will create a new account to interact with the network and will " +
+                "leave everything ready in your configuration.");
     }
 
     public NeverminedAPI getNeverminedAPI() throws CLIException {

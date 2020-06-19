@@ -22,8 +22,6 @@
             * [Using a different logging config file](#using-a-different-logging-config-file)
       * [License](#license)
 
-
-
 ---
 
 ## Features
@@ -158,7 +156,7 @@ ncli utils info http://xxx.com/file.zip
 ## License
 
 ```
-Copyright 2020 Keyko GmbH
+Copyright 2020 Keyko AG
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

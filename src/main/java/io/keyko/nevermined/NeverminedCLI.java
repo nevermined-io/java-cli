@@ -16,7 +16,7 @@ import java.util.concurrent.Callable;
         header = {
                 "\n~ Welcome to Nevermined CLI ~\n" +
                 ""},
-        footer = "\nbuilt by Keyko GmbH (https://keyko.io)\n",
+        footer = "\nbuilt by Keyko (https://keyko.io)\n",
         subcommands = {
             ConfigCommand.class,
             AccountsCommand.class,
