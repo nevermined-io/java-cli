@@ -9,7 +9,13 @@ RUN mvn package
 
 
 ENV NEVERMINED_OPTS=''
-RUN mv target/cli-*-shaded.jar /
-RUN alias ncli='java $NEVERMINED_OPTS -jar cli-*-shaded.jar'
+RUN mkdir -p ~/.local/share/nevermined-cli/accounts
+RUN mkdir -p ~/.nevermined/nevermined-contracts/artifacts
 
-CMD ["/bin/sh"]
+RUN mv target/cli-*-shaded.jar /cli-shaded.jar
+RUN alias ncli='java $NEVERMINED_OPTS -jar cli-shaded.jar'
+
+
+ENTRYPOINT ["java", "-jar", "cli-shaded.jar"]
+CMD []
+

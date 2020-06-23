@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 FILE_CONFIG=$1
 NETWORK=${2:-"spree"}
