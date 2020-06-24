@@ -1,6 +1,13 @@
 History
 =======
 
+0.2.0 (June, 2020)
+-------------------------
+
+* Docker support
+* Integration of last nevermined-sdk-java versions
+
+
 0.1.0 (May, 2020)
 -------------------------
 
