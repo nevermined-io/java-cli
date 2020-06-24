@@ -1,0 +1,13 @@
+
+network="${KEEPER_NETWORK_NAME}"
+
+
+consume.basePath = "${CLI_VOLUME_PATH}"
+#
+## Main account
+account.main.address=""
+account.main.password=""
+account.main.credentialsFile=""
+
+
+spinner.id=14
