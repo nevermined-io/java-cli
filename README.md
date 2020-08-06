@@ -1,4 +1,4 @@
-[![banner](https://raw.githubusercontent.com/keyko-io/assets/master/images/logo/small/keyko_logo@2x-100.jpg)](https://keyko.io)
+[![banner](https://raw.githubusercontent.com/keyko-io/assets/master/images/logo/nevermined_logo_1.png)](https://nevermined.io)
 
 # Nevermined Command Line Interface (CLI)
 
@@ -156,7 +156,7 @@ ncli utils info http://xxx.com/file.zip
 ## License
 
 ```
-Copyright 2020 Keyko AG
+Copyright 2020 Keyko GmbH
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
