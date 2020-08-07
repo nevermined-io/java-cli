@@ -3,7 +3,7 @@
 # Nevermined Command Line Interface (CLI)
 
 > CLI for interacting with Nevermined Data Platform
-> [keyko.io](https://keyko.io)
+> [nevermined.io](https://nevermined.io)
 
 ![Build](https://github.com/keyko-io/nevermined-cli/workflows/Build/badge.svg)
 

@@ -13,6 +13,7 @@ jobs:
 
       - name: Starting Nevermined Tools
         run: |
+          docker login -u ${{ secrets.NEVERMINED_DOCKER_USERNAME }} -p ${{ secrets.NEVERMINED_DOCKER_TOKEN}}
           git clone https://github.com/keyko-io/nevermined-tools
           rm -rf ~/.nevermined/nevermined-contracts/artifacts
           cd nevermined-tools
