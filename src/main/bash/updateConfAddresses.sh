@@ -18,7 +18,7 @@ declare -a contracts=(
     "EscrowReward"
     "HashLockCondition"
     "LockRewardCondition"
-    "OceanToken"
+    "NeverminedToken"
     "SignCondition"
     "TemplateStoreManager"
     "ThresholdCondition"

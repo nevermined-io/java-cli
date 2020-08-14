@@ -142,10 +142,10 @@ ncli assets consume did:op:123
 ncli network list
 
 # Get Smart Contract methods
-ncli network describe OceanToken
+ncli network describe NeverminedToken
 
 # Call Contract method
-ncli network exec OceanToken request 1
+ncli network exec NeverminedToken request 1
 
 # Get resource remote information
 ncli utils info http://xxx.com/file.zip

@@ -24,7 +24,7 @@ public class ContractsReflections {
         put("TemplateStoreLibrary", TemplateStoreLibrary.class);
         put("AgreementTemplate", AgreementTemplate.class);
         put("TemplateStoreManager", TemplateStoreManager.class);
-        put("OceanToken", OceanToken.class);
+        put("NeverminedToken", NeverminedToken.class);
         put("Dispenser", Dispenser.class);
         put("HashLockCondition", HashLockCondition.class);
         put("LockRewardCondition", LockRewardCondition.class);
