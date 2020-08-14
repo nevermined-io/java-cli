@@ -23,7 +23,7 @@ public class AccountsList implements Callable {
     Logger logger;
 
 
-    CommandResult list() {
+    CommandResult list() throws CLIException {
         command.printHeader("Listing Accounts:");
 
         List<Account> accounts;
@@ -42,7 +42,7 @@ public class AccountsList implements Callable {
     }
 
     @Override
-    public CommandResult call() {
+    public CommandResult call() throws CLIException {
         return list();
     }
 }

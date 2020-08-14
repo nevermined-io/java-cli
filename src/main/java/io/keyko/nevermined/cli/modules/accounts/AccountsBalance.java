@@ -35,7 +35,7 @@ public class AccountsBalance implements Callable {
                     .balance(new Account(accountAddress, null));
 
             command.println("\tPOA Ether: " + command.getItem(String.valueOf(balance.getEth())) + " ETH");
-            command.println("\tTokens: " + command.getItem(String.valueOf(balance.getOceanTokens()))
+            command.println("\tTokens: " + command.getItem(String.valueOf(balance.getNeverminedTokens()))
                     + " Tokens = " + command.getItem(String.valueOf(balance.getDrops()) + " drops"));
 
         } catch (EthereumException e) {
