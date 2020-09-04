@@ -8,12 +8,12 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "assets",
         subcommands = {
-                AssetsCreate.class,
+                AssetsPublishDataset.class,
                 AssetsImport.class,
                 AssetsResolve.class,
                 AssetsSearch.class,
                 AssetsOrder.class,
-                AssetsAccess.class},
+                AssetsGet.class},
         description = "Assets handler")
 public class AssetsCommand extends NeverminedBaseCommand implements Runnable {
 

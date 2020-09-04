@@ -40,16 +40,24 @@ public class AssetsIT extends TestsBase {
     }
 
     @Test
-    public void assetsCreateAndResolve() throws CLIException {
+    public void assetsSearch() throws CLIException {
+        String[] args= {"assets", "search", "weather"};
+        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
+        assertFalse(result.isSuccess());
+    }
 
-        String[] args= {"assets", "create",
+    @Test
+    public void assetsPublishAndResolveDataset() throws CLIException {
+
+        String[] args= {"assets", "publish-dataset",
+                "--service", "access",
                 "--title", "title",
                 "--dateCreated", "2012-10-10T17:00:000Z",
                 "--author", "aitor",
                 "--license", "CC-BY",
                 "--contentType", "text/csv",
                 "--price", "10",
-                "--url", "https://keyko.io/privacy-policy"};
+                "--urls", "https://keyko.io/privacy-policy,https://keyko.io/robots.txt"};
 
         CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
         assertTrue(result.isSuccess());
@@ -63,6 +71,30 @@ public class AssetsIT extends TestsBase {
 
     }
 
+    @Test
+    public void assetsPublishAndResolveDatasetCompute() throws CLIException {
+
+        String[] args= {"assets", "publish-dataset",
+                "--service", "compute",
+                "--title", "you can compute this",
+                "--dateCreated", "2012-10-10T17:00:000Z",
+                "--author", "aitor",
+                "--license", "CC-BY",
+                "--contentType", "text/txt",
+                "--price", "5",
+                "--urls", "https://keyko.io/robots.txt"};
+
+        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
+        assertTrue(result.isSuccess());
+        String did= ((DDO) result.getResult()).id;
+        assertTrue(!did.isEmpty());
+
+        String[] argsResolve= {"assets", "resolve", did};
+        result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), argsResolve);
+        assertTrue(result.isSuccess());
+        assertEquals(did, ((DDO) result.getResult()).id);
+
+    }
 
     @Test
     public void assetsImportAndAccess() throws CLIException {

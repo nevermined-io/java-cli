@@ -63,11 +63,15 @@ public class AssetsSearch implements Callable {
     }
 
     private void printSimplifiedDDO(DDO ddo)    {
-        command.println("{" +
+        String entry = "{" +
                 "\n\t\"did\": \"" + ddo.id + "\", " +
-                "\n\t\"title\": \"" + ddo.getMetadataService().attributes.main.name  + "\", " +
-                "\n\t\"price\": \"" + ddo.getMetadataService().attributes.main.price  + "\" " +
-                "\n}");
+                "\n\t\"title\": \"" + ddo.getMetadataService().attributes.main.name  + "\", ";
+        if (null != ddo.getAccessService())
+                entry = entry +
+                        "\n\t\"price\": \"" + ddo.getMetadataService().attributes.main.price  + "\" ";
+        entry = entry + "\n}";
+
+        command.println(entry);
     }
 
     @Override

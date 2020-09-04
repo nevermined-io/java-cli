@@ -11,9 +11,9 @@ import picocli.CommandLine;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
-        name = "consume",
+        name = "get",
         description = "Download a previously ordered asset given a DID")
-public class AssetsAccess implements Callable {
+public class AssetsGet implements Callable {
 
     @CommandLine.ParentCommand
     AssetsCommand command;
@@ -34,7 +34,7 @@ public class AssetsAccess implements Callable {
     @CommandLine.Option(names = { "-p", "--path" }, required = false, description = "path where to download the asset")
     String path= "";
 
-    CommandResult access() throws CLIException {
+    CommandResult get() throws CLIException {
         try {
             if (null == path || path.isEmpty())
                 path= command.cli.getMainConfig().getString("consume.basePath");
@@ -58,7 +58,7 @@ public class AssetsAccess implements Callable {
             }
 
         } catch (DIDFormatException | ConsumeServiceException e) {
-            command.printError("Unable to access to files");
+            command.printError("Unable to get to files");
             logger.debug(e.getMessage());
             return CommandResult.errorResult();
         } finally {
@@ -70,6 +70,6 @@ public class AssetsAccess implements Callable {
 
     @Override
     public CommandResult call() throws CLIException {
-        return access();
+        return get();
     }
 }
