@@ -9,6 +9,8 @@ import picocli.CommandLine;
         name = "assets",
         subcommands = {
                 AssetsPublishDataset.class,
+                AssetsPublishAlgorithm.class,
+                AssetsPublishWorkflow.class,
                 AssetsImport.class,
                 AssetsResolve.class,
                 AssetsSearch.class,

@@ -14,6 +14,8 @@ import picocli.CommandLine;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
@@ -29,6 +31,9 @@ public class AssetsImport implements Callable {
     @CommandLine.Mixin
     io.keyko.nevermined.cli.helpers.Logger logger;
 
+    @CommandLine.Option(names = { "-s", "--service" }, required = true, description = "access or compute", defaultValue = "access")
+    String service;
+
     @CommandLine.Parameters(index = "0")
     String metadataFile;
 
@@ -41,8 +46,20 @@ public class AssetsImport implements Callable {
 
             command.cli.progressBar.start();
 
-            ddo = command.cli.getNeverminedAPI().getAssetsAPI()
-                    .create(assetMetadataBuilder(metadataFile), command.serviceEndpointsBuilder());
+            final AssetMetadata assetMetadata = assetMetadataBuilder(metadataFile);
+
+            if (service.toLowerCase().equals("compute"))    {
+                ddo = command.cli.getNeverminedAPI().getAssetsAPI()
+                        .createComputeService(assetMetadata, command.serviceEndpointsBuilder());
+
+            } else if (service.toLowerCase().equals("access"))    {
+                ddo = command.cli.getNeverminedAPI().getAssetsAPI()
+                        .create(assetMetadata, command.serviceEndpointsBuilder());
+
+            }   else {
+                command.printError("The service has to be access or compute");
+                return CommandResult.errorResult();
+            }
 
             command.printSuccess();
             command.println("Asset Created: " + command.getItem(ddo.getDid().toString()));

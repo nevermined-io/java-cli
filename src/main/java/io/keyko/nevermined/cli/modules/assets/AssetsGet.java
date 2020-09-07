@@ -3,9 +3,11 @@ package io.keyko.nevermined.cli.modules.assets;
 import io.keyko.nevermined.cli.AssetsCommand;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
-import io.keyko.nevermined.exceptions.ConsumeServiceException;
-import io.keyko.nevermined.exceptions.DIDFormatException;
+import io.keyko.nevermined.exceptions.*;
+import io.keyko.nevermined.models.DDO;
 import io.keyko.nevermined.models.DID;
+import io.keyko.nevermined.models.asset.OrderResult;
+import io.keyko.nevermined.models.service.Service;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
@@ -24,11 +26,12 @@ public class AssetsGet implements Callable {
     @CommandLine.Parameters(index = "0")
     String did;
 
-    @CommandLine.Option(names = { "-a", "--serviceAgreementId" }, required = true, description = "service agreement id")
+    @CommandLine.Option(names = { "-a", "--serviceAgreementId" }, required = false, description = "service agreement id", defaultValue = "")
     String serviceAgreementId;
 
-    @CommandLine.Option(names = { "-s", "--serviceIndex" }, required = false, description = "service index to consume")
-    int serviceIndex = 0;
+    @CommandLine.Option(names = { "-s", "--serviceIndex" }, required = false, description = "service index to consume", defaultValue = "-1")
+    String serviceIndex = "-1";
+
 
 
     @CommandLine.Option(names = { "-p", "--path" }, required = false, description = "path where to download the asset")
@@ -46,8 +49,31 @@ public class AssetsGet implements Callable {
 
             command.cli.progressBar.start();
 
+            int index = Integer.parseInt(serviceIndex);
+
+            if (null == serviceAgreementId || serviceAgreementId.length() <1)   {
+
+                OrderResult orderResult;
+
+                if (index >= 0)
+                    orderResult = command.cli.getNeverminedAPI().getAssetsAPI()
+                        .orderDirect(assetDid, index);
+                else {
+                    orderResult = command.cli.getNeverminedAPI().getAssetsAPI()
+                            .orderDirect(assetDid, Service.ServiceTypes.ACCESS);
+                    index = orderResult.getServiceIndex();
+                }
+                serviceAgreementId = orderResult.getServiceAgreementId();
+                command.println("DID Ordered, Service Agreement Id: " + serviceAgreementId);
+            }
+
+            if (index < 0)  {
+                DDO assetDdo = command.cli.getNeverminedAPI().getAssetsAPI().resolve(assetDid);
+                index = assetDdo.getAccessService().index;
+            }
+
             Boolean status = command.cli.getNeverminedAPI().getAssetsAPI()
-                    .consume(serviceAgreementId, assetDid, serviceIndex, path);
+                    .consume(serviceAgreementId, assetDid, index, path);
 
             if (status) {
                 command.printSuccess();
@@ -57,8 +83,12 @@ public class AssetsGet implements Callable {
                 return CommandResult.errorResult();
             }
 
-        } catch (DIDFormatException | ConsumeServiceException e) {
+        } catch (DIDFormatException | ConsumeServiceException | DDOException | EthereumException e) {
             command.printError("Unable to get to files");
+            logger.debug(e.getMessage());
+            return CommandResult.errorResult();
+        } catch (ServiceException | OrderException | EscrowRewardException e) {
+            command.printError("Unable to order asset");
             logger.debug(e.getMessage());
             return CommandResult.errorResult();
         } finally {
