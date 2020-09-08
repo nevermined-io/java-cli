@@ -15,7 +15,9 @@ import picocli.CommandLine;
                 AssetsResolve.class,
                 AssetsSearch.class,
                 AssetsOrder.class,
-                AssetsGet.class},
+                AssetsGet.class,
+                AssetsExec.class
+        },
         description = "Assets handler")
 public class AssetsCommand extends NeverminedBaseCommand implements Runnable {
 
@@ -29,7 +31,7 @@ public class AssetsCommand extends NeverminedBaseCommand implements Runnable {
     public ProviderConfig serviceEndpointsBuilder()  {
 
         return new ProviderConfig(
-                cli.getNetworkConfig().getString("gateway.url") + Constants.CONSUME_URI,
+                cli.getNetworkConfig().getString("gateway.url") + Constants.ACCESS_URI,
                 cli.getNetworkConfig().getString("metadata-internal.url") + Constants.METADATA_URI,
                 cli.getNetworkConfig().getString("gateway.url"),
                 cli.getNetworkConfig().getString("metadata-internal.url") + Constants.PROVENANCE_URI,

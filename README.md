@@ -150,8 +150,14 @@ ncli assets search query
 # Order
 ncli assets order did:op:123
 
-# Consume
+# Get an asset
 ncli assets get did:op:123
+
+# Get an asset having already a previous purchased order (via service agreement id) 
+ncli assets get did:op:123 -s 0x12321
+
+# Execute a remote compute service
+ncli assets exec did:nv:01234
 
 # Get Network Smart Contracts
 ncli network list

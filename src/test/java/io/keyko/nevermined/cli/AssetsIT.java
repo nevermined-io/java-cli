@@ -8,6 +8,7 @@ import io.keyko.nevermined.models.DDO;
 import io.keyko.nevermined.models.DID;
 import io.keyko.nevermined.models.asset.OrderResult;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import picocli.CommandLine;
 
@@ -51,17 +52,7 @@ public class AssetsIT extends TestsBase {
     @Test
     public void assetsPublishAndResolveDataset() throws CLIException {
 
-        String[] args= {"assets", "publish-dataset",
-                "--service", "access",
-                "--title", "title",
-                "--dateCreated", "2012-10-10T17:00:000Z",
-                "--author", "aitor",
-                "--license", "CC-BY",
-                "--contentType", "text/csv",
-                "--price", "10",
-                "--urls", "https://keyko.io/privacy-policy,https://keyko.io/robots.txt"};
-
-        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
+        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), PUBLISH_DATASET_ARGS);
         assertTrue(result.isSuccess());
         String did= ((DDO) result.getResult()).id;
         assertTrue(!did.isEmpty());
@@ -72,25 +63,11 @@ public class AssetsIT extends TestsBase {
         assertEquals(did, ((DDO) result.getResult()).id);
 
     }
-
-    //    ncli assets publish-algorithm --title "test" --dateCreated "2019-10-10T17:00:000Z" --author aitor --contentType text/text \
-//            --price 0 --language python --entrypoint "python word_count.py" --container python:3.8-alpine \
-//            --url https://raw.githubusercontent.com/keyko-io/nevermined-sdk-py/examples/word_count.py
 
     @Test
     public void assetsPublishAndResolveAlgorithm() throws CLIException {
 
-        String[] args= {"assets", "publish-algorithm",
-                "--title", "word count",
-                "--dateCreated", "2012-10-10T17:00:000Z",
-                "--author", "aitor",
-                "--contentType", "text/text",
-                "--language", "python",
-                "--entrypoint", "python word_count.py",
-                "--container", "python:3.8-alpine",
-                "--url", "https://raw.githubusercontent.com/keyko-io/nevermined-sdk-py/examples/word_count.py"};
-
-        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
+        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), PUBLISH_ALGORITHM_ARGS);
         assertTrue(result.isSuccess());
         String did= ((DDO) result.getResult()).id;
         assertTrue(!did.isEmpty());
@@ -102,22 +79,11 @@ public class AssetsIT extends TestsBase {
 
     }
 
-    //    ncli assets publish-workflow --title "test" --dateCreated "2019-10-10T17:00:000Z" --author aitor \
-//            --container python:3.8-alpine --inputs did:nv:123,did:nv:456 --transformation did:nv:abc
 
     @Test
     public void assetsPublishAndResolveWorkflow() throws CLIException, DIDFormatException {
 
-        String[] args= {"assets", "publish-workflow",
-                "--title", "word count workflow",
-                "--dateCreated", "2012-11-11T17:00:000Z",
-                "--author", "aitor",
-                "--container", "python:3.8-alpine",
-                "--inputs", DID.builder().getDid() + ":" + DID.builder().getDid(),
-                "--transformation", DID.builder().getDid()
-        };
-
-        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
+        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), PUBLISH_WORKFLOW_ARGS);
         assertTrue(result.isSuccess());
         String did= ((DDO) result.getResult()).id;
         assertTrue(!did.isEmpty());
@@ -132,17 +98,7 @@ public class AssetsIT extends TestsBase {
     @Test
     public void assetsPublishAndResolveDatasetCompute() throws CLIException {
 
-        String[] args= {"assets", "publish-dataset",
-                "--service", "compute",
-                "--title", "you can compute this",
-                "--dateCreated", "2012-10-10T17:00:000Z",
-                "--author", "aitor",
-                "--license", "CC-BY",
-                "--contentType", "text/txt",
-                "--price", "5",
-                "--urls", "https://keyko.io/robots.txt"};
-
-        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
+        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), PUBLISH_COMPUTE_ARGS);
         assertTrue(result.isSuccess());
         String did= ((DDO) result.getResult()).id;
         assertTrue(!did.isEmpty());
@@ -151,7 +107,6 @@ public class AssetsIT extends TestsBase {
         result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), argsResolve);
         assertTrue(result.isSuccess());
         assertEquals(did, ((DDO) result.getResult()).id);
-
     }
 
     @Test
@@ -177,6 +132,45 @@ public class AssetsIT extends TestsBase {
         assertTrue(result.isSuccess());
 
     }
+
+
+    // TODO: Have all the compute technical components automated
+    @Ignore
+    @Test
+    public void computeE2E() throws CLIException {
+
+        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), PUBLISH_COMPUTE_ARGS);
+        assertTrue(result.isSuccess());
+        String didCompute= ((DDO) result.getResult()).id;
+        assertTrue(!didCompute.isEmpty());
+
+        result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), PUBLISH_ALGORITHM_ARGS);
+        assertTrue(result.isSuccess());
+        String didAlgorithm= ((DDO) result.getResult()).id;
+        assertTrue(!didAlgorithm.isEmpty());
+
+        String [] workflowArgs = new String[]{"assets", "publish-workflow",
+                "--title", "word count workflow",
+                "--dateCreated", "2012-11-11T17:00:000Z",
+                "--author", "aitor",
+                "--container", "python:3.8-alpine",
+                "--inputs", didCompute,
+                "--transformation", didAlgorithm
+        };
+        result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), workflowArgs);
+        assertTrue(result.isSuccess());
+        String didWorkflow= ((DDO) result.getResult()).id;
+        assertTrue(!didWorkflow.isEmpty());
+
+
+        String [] execArgs = new String[]{"assets", "exec",
+                didCompute,
+                "--workflow", didWorkflow
+        };
+        result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), execArgs);
+        assertTrue(result.isSuccess());
+    }
+
 
     @Test
     public void assetsCreateError() throws CLIException {

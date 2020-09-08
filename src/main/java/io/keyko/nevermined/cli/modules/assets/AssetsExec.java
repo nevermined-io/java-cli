@@ -13,9 +13,9 @@ import picocli.CommandLine;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
-        name = "get",
-        description = "Download a previously ordered asset given a DID")
-public class AssetsGet implements Callable {
+        name = "exec",
+        description = "Execute a compute service given a DID")
+public class AssetsExec implements Callable {
 
     @CommandLine.ParentCommand
     AssetsCommand command;
@@ -26,26 +26,23 @@ public class AssetsGet implements Callable {
     @CommandLine.Parameters(index = "0")
     String did;
 
+    @CommandLine.Option(names = { "-w", "--workflow" }, required = true, description = "workflow DID")
+    String workflowId;
+
     @CommandLine.Option(names = { "-s", "--serviceAgreementId" }, required = false, description = "service agreement id", defaultValue = "")
     String serviceAgreementId;
 
-    @CommandLine.Option(names = { "-i", "--serviceIndex" }, required = false, description = "service index to consume", defaultValue = "-1")
+    @CommandLine.Option(names = { "-i", "--serviceIndex" }, required = false, description = "service index to execite", defaultValue = "-1")
     String serviceIndex = "-1";
 
 
-
-    @CommandLine.Option(names = { "-p", "--path" }, required = false, description = "path where to download the asset")
-    String path= "";
-
     CommandResult get() throws CLIException {
+        OrderResult orderResult = null;
         try {
-            if (null == path || path.isEmpty())
-                path= command.cli.getMainConfig().getString("consume.basePath");
-
-            command.printHeader("Downloading asset: ");
-            command.printSubHeader(did);
+            command.printHeader("Executing asset: " + did);
 
             DID assetDid= new DID(did);
+            DID workflowDid= new DID(workflowId);
 
             command.cli.progressBar.start();
 
@@ -53,14 +50,12 @@ public class AssetsGet implements Callable {
 
             if (null == serviceAgreementId || serviceAgreementId.length() <1)   {
 
-                OrderResult orderResult;
-
                 if (index >= 0)
                     orderResult = command.cli.getNeverminedAPI().getAssetsAPI()
                         .orderDirect(assetDid, index);
                 else {
                     orderResult = command.cli.getNeverminedAPI().getAssetsAPI()
-                            .orderDirect(assetDid, Service.ServiceTypes.ACCESS);
+                            .orderDirect(assetDid, Service.ServiceTypes.COMPUTE);
                     index = orderResult.getServiceIndex();
                 }
                 serviceAgreementId = orderResult.getServiceAgreementId();
@@ -69,22 +64,25 @@ public class AssetsGet implements Callable {
 
             if (index < 0)  {
                 DDO assetDdo = command.cli.getNeverminedAPI().getAssetsAPI().resolve(assetDid);
-                index = assetDdo.getAccessService().index;
+                index = assetDdo.getComputeService().index;
             }
 
-            Boolean status = command.cli.getNeverminedAPI().getAssetsAPI()
-                    .consume(serviceAgreementId, assetDid, index, path);
+            String executionId = command.cli.getNeverminedAPI().getAssetsAPI()
+                    .execute(serviceAgreementId, assetDid, index, workflowDid);
 
-            if (status) {
+            if (null != executionId) {
                 command.printSuccess();
-                command.println("Files downloaded to " + command.getItem(path));
+                command.println("Execution triggered: " + executionId);
             } else  {
-                command.printError("Unable to download files to " + path);
+                command.printError("Unable to trigger execution");
                 return CommandResult.errorResult();
             }
-
-        } catch (DIDFormatException | ConsumeServiceException | DDOException | EthereumException e) {
-            command.printError("Unable to get to files");
+            if (null == orderResult)
+                orderResult = new OrderResult(serviceAgreementId, true, false);
+            orderResult.setExecutionId(executionId);
+            
+        } catch (DIDFormatException | DDOException | EthereumException e) {
+            command.printError("Unable to execute service");
             logger.debug(e.getMessage());
             return CommandResult.errorResult();
         } catch (ServiceException | OrderException | EscrowRewardException e) {
@@ -94,7 +92,7 @@ public class AssetsGet implements Callable {
         } finally {
             command.cli.progressBar.doStop();
         }
-        return CommandResult.successResult();
+        return CommandResult.successResult().setResult(orderResult);
     }
 
 
