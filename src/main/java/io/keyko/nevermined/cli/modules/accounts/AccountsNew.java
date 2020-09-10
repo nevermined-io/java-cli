@@ -29,7 +29,7 @@ public class AccountsNew implements Callable {
     @CommandLine.Mixin
     Logger logger;
 
-    @CommandLine.Option(names = { "-p", "--password" }, arity = "0..1", interactive = true, required = true, description = "new account password, if it's not given will be auto-generated")
+    @CommandLine.Option(names = { "-p", "--password" }, arity = "0..1", interactive = true, required = true, description = "new account password")
     String password;
 
     @CommandLine.Option(names = { "-d", "--destination" }, description = "destination path")

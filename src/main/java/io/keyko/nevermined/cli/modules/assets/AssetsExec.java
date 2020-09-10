@@ -8,7 +8,6 @@ import io.keyko.nevermined.external.GatewayService;
 import io.keyko.nevermined.models.DDO;
 import io.keyko.nevermined.models.DID;
 import io.keyko.nevermined.models.asset.OrderResult;
-import io.keyko.nevermined.models.gateway.ExecuteService;
 import io.keyko.nevermined.models.service.Service;
 import picocli.CommandLine;
 
@@ -31,15 +30,15 @@ public class AssetsExec implements Callable {
     @CommandLine.Option(names = { "-w", "--workflow" }, required = true, description = "workflow DID")
     String workflowId;
 
-    @CommandLine.Option(names = { "-s", "--serviceAgreementId" }, required = false, description = "service agreement id", defaultValue = "")
+    @CommandLine.Option(names = { "-s", "--serviceAgreementId" }, description = "service agreement id", defaultValue = "")
     String serviceAgreementId;
 
-    @CommandLine.Option(names = { "-i", "--serviceIndex" }, required = false, description = "service index to execite", defaultValue = "-1")
+    @CommandLine.Option(names = { "-i", "--serviceIndex" }, description = "service index to execute", defaultValue = "-1")
     String serviceIndex = "-1";
 
 
     CommandResult get() throws CLIException {
-        OrderResult orderResult = null;
+        OrderResult orderResult;
 
         try {
             command.printHeader("Executing asset: " + did);
@@ -55,7 +54,7 @@ public class AssetsExec implements Callable {
 
                 if (index >= 0)
                     orderResult = command.cli.getNeverminedAPI().getAssetsAPI()
-                        .orderDirect(assetDid, index);
+                            .orderDirect(assetDid, index);
                 else {
                     orderResult = command.cli.getNeverminedAPI().getAssetsAPI()
                             .orderDirect(assetDid, Service.ServiceTypes.COMPUTE);

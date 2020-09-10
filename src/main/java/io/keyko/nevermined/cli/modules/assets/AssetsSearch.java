@@ -25,10 +25,10 @@ public class AssetsSearch implements Callable {
     @CommandLine.Parameters(index = "0")
     String query;
 
-    @CommandLine.Option(names = { "-o", "--offset" }, required = false, description = "search offset")
+    @CommandLine.Option(names = { "-o", "--offset" }, description = "search offset")
     int offset= 10;
 
-    @CommandLine.Option(names = { "-p", "--page" }, required = false, description = "page to show")
+    @CommandLine.Option(names = { "-p", "--page" }, description = "page to show")
     int page= 1;
 
     CommandResult search() throws CLIException {
