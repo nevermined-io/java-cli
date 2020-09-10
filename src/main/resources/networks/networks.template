@@ -9,6 +9,7 @@ metadata.url="${METADATA_URI}"
 metadata-internal.url="${METADATA_URI}"
 gateway.url="${GATEWAY_URL}"
 secretstore.url="${SECRET_STORE_URL}"
+faucet.url="${FAUCET_URL}"
 
 provider.address="${PROVIDER_ADDRESS}"
 

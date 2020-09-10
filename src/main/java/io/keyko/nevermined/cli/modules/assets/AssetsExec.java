@@ -4,9 +4,11 @@ import io.keyko.nevermined.cli.AssetsCommand;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
 import io.keyko.nevermined.exceptions.*;
+import io.keyko.nevermined.external.GatewayService;
 import io.keyko.nevermined.models.DDO;
 import io.keyko.nevermined.models.DID;
 import io.keyko.nevermined.models.asset.OrderResult;
+import io.keyko.nevermined.models.gateway.ExecuteService;
 import io.keyko.nevermined.models.service.Service;
 import picocli.CommandLine;
 
@@ -38,6 +40,7 @@ public class AssetsExec implements Callable {
 
     CommandResult get() throws CLIException {
         OrderResult orderResult = null;
+
         try {
             command.printHeader("Executing asset: " + did);
 
@@ -67,20 +70,19 @@ public class AssetsExec implements Callable {
                 index = assetDdo.getComputeService().index;
             }
 
-            String executionId = command.cli.getNeverminedAPI().getAssetsAPI()
+            final GatewayService.ServiceExecutionResult executionResult = command.cli.getNeverminedAPI()
+                    .getAssetsAPI()
                     .execute(serviceAgreementId, assetDid, index, workflowDid);
 
-            if (null != executionId) {
+            if (executionResult.getOk()) {
                 command.printSuccess();
-                command.println("Execution triggered: " + executionId);
+                command.println("Execution triggered: " + executionResult.getExecutionId());
+                return CommandResult.successResult().setResult(executionResult);
             } else  {
                 command.printError("Unable to trigger execution");
                 return CommandResult.errorResult();
             }
-            if (null == orderResult)
-                orderResult = new OrderResult(serviceAgreementId, true, false);
-            orderResult.setExecutionId(executionId);
-            
+
         } catch (DIDFormatException | DDOException | EthereumException e) {
             command.printError("Unable to execute service");
             logger.debug(e.getMessage());
@@ -92,7 +94,6 @@ public class AssetsExec implements Callable {
         } finally {
             command.cli.progressBar.doStop();
         }
-        return CommandResult.successResult().setResult(orderResult);
     }
 
 

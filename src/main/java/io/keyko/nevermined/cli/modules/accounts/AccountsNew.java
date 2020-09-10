@@ -1,7 +1,7 @@
 package io.keyko.nevermined.cli.modules.accounts;
 
+import io.keyko.nevermined.api.helper.AccountsHelper;
 import io.keyko.nevermined.cli.AccountsCommand;
-import io.keyko.nevermined.cli.helpers.AccountsHelper;
 import io.keyko.nevermined.cli.helpers.Constants;
 import io.keyko.nevermined.cli.helpers.Logger;
 import io.keyko.nevermined.cli.models.CommandResult;

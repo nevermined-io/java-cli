@@ -22,12 +22,15 @@ public class AccountsBalance implements Callable {
     @CommandLine.Mixin
     Logger logger;
 
-    @CommandLine.Parameters(index = "0")
+    @CommandLine.Option(names = { "-a", "--account" }, defaultValue = "", description = "account address we want to get the balance information")
     String accountAddress;
 
     CommandResult balance() throws CLIException {
         Balance balance;
         try {
+            if (null == accountAddress || accountAddress.isEmpty())
+                accountAddress = command.cli.getMainAddress();
+
             command.printHeader("Account Balance:");
             command.printSubHeader(accountAddress);
 

@@ -5,6 +5,8 @@ import io.keyko.nevermined.cli.helpers.Logger;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
 import io.keyko.nevermined.exceptions.EthereumException;
+import io.keyko.nevermined.exceptions.ServiceException;
+import io.keyko.nevermined.models.faucet.FaucetResponse;
 import picocli.CommandLine;
 
 import java.math.BigInteger;
@@ -14,7 +16,8 @@ import static io.keyko.nevermined.cli.helpers.Constants.TRANSACTION_SUCCESS;
 
 @CommandLine.Command(
         name = "request",
-        description = "Request some Tokens")
+        description = "Request some Tokens and ETH for paying transactions gas.\n" +
+                "WARNING: This command will environments where the faucet or the dispenser are disabled (i.e: production).")
 public class TokensRequest implements Callable {
 
     @CommandLine.ParentCommand
@@ -23,26 +26,44 @@ public class TokensRequest implements Callable {
     @CommandLine.Mixin
     Logger logger;
 
-    @CommandLine.Parameters(index = "0")
+    @CommandLine.Option(names = { "-e", "--eth" }, defaultValue = "false", description = "ETH for paying transactions gas")
+    boolean eth;
+
+    @CommandLine.Option(names = { "-t", "--tokens" }, defaultValue = "0", description = "Nevermined tokens")
     BigInteger numberTokens;
+
 
     CommandResult request() throws CLIException {
         try {
-            command.printHeader("Requesting Tokens:");
-            command.println("Requesting " + numberTokens.longValue() +
-                    " Token/s for " + command.cli.getNeverminedAPI().getMainAccount().getAddress() +
-                    " address");
+            String accountAddress = command.cli.getNeverminedAPI().getMainAccount().getAddress();
 
-            command.cli.progressBar.start();
+            if (numberTokens.compareTo(BigInteger.ZERO) > 0)    {
+                command.printHeader("Requesting Nevermined Tokens:");
+                command.println("Requesting " + numberTokens.longValue() +
+                        " Token/s for " + accountAddress +
+                        " address");
 
-            String status= command.cli.getNeverminedAPI().getTokensAPI()
-                    .request(numberTokens)
-                    .getStatus();
+                command.cli.progressBar.start();
 
-            if (status.equals(TRANSACTION_SUCCESS))
-                command.printSuccess();
+                String status= command.cli.getNeverminedAPI().getTokensAPI()
+                        .request(numberTokens)
+                        .getStatus();
 
-        } catch (EthereumException e) {
+                if (status.equals(TRANSACTION_SUCCESS))
+                    command.printSuccess();
+            }
+
+            if (eth)    {
+                command.printHeader("Requesting Network ETH for paying transactions gas:");
+                final FaucetResponse faucetResponse = command.cli.getNeverminedAPI().getAccountsAPI().requestEthFromFaucet(
+                        accountAddress);
+                if (faucetResponse.success)
+                    command.printSuccess();
+                else
+                    command.printError(faucetResponse.message);
+            }
+
+        } catch (EthereumException | ServiceException e) {
             command.printError("Error during token request");
             logger.debug(e.getMessage());
             return CommandResult.errorResult();

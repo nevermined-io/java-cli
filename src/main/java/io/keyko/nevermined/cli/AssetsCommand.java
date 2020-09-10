@@ -37,7 +37,8 @@ public class AssetsCommand extends NeverminedBaseCommand implements Runnable {
                 cli.getNetworkConfig().getString("metadata-internal.url") + Constants.PROVENANCE_URI,
                 cli.getNetworkConfig().getString("secretstore.url"),
                 cli.getNetworkConfig().getString("provider.address")
-        );
+        )
+                .setExecuteEndpoint(cli.getNetworkConfig().getString("gateway.url") + Constants.EXECUTE_URI);
 
     }
 

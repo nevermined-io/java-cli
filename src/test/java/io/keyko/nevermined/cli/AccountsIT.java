@@ -41,10 +41,16 @@ public class AccountsIT {
 
     @Test
     public void balanceAccount() throws CLIException {
-        String[] args= {"accounts", "balance", config.getString("account.main.address")};
+        String[] args= {"accounts", "balance", "-a", config.getString("account.main.address")};
         CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
 
         assertTrue(result.isSuccess());
+
+        String [] argsNoAccount= {"accounts", "balance"};
+        result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), argsNoAccount);
+
+        assertTrue(result.isSuccess());
+
     }
 
 }
