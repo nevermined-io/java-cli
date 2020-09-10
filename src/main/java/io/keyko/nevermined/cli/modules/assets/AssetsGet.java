@@ -14,7 +14,9 @@ import java.util.concurrent.Callable;
 
 @CommandLine.Command(
         name = "get",
-        description = "Download a previously ordered asset given a DID")
+        description = "Download an asset.\n " +
+                "It supports downloading a previously purchase asset (passing the --serviceAgrementId flag)\n" +
+                "or order the asset and download it if that is not given")
 public class AssetsGet implements Callable {
 
     @CommandLine.ParentCommand
@@ -26,15 +28,16 @@ public class AssetsGet implements Callable {
     @CommandLine.Parameters(index = "0")
     String did;
 
-    @CommandLine.Option(names = { "-s", "--serviceAgreementId" }, required = false, description = "service agreement id", defaultValue = "")
+    @CommandLine.Option(names = { "-s", "--serviceAgreementId" }, description = "service agreement id", defaultValue = "")
     String serviceAgreementId;
 
-    @CommandLine.Option(names = { "-i", "--serviceIndex" }, required = false, description = "service index to consume", defaultValue = "-1")
-    String serviceIndex = "-1";
+    @CommandLine.Option(names = { "-i", "--serviceIndex" }, description = "service index to consume", defaultValue = "-1")
+    Integer serviceIndex = -1;
 
+    @CommandLine.Option(names = { "-f", "--fileIndex" }, description = "file index to download. if not given will download all the files", defaultValue = "-1")
+    Integer fileIndex = -1;
 
-
-    @CommandLine.Option(names = { "-p", "--path" }, required = false, description = "path where to download the asset")
+    @CommandLine.Option(names = { "-p", "--path" }, description = "path where to download the asset")
     String path= "";
 
     CommandResult get() throws CLIException {
@@ -42,44 +45,48 @@ public class AssetsGet implements Callable {
             if (null == path || path.isEmpty())
                 path= command.cli.getMainConfig().getString("consume.basePath");
 
-            command.printHeader("Downloading asset: ");
+            command.printHeader("Downloading asset files: ");
             command.printSubHeader(did);
 
             DID assetDid= new DID(did);
 
             command.cli.progressBar.start();
 
-            int index = Integer.parseInt(serviceIndex);
 
             if (null == serviceAgreementId || serviceAgreementId.length() <1)   {
 
                 OrderResult orderResult;
 
-                if (index >= 0)
+                if (serviceIndex >= 0)
                     orderResult = command.cli.getNeverminedAPI().getAssetsAPI()
-                        .orderDirect(assetDid, index);
+                        .orderDirect(assetDid, serviceIndex);
                 else {
                     orderResult = command.cli.getNeverminedAPI().getAssetsAPI()
                             .orderDirect(assetDid, Service.ServiceTypes.ACCESS);
-                    index = orderResult.getServiceIndex();
+                    serviceIndex = orderResult.getServiceIndex();
                 }
                 serviceAgreementId = orderResult.getServiceAgreementId();
                 command.println("DID Ordered, Service Agreement Id: " + serviceAgreementId);
             }
 
-            if (index < 0)  {
+            if (serviceIndex < 0)  {
                 DDO assetDdo = command.cli.getNeverminedAPI().getAssetsAPI().resolve(assetDid);
-                index = assetDdo.getAccessService().index;
+                serviceIndex = assetDdo.getAccessService().index;
             }
 
-            Boolean status = command.cli.getNeverminedAPI().getAssetsAPI()
-                    .consume(serviceAgreementId, assetDid, index, path);
+            Boolean status = false;
+            if (fileIndex >= 0)
+                status = command.cli.getNeverminedAPI().getAssetsAPI()
+                        .consume(serviceAgreementId, assetDid, serviceIndex, fileIndex, path);
+            else
+                status = command.cli.getNeverminedAPI().getAssetsAPI()
+                        .consume(serviceAgreementId, assetDid, serviceIndex, path);
 
             if (status) {
                 command.printSuccess();
-                command.println("Files downloaded to " + command.getItem(path));
+                command.println("File/s downloaded to " + command.getItem(path));
             } else  {
-                command.printError("Unable to download files to " + path);
+                command.printError("Unable to download file/s to " + path);
                 return CommandResult.errorResult();
             }
 
