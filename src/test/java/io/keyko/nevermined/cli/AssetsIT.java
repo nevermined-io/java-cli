@@ -20,7 +20,7 @@ public class AssetsIT extends TestsBase {
     public static void setup() throws CLIException {
         logger.info("Requesting for some tokens before running the tests");
 
-        String[] args= {"tokens", "request", "10"};
+        String[] args= {"tokens", "request", "--tokens", "10"};
         CommandResult result = (CommandResult) CommandLine.call(
                 new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
         assertTrue(result.isSuccess());
@@ -46,7 +46,7 @@ public class AssetsIT extends TestsBase {
     public void assetsSearch() throws CLIException {
         String[] args= {"assets", "search", "weather"};
         CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
-        assertFalse(result.isSuccess());
+        assertTrue(result.isSuccess());
     }
 
     @Test
@@ -127,7 +127,7 @@ public class AssetsIT extends TestsBase {
 
         assertTrue(result.isSuccess());
 
-        String[] argsGet= {"assets", "get", did, "-a", saId, "-s", "3"};
+        String[] argsGet= {"assets", "get", did, "-s", saId, "-i", "3"};
         result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), argsGet);
         assertTrue(result.isSuccess());
 
@@ -174,14 +174,14 @@ public class AssetsIT extends TestsBase {
 
     @Test
     public void assetsCreateError() throws CLIException {
-        String[] args= {"assets", "create",
+        String[] args= {"assets", "publish-dataset",
                 "--title", "title",
                 "--dateCreated", "2012",
                 "--author", "aitor",
                 "--license", "CC-BY",
                 "--contentType", "text/csv",
                 "--price", "10",
-                "--url", "https://keyko.io/privacy-policy"};
+                "--urls", "https://keyko.io/privacy-policy"};
 
         CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
         assertFalse(result.isSuccess());

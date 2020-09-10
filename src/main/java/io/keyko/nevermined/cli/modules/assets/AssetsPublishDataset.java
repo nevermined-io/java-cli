@@ -25,7 +25,7 @@ public class AssetsPublishDataset extends AssetsBuilder implements Callable {
     io.keyko.nevermined.cli.helpers.Logger logger;
 
 
-    // $ ncli assets new-dataset --title title --dateCreated 2012-10-10T17:00:000Z
+    // $ ncli assets publish-dataset --title title --dateCreated 2012-10-10T17:00:000Z
     // --author aitor --license CC-BY --contentType text/csv --price 10
     // --url https://google.com/robots.txt
 
