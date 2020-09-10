@@ -25,21 +25,25 @@ public class AssetsImport implements Callable {
 
     private static final Logger log = LogManager.getLogger(AssetsImport.class);
 
+    enum SupportedServices { access, compute }
+
     @CommandLine.ParentCommand
     AssetsCommand command;
 
     @CommandLine.Mixin
     io.keyko.nevermined.cli.helpers.Logger logger;
 
-    @CommandLine.Option(names = { "-s", "--service" }, required = true, description = "access or compute", defaultValue = "access")
-    String service;
+    @CommandLine.Option(names = { "-s", "--service" },
+            description = " values: ${COMPLETION-CANDIDATES}", defaultValue = "access")
+    SupportedServices service;
 
     @CommandLine.Parameters(index = "0")
     String metadataFile;
 
+
     CommandResult importAsset() throws CLIException {
 
-        DDO ddo;
+        DDO ddo = null;
         try {
             command.printHeader("Importing asset");
             command.printSubHeader("Using file " + metadataFile);
@@ -48,17 +52,13 @@ public class AssetsImport implements Callable {
 
             final AssetMetadata assetMetadata = assetMetadataBuilder(metadataFile);
 
-            if (service.toLowerCase().equals("compute"))    {
+            if (service.equals(SupportedServices.compute))    {
                 ddo = command.cli.getNeverminedAPI().getAssetsAPI()
                         .createComputeService(assetMetadata, command.serviceEndpointsBuilder());
 
-            } else if (service.toLowerCase().equals("access"))    {
+            } else if (service.equals(SupportedServices.access))    {
                 ddo = command.cli.getNeverminedAPI().getAssetsAPI()
                         .create(assetMetadata, command.serviceEndpointsBuilder());
-
-            }   else {
-                command.printError("The service has to be access or compute");
-                return CommandResult.errorResult();
             }
 
             command.printSuccess();

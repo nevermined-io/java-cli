@@ -52,7 +52,7 @@ public class AssetsPublishDataset extends AssetsBuilder implements Callable {
     @CommandLine.Option(names = { "-p", "--price" }, defaultValue = "0", description = "the dataset price")
     String price;
 
-    @CommandLine.Option(names = { "-u", "--urls" }, required = true, description = "the asset urls. It could be a comma separated list of urls")
+    @CommandLine.Option(names = { "-u", "--urls" }, description = "the asset urls. It could be a comma separated list of urls")
     String urls;
 
     CommandResult publish() throws CLIException {

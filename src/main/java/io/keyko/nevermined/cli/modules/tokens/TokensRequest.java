@@ -17,7 +17,7 @@ import static io.keyko.nevermined.cli.helpers.Constants.TRANSACTION_SUCCESS;
 @CommandLine.Command(
         name = "request",
         description = "Request some Tokens and ETH for paying transactions gas.\n" +
-                "WARNING: This command will environments where the faucet or the dispenser are disabled (i.e: production).")
+                "WARNING: This command will not work in environments where the faucet or the dispenser are disabled (i.e: production).")
 public class TokensRequest implements Callable {
 
     @CommandLine.ParentCommand
