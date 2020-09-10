@@ -106,16 +106,16 @@ ncli config clean
 ncli --help
 
 # Create a new account
-ncli accounts new -p 1234 -m
+ncli accounts new -m --password
 
 # List existing accounts 
 ncli accounts list 
 
 # Get account balance 
-ncli accounts balance 0x123
+ncli accounts balance --address 0x123
 
 # Request some tokens
-ncli tokens request 5
+ncli tokens request --tokens 5 --eth
 
 # Transfers tokens to other account
 ncli tokens transfer 0x123 5
