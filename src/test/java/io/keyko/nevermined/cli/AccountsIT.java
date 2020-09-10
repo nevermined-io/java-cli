@@ -16,6 +16,7 @@ public class AccountsIT {
 
     Config config = ConfigFactory.load();
 
+
     @Test
     public void newAccount() throws CLIException {
         String[] args= {"accounts", "new", "-p", "1234", "-d", "/tmp"};
@@ -29,7 +30,6 @@ public class AccountsIT {
         String[] args= {"accounts", "new", "-p", "1234", "-m"};
         CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
         assertTrue(result.isSuccess());
-
     }
 
     @Test
