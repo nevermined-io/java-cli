@@ -1,7 +1,5 @@
 package io.keyko.nevermined.cli;
 
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 import io.keyko.nevermined.NeverminedCLI;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
@@ -23,7 +21,7 @@ public class TokensIT extends TestsBase {
 
     @Test
     public void tokenAndtransferRequest() throws CLIException {
-        String[] args= {"tokens", "request", "1"};
+        String[] args= {"tokens", "request", "--tokens", "1"};
         CommandResult result = (CommandResult) CommandLine.call(
                 new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
         assertTrue(result.isSuccess());
@@ -33,5 +31,6 @@ public class TokensIT extends TestsBase {
                 new NeverminedCLI(TESTS_CONFIG_FOLDER), argsTransfer);
         assertTrue(resultTransfer.isSuccess());
     }
+
 
 }

@@ -14,6 +14,8 @@ import picocli.CommandLine;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
@@ -23,26 +25,41 @@ public class AssetsImport implements Callable {
 
     private static final Logger log = LogManager.getLogger(AssetsImport.class);
 
+    enum SupportedServices { access, compute }
+
     @CommandLine.ParentCommand
     AssetsCommand command;
 
     @CommandLine.Mixin
     io.keyko.nevermined.cli.helpers.Logger logger;
 
+    @CommandLine.Option(names = { "-s", "--service" },
+            description = " values: ${COMPLETION-CANDIDATES}", defaultValue = "access")
+    SupportedServices service;
+
     @CommandLine.Parameters(index = "0")
     String metadataFile;
 
+
     CommandResult importAsset() throws CLIException {
 
-        DDO ddo;
+        DDO ddo = null;
         try {
             command.printHeader("Importing asset");
             command.printSubHeader("Using file " + metadataFile);
 
             command.cli.progressBar.start();
 
-            ddo = command.cli.getNeverminedAPI().getAssetsAPI()
-                    .create(assetMetadataBuilder(metadataFile), command.serviceEndpointsBuilder());
+            final AssetMetadata assetMetadata = assetMetadataBuilder(metadataFile);
+
+            if (service.equals(SupportedServices.compute))    {
+                ddo = command.cli.getNeverminedAPI().getAssetsAPI()
+                        .createComputeService(assetMetadata, command.serviceEndpointsBuilder());
+
+            } else if (service.equals(SupportedServices.access))    {
+                ddo = command.cli.getNeverminedAPI().getAssetsAPI()
+                        .create(assetMetadata, command.serviceEndpointsBuilder());
+            }
 
             command.printSuccess();
             command.println("Asset Created: " + command.getItem(ddo.getDid().toString()));

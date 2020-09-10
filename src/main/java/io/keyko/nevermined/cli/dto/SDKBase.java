@@ -24,6 +24,7 @@ public class SDKBase {
     private Config mainConfig;
     private Config networkConfig= null;
     private String networkName;
+    private String mainAddress;
     private NeverminedAPI neverminedAPI = null;
 
     public ProgressBar progressBar= new ProgressBar();
@@ -71,7 +72,7 @@ public class SDKBase {
         }
 
         try {
-            String mainAddress = mainConfig.getString("account.main.address");
+            mainAddress = mainConfig.getString("account.main.address");
             String credentialsFile = mainConfig.getString("account.main.credentialsFile");
             if (null == mainAddress || null == credentialsFile) {
                 String errorMessage = "We couldn'f find a proper account configuration";
@@ -115,6 +116,10 @@ public class SDKBase {
 
     public Config getMainConfig()    {
         return mainConfig;
+    }
+
+    public String getMainAddress() {
+        return mainAddress;
     }
 
     private boolean fileExists(String path)    {

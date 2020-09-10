@@ -21,6 +21,8 @@ public abstract class Constants {
 
     public static final String PROVENANCE_URI = "/api/v1/metadata/assets/ddo/{did}";
 
-    public static final String CONSUME_URI = "/api/v1/gateway/services/access";
+    public static final String ACCESS_URI = "/api/v1/gateway/services/access";
+
+    public static final String EXECUTE_URI = "/api/v1/gateway/services/execute";
 
 }

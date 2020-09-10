@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.keyko.nevermined</groupId>
     <artifactId>cli</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
     <packaging>jar</packaging>
     <name>Nevermined Command Line Interface</name>
     <url>https://github.com/keyko-io/nevermined-cli</url>
@@ -22,7 +22,7 @@
         <maven.compiler.release>11</maven.compiler.release>
         <final-name>nevermined-cli</final-name>
 
-        <nevermined.sdk.version>0.3.0</nevermined.sdk.version>
+        <nevermined.sdk.version>0.3.2</nevermined.sdk.version>
         <picocli.version>4.3.2</picocli.version>
         <log4j.version>2.11.1</log4j.version>
         <junit.version>4.12</junit.version>

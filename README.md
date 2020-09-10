@@ -106,22 +106,37 @@ ncli config clean
 ncli --help
 
 # Create a new account
-ncli accounts new -p 1234 -m
+ncli accounts new -m --password
 
 # List existing accounts 
 ncli accounts list 
 
 # Get account balance 
-ncli accounts balance 0x123
+ncli accounts balance --address 0x123
 
 # Request some tokens
-ncli tokens request 5
+ncli tokens request --tokens 5 --eth
 
 # Transfers tokens to other account
 ncli tokens transfer 0x123 5
 
-# Creates an asset
-ncli assets create --title "test" --dateCreated "2019-10-10T17:00:000Z" --author aitor --license CC-BY --contentType text/csv --price 1 --url https://keyko.io/robots.txt
+# Publishing a new dataset that can be offered for access
+ncli assets publish-dataset --service access --title "test" --dateCreated "2019-10-10T17:00:000Z" --author aitor \ 
+    --contentType text/csv --price 1 --urls https://keyko.io/robots.txt
+
+# Publishing a new dataset that can be offered for compute
+ncli assets publish-dataset --service compute --title "test" --dateCreated "2019-10-10T17:00:000Z" --author aitor \ 
+    --contentType text/csv --urls https://keyko.io/robots.txt
+
+# Publishing a new algorithm
+ncli assets publish-algorithm --title "test" --dateCreated "2019-10-10T17:00:000Z" --author aitor --contentType text/text \ 
+    --price 0 --language python --entrypoint "python word_count.py" --container python:3.8-alpine \
+    --url https://raw.githubusercontent.com/keyko-io/nevermined-sdk-py/examples/word_count.py
+
+# Publishing a new workflow
+ncli assets publish-workflow --title "test" --dateCreated "2019-10-10T17:00:000Z" --author aitor \ 
+    --container python:3.8-alpine --inputs did:nv:123,did:nv:456 --transformation did:nv:abc    
+
 
 # Imports an asset from a JSON file
 ncli assets import metadata.json
@@ -135,8 +150,14 @@ ncli assets search query
 # Order
 ncli assets order did:op:123
 
-# Consume
-ncli assets consume did:op:123
+# Get an asset
+ncli assets get did:op:123
+
+# Get an asset having already a previous purchased order (via service agreement id) 
+ncli assets get did:op:123 -s 0x12321
+
+# Execute a remote compute service
+ncli assets exec did:nv:01234
 
 # Get Network Smart Contracts
 ncli network list
