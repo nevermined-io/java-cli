@@ -46,10 +46,10 @@ public class AssetsPublishAlgorithm extends AssetsBuilder implements Callable {
     @CommandLine.Option(names = { "-c", "--contentType" }, required = true, description = "file content type")
     String contentType;
 
-    @CommandLine.Option(names = { "-p", "--price" }, required = false, defaultValue = "0", description = "the algorithm price")
+    @CommandLine.Option(names = { "-p", "--price" }, defaultValue = "0", description = "the algorithm price")
     String price;
 
-    @CommandLine.Option(names = { "-u", "--url" }, required = true, description = "the asset url to the algorithm")
+    @CommandLine.Option(names = { "-u", "--url" }, description = "the asset url to the algorithm")
     String url;
 
     @CommandLine.Option(names = { "--language" }, required = true, description = "the programing language of the algorithm")
