@@ -24,7 +24,7 @@ public abstract class TestsBase {
             "--license", "CC-BY",
             "--contentType", "text/txt",
             "--price", "5",
-            "--urls", "https://keyko.io/robots.txt"};
+            "--urls", "https://raw.githubusercontent.com/keyko-io/nevermined-docs/master/docs/README.md"};
 
     final String[] PUBLISH_ALGORITHM_ARGS = {"assets", "publish-algorithm",
             "--title", "word count",
@@ -58,7 +58,7 @@ public abstract class TestsBase {
             "--license", "CC-BY",
             "--contentType", "text/txt",
             "--price", "5",
-            "--urls", "https://keyko.io/robots.txt"
+            "--urls", "https://github.com/robots.txt"
     };
 
 }

@@ -122,11 +122,11 @@ ncli tokens transfer 0x123 5
 
 # Publishing a new dataset that can be offered for access
 ncli assets publish-dataset --service access --title "test" --dateCreated "2019-10-10T17:00:000Z" --author aitor \ 
-    --contentType text/csv --price 1 --urls https://keyko.io/robots.txt
+    --contentType text/csv --price 1 --urls https://github.com/robots.txt
 
 # Publishing a new dataset that can be offered for compute
 ncli assets publish-dataset --service compute --title "test" --dateCreated "2019-10-10T17:00:000Z" --author aitor \ 
-    --contentType text/csv --urls https://keyko.io/robots.txt
+    --contentType text/csv --urls https://github.com/robots.txt
 
 # Publishing a new algorithm
 ncli assets publish-algorithm --title "test" --dateCreated "2019-10-10T17:00:000Z" --author aitor --contentType text/text \ 

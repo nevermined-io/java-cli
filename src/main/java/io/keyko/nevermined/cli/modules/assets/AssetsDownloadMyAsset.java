@@ -6,18 +6,16 @@ import io.keyko.nevermined.cli.models.exceptions.CLIException;
 import io.keyko.nevermined.exceptions.*;
 import io.keyko.nevermined.models.DDO;
 import io.keyko.nevermined.models.DID;
-import io.keyko.nevermined.models.asset.OrderResult;
-import io.keyko.nevermined.models.service.Service;
 import picocli.CommandLine;
 
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
-        name = "get",
-        description = "Order & download or download directly a previously purchased asset.\n " +
+        name = "download-my-asset",
+        description = "Download an asset owned by me.\n " +
                 "It supports downloading a previously purchase asset (passing the --serviceAgrementId flag)\n" +
                 "or order the asset and download it if that is not given")
-public class AssetsGet implements Callable {
+public class AssetsDownloadMyAsset implements Callable {
 
     @CommandLine.ParentCommand
     AssetsCommand command;
@@ -28,19 +26,13 @@ public class AssetsGet implements Callable {
     @CommandLine.Parameters(index = "0")
     String did;
 
-    @CommandLine.Option(names = { "-s", "--serviceAgreementId" }, description = "service agreement id", defaultValue = "")
-    String serviceAgreementId;
-
     @CommandLine.Option(names = { "-i", "--serviceIndex" }, description = "service index to consume", defaultValue = "-1")
     Integer serviceIndex = -1;
-
-    @CommandLine.Option(names = { "-f", "--fileIndex" }, description = "file index to download. if not given will download all the files", defaultValue = "-1")
-    Integer fileIndex = -1;
 
     @CommandLine.Option(names = { "-p", "--path" }, description = "path where to download the asset")
     String path= "";
 
-    CommandResult get() throws CLIException {
+    CommandResult getMyAsset() throws CLIException {
         try {
             if (null == path || path.isEmpty())
                 path= command.cli.getMainConfig().getString("consume.basePath");
@@ -52,35 +44,13 @@ public class AssetsGet implements Callable {
 
             command.cli.progressBar.start();
 
-
-            if (null == serviceAgreementId || serviceAgreementId.length() <1)   {
-
-                OrderResult orderResult;
-
-                if (serviceIndex >= 0)
-                    orderResult = command.cli.getNeverminedAPI().getAssetsAPI()
-                        .orderDirect(assetDid, serviceIndex);
-                else {
-                    orderResult = command.cli.getNeverminedAPI().getAssetsAPI()
-                            .orderDirect(assetDid, Service.ServiceTypes.ACCESS);
-                    serviceIndex = orderResult.getServiceIndex();
-                }
-                serviceAgreementId = orderResult.getServiceAgreementId();
-                command.println("DID Ordered, Service Agreement Id: " + serviceAgreementId);
-            }
-
             if (serviceIndex < 0)  {
                 DDO assetDdo = command.cli.getNeverminedAPI().getAssetsAPI().resolve(assetDid);
                 serviceIndex = assetDdo.getAccessService().index;
             }
 
-            Boolean status = false;
-            if (fileIndex >= 0)
-                status = command.cli.getNeverminedAPI().getAssetsAPI()
-                        .consume(serviceAgreementId, assetDid, serviceIndex, fileIndex, path);
-            else
-                status = command.cli.getNeverminedAPI().getAssetsAPI()
-                        .consume(serviceAgreementId, assetDid, serviceIndex, path);
+            Boolean status = command.cli.getNeverminedAPI().getAssetsAPI()
+                    .ownerDownload(assetDid, serviceIndex, path);
 
             if (status) {
                 command.printSuccess();
@@ -94,7 +64,7 @@ public class AssetsGet implements Callable {
             command.printError("Unable to get to files");
             logger.debug(e.getMessage());
             return CommandResult.errorResult();
-        } catch (ServiceException | OrderException | EscrowRewardException e) {
+        } catch (ServiceException e) {
             command.printError("Unable to order asset");
             logger.debug(e.getMessage());
             return CommandResult.errorResult();
@@ -107,6 +77,6 @@ public class AssetsGet implements Callable {
 
     @Override
     public CommandResult call() throws CLIException {
-        return get();
+        return getMyAsset();
     }
 }

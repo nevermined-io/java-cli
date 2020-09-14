@@ -65,6 +65,20 @@ public class AssetsIT extends TestsBase {
     }
 
     @Test
+    public void assetsPublishAndDownloadMyAsset() throws CLIException {
+
+        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), PUBLISH_DATASET_ARGS);
+        assertTrue(result.isSuccess());
+        String did= ((DDO) result.getResult()).id;
+        assertTrue(!did.isEmpty());
+
+        String[] argsResolve= {"assets", "download-my-asset", did};
+        result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), argsResolve);
+        assertTrue(result.isSuccess());
+
+    }
+
+    @Test
     public void assetsPublishAndResolveAlgorithm() throws CLIException {
 
         CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), PUBLISH_ALGORITHM_ARGS);

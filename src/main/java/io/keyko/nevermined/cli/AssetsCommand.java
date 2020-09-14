@@ -16,6 +16,7 @@ import picocli.CommandLine;
                 AssetsSearch.class,
                 AssetsOrder.class,
                 AssetsGet.class,
+                AssetsDownloadMyAsset.class,
                 AssetsExec.class
         },
         description = "Assets handler")
