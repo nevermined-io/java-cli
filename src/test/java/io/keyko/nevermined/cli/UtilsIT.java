@@ -14,7 +14,7 @@ public class UtilsIT {
 
     @Test
     public void utilsInfo() throws CLIException {
-        String[] args= {"utils", "info", "https://keyko.io/robots.txt"};
+        String[] args= {"utils", "info", "https://github.com/robots.txt"};
         CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
         assertTrue(result.isSuccess());
 
