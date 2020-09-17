@@ -2,7 +2,7 @@
 
 env
 
-$ROOT_PATH="/"
+ROOT_PATH="/"
 
 mkdir -p /root/.local/share/nevermined-cli/networks/
 envsubst < $ROOT_PATH/src/main/resources/application.template > /root/.local/share/nevermined-cli/application.conf
