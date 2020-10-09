@@ -42,6 +42,7 @@ jobs:
       - name: Test script
         run: |
           bash src/main/bash/updateConfAddresses.sh src/main/resources/networks/spree.conf
+          mvn clean package
           ./src/test/resources/examples/flink-demo.sh
 
       - name: Run tests
