@@ -26,28 +26,28 @@ jobs:
         run: |
           docker system prune --all --volumes -f
 
-      - name: Start Nevermined
-        run: |
-          docker login -u ${{ secrets.NEVERMINED_DOCKER_USERNAME }} -p ${{ secrets.NEVERMINED_DOCKER_TOKEN}}
-          git clone https://github.com/keyko-io/nevermined-tools
-          cd nevermined-tools
-          rm -rf "${HOME}/.nevermined/nevermined-contracts/artifacts"
-          # start nevermined with the compute stack
-          ./start_nevermined.sh --latest --no-commons --local-spree-node --compute &
-          # wait for the compute api to be online.
-          # the compute api is the last service to come online
-          ./scripts/wait_for_compute_api.sh
-          cd ..
+      #- name: Start Nevermined
+      #  run: |
+      #    docker login -u ${{ secrets.NEVERMINED_DOCKER_USERNAME }} -p ${{ secrets.NEVERMINED_DOCKER_TOKEN}}
+      #    git clone https://github.com/keyko-io/nevermined-tools
+      #    cd nevermined-tools
+      #    rm -rf "${HOME}/.nevermined/nevermined-contracts/artifacts"
+      #    # start nevermined with the compute stack
+      #    ./start_nevermined.sh --latest --no-commons --local-spree-node --compute &
+      #    # wait for the compute api to be online.
+      #    # the compute api is the last service to come online
+      #    ./scripts/wait_for_compute_api.sh
+      #    cd ..
 
       - name: Test script
         run: |
-          bash src/main/bash/updateConfAddresses.sh src/main/resources/networks/spree.conf
+          # bash src/main/bash/updateConfAddresses.sh src/main/resources/networks/spree.conf
           mvn clean package
           whoami
           echo $RUNNER_USER
           ls -lR ~/.local/share
           mkdir -p ~/.local/share/nevermined-cli
-          sudo chown $RUNNER_USER ~/.local/share/nevermined-cli
+          sudo chown $USER:$USER ~/.local/share/nevermined-cli
           ls -lR ~/.local/share
           ./src/test/resources/examples/flink-demo.sh
 
