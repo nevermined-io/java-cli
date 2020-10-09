@@ -41,7 +41,7 @@ jobs:
 
       - name: Run script
         run: |
-          sudo chown $USER:$USER ~/.local
+          sudo chown $USER:$USER -R ~/.local
           rm -rf ~/.local/share/nevermined-cli
           bash src/main/bash/updateConfAddresses.sh src/test/resources/networks/spree.conf
           bash src/main/bash/updateConfAddresses.sh src/main/resources/networks/spree.conf
