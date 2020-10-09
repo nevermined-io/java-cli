@@ -23,7 +23,8 @@ import java.util.concurrent.Callable;
             TokensCommand.class,
             AssetsCommand.class,
             UtilsCommand.class,
-            NetworkCommand.class
+            NetworkCommand.class,
+            ComputeCommand.class
         })
 public class NeverminedCLI extends SDKBase implements Callable {
 
