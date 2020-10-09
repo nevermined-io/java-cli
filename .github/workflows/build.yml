@@ -41,7 +41,8 @@ jobs:
 
       - name: Run tests
         run: |
-          sudo rm -rf ~/.local/share
+          sudo chown $USER:$USER -R ~/.local
+          rm -rf ~/.local/nevermined-cli
           bash src/main/bash/updateConfAddresses.sh src/test/resources/networks/spree.conf
           bash src/main/bash/updateConfAddresses.sh src/main/resources/networks/spree.conf
           mvn clean verify -P integration-test
