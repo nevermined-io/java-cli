@@ -41,6 +41,7 @@ jobs:
 
       - name: Run tests
         run: |
+          sudo rm -rf ~/.local/share
           bash src/main/bash/updateConfAddresses.sh src/test/resources/networks/spree.conf
           bash src/main/bash/updateConfAddresses.sh src/main/resources/networks/spree.conf
-          mvn clean verify -P integration-test -Dsurefire.useFile=false
+          mvn clean verify -P integration-test
