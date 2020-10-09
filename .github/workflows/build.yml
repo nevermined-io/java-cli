@@ -45,7 +45,6 @@ jobs:
           mvn clean package
           whoami
           echo $RUNNER_USER
-          ls -lR ~/.local/share
           mkdir -p ~/.local/share/nevermined-cli
           sudo chown $USER:$USER ~/.local/share/nevermined-cli
           ls -lR ~/.local/share
