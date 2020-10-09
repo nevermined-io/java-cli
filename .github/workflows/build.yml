@@ -46,4 +46,4 @@ jobs:
           mvn clean package
           bash src/main/bash/updateConfAddresses.sh src/test/resources/networks/spree.conf
           bash src/main/bash/updateConfAddresses.sh src/main/resources/networks/spree.conf
-          mvn clean verify -P integration-test
+          mvn verify -P integration-test
