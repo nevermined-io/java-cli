@@ -41,7 +41,8 @@ jobs:
 
       - name: Run script
         run: |
-          sudo rm -rf ~/.local/share
+          sudo chown $USER:$USER ~/.local
+          rm -rf ~/.local/share/nevermined-cli
           bash src/main/bash/updateConfAddresses.sh src/test/resources/networks/spree.conf
           bash src/main/bash/updateConfAddresses.sh src/main/resources/networks/spree.conf
           mvn clean package
