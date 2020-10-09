@@ -39,6 +39,11 @@ jobs:
           ./scripts/wait_for_compute_api.sh
           cd ..
 
+      - name: Test script
+        run: |
+          bash src/main/bash/updateConfAddresses.sh src/main/resources/networks/spree.conf
+          ./src/test/resources/examples/flink-demo.sh
+
       - name: Run tests
         run: |
           bash src/main/bash/updateConfAddresses.sh src/test/resources/networks/spree.conf
