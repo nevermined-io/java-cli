@@ -43,6 +43,8 @@ jobs:
         run: |
           bash src/main/bash/updateConfAddresses.sh src/main/resources/networks/spree.conf
           mvn clean package
+          mkdir -p ~/.local/share/nevermined-cli
+          sudo chown $RUNNER_USER ~/.local/share/nevermined-cli
           ./src/test/resources/examples/flink-demo.sh
 
       - name: Run tests
