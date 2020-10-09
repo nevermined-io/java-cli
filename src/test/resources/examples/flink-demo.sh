@@ -11,6 +11,9 @@ eid () { cat /tmp/capture.out | grep -oP '\Knevermined-compute-\w+'; }
 
 alias ncli='java $NEVERMINED_OPTS -jar target/cli-*-shaded.jar'
 
+# clean config
+ncli config clean
+
 # create account
 ncli accounts new -m -p secret -d /tmp
 # request some eth so that we can pay for gas
