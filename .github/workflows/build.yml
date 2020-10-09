@@ -43,4 +43,4 @@ jobs:
         run: |
           bash src/main/bash/updateConfAddresses.sh src/test/resources/networks/spree.conf
           bash src/main/bash/updateConfAddresses.sh src/main/resources/networks/spree.conf
-          mvn clean verify -P integration-test
+          mvn clean verify -P integration-test -Dsurefire.useFile=false
