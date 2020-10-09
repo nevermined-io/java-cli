@@ -39,6 +39,14 @@ jobs:
           ./scripts/wait_for_compute_api.sh
           cd ..
 
+      - name: Run script
+        run: |
+          sudo rm -rf ~/.local/share
+          bash src/main/bash/updateConfAddresses.sh src/test/resources/networks/spree.conf
+          bash src/main/bash/updateConfAddresses.sh src/main/resources/networks/spree.conf
+          mvn clean package
+          ./src/test/resources/examples/flink-demo.sh
+
       - name: Run tests
         run: |
           sudo rm -rf ~/.local/share
