@@ -23,17 +23,22 @@ public class NeverminedBaseCommand {
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;
 
-    public void println()   {
-        println("");
-    }
-
-    public void println(String line)   {
+    public void print(String line)   {
         if (!line.contains(COLOR_PREFIX))
-            getOut().println(line);
+            getOut().print(line);
         else
-            getOut().println(
+            getOut().print(
                 CommandLine.Help.Ansi.AUTO.string(line)
             );
+        getOut().flush();
+    }
+
+    public void println(String line) {
+        print(line + "\n");
+    }
+
+    public void println() {
+        print("\n");
     }
 
     public void printHeader(String header)  {
@@ -64,6 +69,18 @@ public class NeverminedBaseCommand {
 
     public void printSuccess()  {
         println(SUCCESS_MESSAGE);
+    }
+
+    public void printStatusRunning(String text) {
+        print(COLOR_PREFIX + "yellow  " + text + COLOR_SUFFIX);
+    }
+
+    public void printStatusSucceeded(String text) {
+        print(COLOR_PREFIX + "green  " + text + COLOR_SUFFIX);
+    }
+
+    public void printStatusFailed(String text) {
+        print(COLOR_PREFIX + "red  " + text + COLOR_SUFFIX);
     }
 
     public PrintWriter getOut() {

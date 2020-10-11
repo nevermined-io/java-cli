@@ -22,7 +22,7 @@
         <maven.compiler.release>11</maven.compiler.release>
         <final-name>nevermined-cli</final-name>
 
-        <nevermined.sdk.version>0.3.3</nevermined.sdk.version>
+        <nevermined.sdk.version>0.3.5</nevermined.sdk.version>
         <picocli.version>4.3.2</picocli.version>
         <log4j.version>2.11.1</log4j.version>
         <junit.version>4.12</junit.version>
