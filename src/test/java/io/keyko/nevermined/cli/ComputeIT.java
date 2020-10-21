@@ -26,4 +26,21 @@ public class ComputeIT {
         int returnCode = process.waitFor();
         assertEquals(0, returnCode);
     }
+
+    @Test
+    public void FLExampleE2E() throws Exception {
+        Process process = Runtime.getRuntime().exec("src/test/resources/examples/fl-demo.sh");
+        InputStream stream = process.getInputStream();
+        InputStreamReader streamReader = new InputStreamReader(stream);
+        BufferedReader reader = new BufferedReader(streamReader);
+
+        String line = null;
+        while ((line = reader.readLine()) != null) {
+            if (line.length() > 1) {
+                System.out.println(line);
+            }
+        }
+        int returnCode = process.waitFor();
+        assertEquals(0, returnCode);
+    }
 }
