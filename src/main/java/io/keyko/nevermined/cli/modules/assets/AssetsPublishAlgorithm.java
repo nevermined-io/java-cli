@@ -27,7 +27,7 @@ public class AssetsPublishAlgorithm extends AssetsBuilder implements Callable {
 
 //    ncli assets publish-algorithm --title "test" --dateCreated "2019-10-10T17:00:000Z" --author aitor --contentType text/text \
 //            --price 0 --language python --entrypoint "python word_count.py" --container python:3.8-alpine \
-//            --url https://raw.githubusercontent.com/keyko-io/nevermined-sdk-py/examples/word_count.py
+//            --url https://raw.githubusercontent.com/nevermined-io/sdk-py/examples/word_count.py
 
     @CommandLine.Option(names = { "-t", "--title" }, required = true, description = "the algorithm title")
     String title;

@@ -6,7 +6,7 @@
     <version>0.4.1</version>
     <packaging>jar</packaging>
     <name>Nevermined Command Line Interface</name>
-    <url>https://github.com/keyko-io/nevermined-cli</url>
+    <url>https://github.com/nevermined-io/cli</url>
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -35,16 +35,16 @@
     </properties>
     <developers>
         <developer>
-            <name>Keyko</name>
-            <email>root@keyko.io</email>
+            <name>Nevermined</name>
+            <email>root@nevermined.io</email>
             <organization>Keyko</organization>
-            <organizationUrl>https://www.keyko.io</organizationUrl>
+            <organizationUrl>https://www.nevermined.io</organizationUrl>
         </developer>
     </developers>
     <scm>
-        <connection>scm:git:git://github.com/keyko-io/nevermined-cli.git</connection>
-        <developerConnection>scm:git:ssh://keyko-io/nevermined-cli.git</developerConnection>
-        <url>https://github.com/keyko-io/nevermined-cli/tree/master</url>
+        <connection>scm:git:git://github.com/nevermined-io/cli.git</connection>
+        <developerConnection>scm:git:ssh://nevermined-io/cli.git</developerConnection>
+        <url>https://github.com/nevermined-io/cli/tree/master</url>
     </scm>
 
     <build>
