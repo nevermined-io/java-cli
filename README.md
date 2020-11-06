@@ -1,11 +1,11 @@
-[![banner](https://raw.githubusercontent.com/keyko-io/assets/master/images/logo/nevermined_logo_1.png)](https://nevermined.io)
+[![banner](https://raw.githubusercontent.com/nevermined-io/assets/main/images/logo/banner_logo.png)](https://nevermined.io)
 
 # Nevermined Command Line Interface (CLI)
 
 > CLI for interacting with Nevermined Data Platform
 > [nevermined.io](https://nevermined.io)
 
-![Build](https://github.com/keyko-io/nevermined-cli/workflows/Build/badge.svg)
+![Build](https://github.com/nevermined-io/cli/workflows/Build/badge.svg)
 
 ---
 
@@ -131,7 +131,7 @@ ncli assets publish-dataset --service compute --title "test" --dateCreated "2019
 # Publishing a new algorithm
 ncli assets publish-algorithm --title "test" --dateCreated "2019-10-10T17:00:000Z" --author aitor --contentType text/text \ 
     --price 0 --language python --entrypoint "python word_count.py" --container python:3.8-alpine \
-    --url https://raw.githubusercontent.com/keyko-io/nevermined-sdk-py/examples/word_count.py
+    --url https://raw.githubusercontent.com/nevermined-io/sdk-py/examples/word_count.py
 
 # Publishing a new workflow
 ncli assets publish-workflow --title "test" --dateCreated "2019-10-10T17:00:000Z" --author aitor \ 
