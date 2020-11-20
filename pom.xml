@@ -25,7 +25,7 @@
         <nevermined.sdk.version>0.3.6</nevermined.sdk.version>
         <picocli.version>4.3.2</picocli.version>
         <log4j.version>2.11.1</log4j.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <typesafe-config.version>1.3.4</typesafe-config.version>
         <reflections.version>0.9.11</reflections.version>
 
