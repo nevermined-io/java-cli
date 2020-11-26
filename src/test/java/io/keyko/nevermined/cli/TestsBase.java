@@ -16,6 +16,17 @@ public abstract class TestsBase {
     public static final String TESTS_MAIN_CONFIG_FILE = "src/test/resources/application.conf";
     public static final String TESTS_NETWORK_FOLDER = "src/test/resources/";
 
+    final static String[] PUBLISH_DATASET_PROVENANCE_ARGS = {"assets", "publish-dataset",
+            "--service", "access",
+            "--title", "provenance dataset test",
+            "--dateCreated", "2020-11-11T17:00:000Z",
+            "--author", "aitor",
+            "--license", "CC-BY",
+            "--contentType", "text/txt",
+            "--price", "1",
+            "--urls", "https://raw.githubusercontent.com/nevermined-io/docs/master/docs/README.md"};
+
+
     final String[] PUBLISH_DATASET_ARGS = {"assets", "publish-dataset",
             "--service", "access",
             "--title", "you can access to this",
