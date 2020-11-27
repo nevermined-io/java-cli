@@ -1,15 +1,21 @@
 package io.keyko.nevermined.cli;
 
 import io.keyko.nevermined.NeverminedCLI;
+import io.keyko.nevermined.models.contracts.ProvenanceEntry;
 import picocli.CommandLine;
 
 import java.io.PrintWriter;
+
+import static io.keyko.nevermined.cli.helpers.CommandLineHelper.isValidSignature;
 
 public class NeverminedBaseCommand {
 
     public static final String COLOR_PREFIX = "@|";
     public static final String COLOR_SUFFIX = "|@ ";
     public static final String ERROR_PREFIX = COLOR_PREFIX + "bold,red Error:" + COLOR_SUFFIX + "\n";
+    public static final String SUCCESS_INDICATOR = COLOR_PREFIX + "bold,green [✔] " + COLOR_SUFFIX;
+    public static final String ERROR_INDICATOR = COLOR_PREFIX + "bold,red [✘] " + COLOR_SUFFIX;
+    public static final String QUESTION_INDICATOR = COLOR_PREFIX + "bold,orange [?] " + COLOR_SUFFIX;
     public static final String SUCCESS_MESSAGE = COLOR_PREFIX + "bold,green Success [✔] " + COLOR_SUFFIX;
     public static final String ERROR_MESSAGE = COLOR_PREFIX + "bold,red Error [✘] " + COLOR_SUFFIX;
     public static final String HEADER_PREFIX = COLOR_PREFIX + "bold,blue ";
@@ -81,6 +87,31 @@ public class NeverminedBaseCommand {
 
     public void printStatusFailed(String text) {
         print(COLOR_PREFIX + "red  " + text + COLOR_SUFFIX);
+    }
+
+    public void print(String provenanceId, ProvenanceEntry entry, boolean skipSignatureValidation)    {
+
+        println("\tProvenance ID:   \t" + provenanceId);
+        println("\tDID:             \t" + entry.did.getDid());
+        println("\tRelated DID:     \t" + entry.relatedDid.getDid());
+        println("\tCreated by:      \t" + entry.createdBy);
+        println("\tAgent:           \t" + entry.agentId);
+        println("\tAgent Involved:  \t" + entry.agentInvolvedId);
+        println("\tActivity:        \t" + entry.activityId);
+        println("\tW3C PROV Method: \t" + entry.method.name());
+
+        if (!skipSignatureValidation) {
+            final boolean validSignature = isValidSignature(provenanceId, entry.signature, entry.agentId);
+
+            if (!validSignature) {
+                print("\tSignature:       \t" + NeverminedBaseCommand.ERROR_INDICATOR);
+                println("The signature couldn't be validated");
+            } else {
+                print("\tSignature:       \t" + NeverminedBaseCommand.SUCCESS_INDICATOR);
+                println("Validated - " + entry.signature);
+            }
+        }
+        println("\tBlock number:    \t" + entry.blockNumberUpdated.toString());
     }
 
     public PrintWriter getOut() {

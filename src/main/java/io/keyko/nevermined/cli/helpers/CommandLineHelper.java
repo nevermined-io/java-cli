@@ -1,7 +1,11 @@
 package io.keyko.nevermined.cli.helpers;
 
+import io.keyko.common.exceptions.EncodingException;
+import io.keyko.common.helpers.EncodingHelper;
+import io.keyko.common.helpers.EthereumHelper;
 import org.json.JSONObject;
 import org.web3j.crypto.Hash;
+import org.web3j.crypto.Sign;
 import org.web3j.crypto.WalletUtils;
 
 import java.util.UUID;
@@ -15,6 +19,17 @@ public abstract class CommandLineHelper {
     public static final String PARAM_ACTIVITY_DESC = "Ethereum address of the user associated to the provenance event";
 
     public static final String PARAM_ATTRIBUTES_DESC =  "Additional attributes or information associated to the event";
+
+
+    public static boolean isValidSignature(String message, String signature, String address)    {
+        try {
+            Sign.SignatureData signatureData = EncodingHelper.stringToSignature(EthereumHelper.remove0x(signature));
+            byte[] hashMessage= EthereumHelper.getEthereumMessageHash(message);
+            return EthereumHelper.wasSignedByAddress(address, signatureData, hashMessage);
+        } catch (EncodingException e) {
+            return false;
+        }
+    }
 
     public static String generateProvenanceIdIfEmpty(String provenanceId)   {
         if (null == provenanceId || provenanceId.isEmpty())
