@@ -1,9 +1,11 @@
 package io.keyko.nevermined.cli.helpers;
 
 import io.keyko.common.exceptions.EncodingException;
+import io.keyko.common.helpers.CryptoHelper;
 import io.keyko.common.helpers.EncodingHelper;
 import io.keyko.common.helpers.EthereumHelper;
 import org.json.JSONObject;
+import org.web3j.crypto.Credentials;
 import org.web3j.crypto.Hash;
 import org.web3j.crypto.Sign;
 import org.web3j.crypto.WalletUtils;
@@ -21,6 +23,13 @@ public abstract class CommandLineHelper {
     public static final String PARAM_ATTRIBUTES_DESC =  "Additional attributes or information associated to the event";
 
 
+    public static String signMessage(String message, Credentials credentials)   {
+        Sign.SignatureData signatureData = EthereumHelper.signMessage(
+                CryptoHelper.sha3256(message),
+                credentials.getEcKeyPair());
+        return EncodingHelper.signatureToString(signatureData);
+    }
+
     public static boolean isValidSignature(String message, String signature, String address)    {
         try {
             Sign.SignatureData signatureData = EncodingHelper.stringToSignature(EthereumHelper.remove0x(signature));
@@ -33,7 +42,7 @@ public abstract class CommandLineHelper {
 
     public static String generateProvenanceIdIfEmpty(String provenanceId)   {
         if (null == provenanceId || provenanceId.isEmpty())
-            return generateRandomProvenanceID();
+            return generateRandomIdentifier();
         return provenanceId;
     }
 
@@ -47,7 +56,7 @@ public abstract class CommandLineHelper {
         return WalletUtils.isValidAddress(address);
     }
 
-    public static String generateRandomProvenanceID() {
+    public static String generateRandomIdentifier() {
         String token = UUID.randomUUID().toString() + UUID.randomUUID().toString();
         return token.replaceAll("-", "");
     }

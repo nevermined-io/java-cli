@@ -101,17 +101,20 @@ public class NeverminedBaseCommand {
         println("\tW3C PROV Method: \t" + entry.method.name());
 
         if (!skipSignatureValidation) {
-            final boolean validSignature = isValidSignature(provenanceId, entry.signature, entry.agentId);
-
-            if (!validSignature) {
-                print("\tSignature:       \t" + NeverminedBaseCommand.ERROR_INDICATOR);
-                println("The signature couldn't be validated");
-            } else {
-                print("\tSignature:       \t" + NeverminedBaseCommand.SUCCESS_INDICATOR);
-                println("Validated - " + entry.signature);
-            }
+            final boolean isValidSignature = isValidSignature(provenanceId, entry.signature, entry.agentId);
+            printSignatureValidation(isValidSignature, entry.signature);
         }
         println("\tBlock number:    \t" + entry.blockNumberUpdated.toString());
+    }
+
+    public void printSignatureValidation(boolean isValidSignature, String signature)    {
+        if (!isValidSignature) {
+            print("\tSignature:       \t" + NeverminedBaseCommand.ERROR_INDICATOR);
+            println("The signature couldn't be validated");
+        } else {
+            print("\tSignature:       \t" + NeverminedBaseCommand.SUCCESS_INDICATOR);
+            println("Validated - " + signature);
+        }
     }
 
     public PrintWriter getOut() {
