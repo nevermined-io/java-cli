@@ -1,16 +1,27 @@
 package io.keyko.nevermined.cli;
 
+import io.keyko.common.exceptions.EncodingException;
+import io.keyko.common.helpers.EncodingHelper;
+import io.keyko.common.helpers.EthereumHelper;
 import io.keyko.nevermined.NeverminedCLI;
+import io.keyko.nevermined.cli.helpers.CommandLineHelper;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.web3j.crypto.*;
 import picocli.CommandLine;
 
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+
 import static io.keyko.nevermined.cli.TestsBase.TESTS_CONFIG_FOLDER;
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class UtilsIT {
-
+public class UtilsIT extends TestsBase {
 
     @Test
     public void utilsInfo() throws CLIException {
@@ -20,5 +31,85 @@ public class UtilsIT {
 
     }
 
+    @Test
+    public void utilsRandomId() throws CLIException {
+        String[] args= {"utils", "random-id"};
+        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
+        assertTrue(result.isSuccess());
+
+    }
+
+    @Test
+    public void utilsSignAndValidate() throws CLIException {
+        final NeverminedCLI cli = new NeverminedCLI(TESTS_CONFIG_FOLDER);
+
+        String message = "Hi dude";
+
+        String[] args= {"utils", "sign", message};
+        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
+        assertTrue(result.isSuccess());
+        String signature = result.getMessage();
+        assertFalse(signature.isEmpty());
+
+        String[] validateArgs= {"utils", "validate-signature",
+                "--address", cli.getMainAddress(),
+                "--message", message,
+                "--signature", signature
+        };
+        result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), validateArgs);
+        assertTrue(result.isSuccess());
+    }
+
+    // Code only valid for signatures validation
+
+    @Ignore
+    @Test
+    public void signAndValidateShort() throws EncodingException, CLIException, IOException, CipherException {
+        final NeverminedCLI cli = new NeverminedCLI(TESTS_CONFIG_FOLDER);
+        String message = "Hi dude";
+        String signatureString = CommandLineHelper.signMessage(message, cli.getCredentials());
+        System.out.println("Signature:" + signatureString);
+        assertTrue(CommandLineHelper.isValidSignature(message, signatureString, cli.getMainAddress()));
+    }
+
+    @Ignore
+    @Test
+    public void signAndValidate() throws EncodingException, CLIException, IOException, CipherException {
+        final NeverminedCLI cli = new NeverminedCLI(TESTS_CONFIG_FOLDER);
+
+        String message = "Hi dude";
+
+        System.out.println("String message to sign and validate: " + message);
+        Sign.SignatureData signatureData = EthereumHelper.signMessage(message, cli.getCredentials().getEcKeyPair());
+
+        byte[] hashMessage= EthereumHelper.getEthereumMessageHash(message);
+        assertTrue(EthereumHelper.wasSignedByAddress(cli.getCredentials().getAddress(), signatureData, hashMessage));
+
+        String signatureString= EncodingHelper.signatureToString(signatureData);
+        System.out.println("Signature:" + signatureString);
+        Sign.SignatureData signatureGenerated =
+                EncodingHelper.stringToSignature(EthereumHelper.remove0x(signatureString));
+
+        assertTrue(EthereumHelper.wasSignedByAddress(cli.getCredentials().getAddress(), signatureGenerated, hashMessage));
+/*
+        String PERSONAL_MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
+        String message = "v0G9u7huK4mJb2K1";
+        String prefix = PERSONAL_MESSAGE_PREFIX + message.length();
+//        String prefix = "";
+        byte[] hashMessage = Hash.sha3((prefix + message).getBytes());
+
+        Sign.SignatureData signatureGenerated =
+                Sign.signPrefixedMessage(message.getBytes(), cli.getCredentials().getEcKeyPair());
+
+//        String DUMMY_ADDRESS = "0x31b26e43651e9371c88af3d36c14cfd938baf4fd";
+//        String signatureString= "0x2c6401216c9031b9a6fb8cbfccab4fcec6c951cdf40e2320108d1856eb532250576865fbcd452bcdc4c57321b619ed7a9cfd38bd973c3e1e0243ac2777fe9d5b1b";
+        String DUMMY_ADDRESS = cli.getMainAddress();
+        String signatureString= EncodingHelper.signatureToString(signatureGenerated);
+
+        Sign.SignatureData signatureData= EncodingHelper.stringToSignature(EthereumHelper.remove0x(signatureString));
+        List<String> addresses = recoverAddressFromSignature(signatureData, hashMessage);
+        assertTrue(addresses.contains(DUMMY_ADDRESS));*/
+
+    }
 
 }

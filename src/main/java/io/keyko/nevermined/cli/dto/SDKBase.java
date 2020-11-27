@@ -2,7 +2,9 @@ package io.keyko.nevermined.cli.dto;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import io.keyko.common.web3.KeeperService;
 import io.keyko.nevermined.api.NeverminedAPI;
+import io.keyko.nevermined.api.config.NeverminedConfig;
 import io.keyko.nevermined.cli.helpers.Constants;
 import io.keyko.nevermined.cli.helpers.ProgressBar;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
@@ -11,6 +13,8 @@ import io.keyko.nevermined.exceptions.InvalidConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.web3j.crypto.CipherException;
+import org.web3j.crypto.Credentials;
 
 import java.io.File;
 import java.io.IOException;
@@ -134,7 +138,6 @@ public class SDKBase {
                 log.error("Unable to create main config folder " + configFolder);
                 throw new CLIException("Unable to create main config folder " + configFolder);
             }
-
         }
 
         final String accountsFolder = configFolder + File.separator + "accounts" + File.separator;
@@ -153,6 +156,17 @@ public class SDKBase {
             copyResourceFileToPath("src/main/resources/application.conf", mainConfigFile);
         }
         return true;
+    }
+
+    public Credentials getCredentials() throws IOException, CipherException {
+        return KeeperService.getInstance(
+                networkConfig.getString(NeverminedConfig.KEEPER_URL),
+                mainConfig.getString(NeverminedConfig.MAIN_ACCOUNT_ADDRESS),
+                mainConfig.getString(NeverminedConfig.MAIN_ACCOUNT_PASSWORD),
+                mainConfig.getString(NeverminedConfig.MAIN_ACCOUNT_CREDENTIALS_FILE),
+                networkConfig.getInt(NeverminedConfig.KEEPER_TX_ATTEMPTS),
+                networkConfig.getLong(NeverminedConfig.KEEPER_TX_SLEEPDURATION)
+        ).getCredentials();
     }
 
     private static Properties joinConfig(Config c1, Config c2) {
