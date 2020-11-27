@@ -11,7 +11,7 @@ import java.util.concurrent.Callable;
 
 @CommandLine.Command(
         name = "validate-signature",
-        description = "It sign a message using the ECDSA credentials")
+        description = "It validates a ECDSA signature")
 public class UtilsValidateSignature implements Callable {
 
     @CommandLine.ParentCommand

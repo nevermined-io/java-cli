@@ -91,25 +91,6 @@ public class UtilsIT extends TestsBase {
                 EncodingHelper.stringToSignature(EthereumHelper.remove0x(signatureString));
 
         assertTrue(EthereumHelper.wasSignedByAddress(cli.getCredentials().getAddress(), signatureGenerated, hashMessage));
-/*
-        String PERSONAL_MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
-        String message = "v0G9u7huK4mJb2K1";
-        String prefix = PERSONAL_MESSAGE_PREFIX + message.length();
-//        String prefix = "";
-        byte[] hashMessage = Hash.sha3((prefix + message).getBytes());
-
-        Sign.SignatureData signatureGenerated =
-                Sign.signPrefixedMessage(message.getBytes(), cli.getCredentials().getEcKeyPair());
-
-//        String DUMMY_ADDRESS = "0x31b26e43651e9371c88af3d36c14cfd938baf4fd";
-//        String signatureString= "0x2c6401216c9031b9a6fb8cbfccab4fcec6c951cdf40e2320108d1856eb532250576865fbcd452bcdc4c57321b619ed7a9cfd38bd973c3e1e0243ac2777fe9d5b1b";
-        String DUMMY_ADDRESS = cli.getMainAddress();
-        String signatureString= EncodingHelper.signatureToString(signatureGenerated);
-
-        Sign.SignatureData signatureData= EncodingHelper.stringToSignature(EthereumHelper.remove0x(signatureString));
-        List<String> addresses = recoverAddressFromSignature(signatureData, hashMessage);
-        assertTrue(addresses.contains(DUMMY_ADDRESS));*/
-
     }
 
 }
