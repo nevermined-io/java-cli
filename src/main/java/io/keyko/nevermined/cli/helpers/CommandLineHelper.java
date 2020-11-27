@@ -24,17 +24,17 @@ public abstract class CommandLineHelper {
 
 
     public static String signMessage(String message, Credentials credentials)   {
-        Sign.SignatureData signatureData = EthereumHelper.signMessage(
-                CryptoHelper.sha3256(message),
-                credentials.getEcKeyPair());
+        Sign.SignatureData signatureData = EthereumHelper.signMessage(message, credentials.getEcKeyPair());
         return EncodingHelper.signatureToString(signatureData);
     }
 
     public static boolean isValidSignature(String message, String signature, String address)    {
         try {
-            Sign.SignatureData signatureData = EncodingHelper.stringToSignature(EthereumHelper.remove0x(signature));
             byte[] hashMessage= EthereumHelper.getEthereumMessageHash(message);
-            return EthereumHelper.wasSignedByAddress(address, signatureData, hashMessage);
+            Sign.SignatureData signatureGenerated =
+                    EncodingHelper.stringToSignature(EthereumHelper.remove0x(signature));
+            return EthereumHelper.recoverAddressFromSignature(signatureGenerated, hashMessage)
+                    .contains(address.toLowerCase());
         } catch (EncodingException e) {
             return false;
         }

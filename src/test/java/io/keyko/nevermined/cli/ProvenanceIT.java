@@ -89,4 +89,11 @@ public class ProvenanceIT extends TestsBase {
         assertTrue(result.isSuccess());
     }
 
+    @Test
+    public void provenanceHistory() throws CLIException {
+        String[] args= {"provenance", "history", TEST_DID };
+        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
+        assertTrue(result.isSuccess());
+    }
+
 }

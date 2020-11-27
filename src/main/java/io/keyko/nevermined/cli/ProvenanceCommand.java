@@ -10,7 +10,8 @@ import picocli.CommandLine;
                 ProvenanceDerivation.class,
                 ProvenanceAssociation.class,
                 ProvenanceDelegation.class,
-                ProvenanceInspect.class
+                ProvenanceInspect.class,
+                ProvenanceHistory.class
         },
         description = "W3C Provenance")
 public class ProvenanceCommand extends NeverminedBaseCommand implements Runnable {

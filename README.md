@@ -186,6 +186,9 @@ ncli provenance delegation did:nv:123 --provenanceId 1234 --delegatedAgent 0xabc
 # Get Provenance entry details given a provenance id
 ncli provenance inspect 1234
 
+# Get Provenance history about a DID
+ncli provenance history did:nv:1234
+
 # Check if an address is a provenance delegate
 ncli provenance is-delegate 0xb0b did:nv:1234 
 
@@ -194,9 +197,6 @@ ncli provenance add-delegate  0xb0b did:nv:1234
 
 # Remove an address as a delegate of a did
 ncli provenance remove-delegate  0xb0b did:nv:1234
-
-# Remove an address as a delegate of a did
-ncli provenance history did:nv:1234
 
 ## Others 
 
