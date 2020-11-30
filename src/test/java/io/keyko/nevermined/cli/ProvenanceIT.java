@@ -6,17 +6,16 @@ import io.keyko.nevermined.cli.models.exceptions.CLIException;
 import io.keyko.nevermined.exceptions.DIDFormatException;
 import io.keyko.nevermined.models.DDO;
 import io.keyko.nevermined.models.DID;
-import io.keyko.nevermined.models.asset.OrderResult;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import picocli.CommandLine;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class ProvenanceIT extends TestsBase {
 
     private static String TEST_DID;
+    private static final String DELEGATE_ADDRESS = "0xa99d43d86a0758d5632313b8fa3972b6088a21bb";
 
     @BeforeClass
     public static void setup() throws CLIException {
@@ -95,5 +94,23 @@ public class ProvenanceIT extends TestsBase {
         CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
         assertTrue(result.isSuccess());
     }
+
+    @Test
+    public void provenanceDelegates() throws CLIException {
+        String[] args= {"provenance", "add-delegate", DELEGATE_ADDRESS, TEST_DID};
+        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
+        assertTrue(result.isSuccess());
+
+        args= new String[]{"provenance", "is-delegate", DELEGATE_ADDRESS, TEST_DID};
+        result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
+        assertTrue(result.isSuccess());
+        assertTrue(result.getMessage().equals("true"));
+
+        args= new String[]{"provenance", "remove-delegate", DELEGATE_ADDRESS, TEST_DID};
+        result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
+        assertTrue(result.isSuccess());
+    }
+
+
 
 }

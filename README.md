@@ -193,7 +193,7 @@ ncli provenance history did:nv:1234
 ncli provenance is-delegate 0xb0b did:nv:1234 
 
 # Add an address as a delegate of a did
-ncli provenance add-delegate  0xb0b did:nv:1234
+ncli provenance add-delegate 0xb0b did:nv:1234
 
 # Remove an address as a delegate of a did
 ncli provenance remove-delegate  0xb0b did:nv:1234
