@@ -11,7 +11,10 @@ import picocli.CommandLine;
                 ProvenanceAssociation.class,
                 ProvenanceDelegation.class,
                 ProvenanceInspect.class,
-                ProvenanceHistory.class
+                ProvenanceHistory.class,
+                ProvenanceIsDelegate.class,
+                ProvenanceAddDelegate.class,
+                ProvenanceRemoveDelegate.class
         },
         description = "W3C Provenance")
 public class ProvenanceCommand extends NeverminedBaseCommand implements Runnable {
