@@ -26,14 +26,15 @@ public class TokensRequest implements Callable {
     @CommandLine.Mixin
     Logger logger;
 
-    BigInteger DEFAULT_NUMBER_TOKENS = BigInteger.valueOf(1000l);
-
     enum TokenOptions { eth, nvm, both }
 
     @CommandLine.Option(names = { "-t", "--token" }, defaultValue = "both", description = " Network tokens to request. Options: ${COMPLETION-CANDIDATES}"
     + "\n With ETH it's possible to pay network transactions gas"
     + "\n With NVM tokens you can pay for access and computing services.")
     TokenOptions token;
+
+    @CommandLine.Option(names = { "-n", "--nvm" }, defaultValue = "100", description = " Number of Nevermined tokens requested.")
+    BigInteger amountNvm;
 
     CommandResult request() throws CLIException {
         try {
@@ -53,14 +54,14 @@ public class TokensRequest implements Callable {
             if (token.equals(TokenOptions.nvm) || token.equals(TokenOptions.both))  {
 
                 command.printHeader("Requesting Nevermined Tokens:");
-                command.println("Requesting " + DEFAULT_NUMBER_TOKENS.longValue() +
+                command.println("Requesting " + amountNvm.longValue() +
                         " Token/s for " + accountAddress +
                         " address");
 
                 command.cli.progressBar.start();
 
                 String status= command.cli.getNeverminedAPI().getTokensAPI()
-                        .request(DEFAULT_NUMBER_TOKENS)
+                        .request(amountNvm)
                         .getStatus();
 
                 if (status.equals(TRANSACTION_SUCCESS))
