@@ -26,7 +26,7 @@ public class TokensRequest implements Callable {
     @CommandLine.Mixin
     Logger logger;
 
-    BigInteger DEFAULT_NUMBER_TOKENS = BigInteger.valueOf(100l);
+    BigInteger DEFAULT_NUMBER_TOKENS = BigInteger.valueOf(1000l);
 
     enum TokenOptions { eth, nvm, both }
 
