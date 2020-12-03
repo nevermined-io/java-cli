@@ -26,34 +26,21 @@ public class TokensRequest implements Callable {
     @CommandLine.Mixin
     Logger logger;
 
-    @CommandLine.Option(names = { "-e", "--eth" }, defaultValue = "false", description = "ETH for paying transactions gas")
-    boolean eth;
+    BigInteger DEFAULT_NUMBER_TOKENS = BigInteger.valueOf(100l);
 
-    @CommandLine.Option(names = { "-t", "--tokens" }, defaultValue = "0", description = "Nevermined tokens")
-    BigInteger numberTokens;
+    enum TokenOptions { eth, nvm, both }
 
+    @CommandLine.Option(names = { "-t", "--token" }, defaultValue = "both", description = " Network tokens to request. Options: ${COMPLETION-CANDIDATES}"
+    + "\n With ETH it's possible to pay network transactions gas"
+    + "\n With NVM tokens you can pay for access and computing services.")
+    TokenOptions token;
 
     CommandResult request() throws CLIException {
         try {
             String accountAddress = command.cli.getNeverminedAPI().getMainAccount().getAddress();
 
-            if (numberTokens.compareTo(BigInteger.ZERO) > 0)    {
-                command.printHeader("Requesting Nevermined Tokens:");
-                command.println("Requesting " + numberTokens.longValue() +
-                        " Token/s for " + accountAddress +
-                        " address");
+            if (token.equals(TokenOptions.eth) || token.equals(TokenOptions.both))  {
 
-                command.cli.progressBar.start();
-
-                String status= command.cli.getNeverminedAPI().getTokensAPI()
-                        .request(numberTokens)
-                        .getStatus();
-
-                if (status.equals(TRANSACTION_SUCCESS))
-                    command.printSuccess();
-            }
-
-            if (eth)    {
                 command.printHeader("Requesting Network ETH for paying transactions gas:");
                 final FaucetResponse faucetResponse = command.cli.getNeverminedAPI().getAccountsAPI().requestEthFromFaucet(
                         accountAddress);
@@ -62,6 +49,24 @@ public class TokensRequest implements Callable {
                 else
                     command.printError(faucetResponse.message);
             }
+
+            if (token.equals(TokenOptions.nvm) || token.equals(TokenOptions.both))  {
+
+                command.printHeader("Requesting Nevermined Tokens:");
+                command.println("Requesting " + DEFAULT_NUMBER_TOKENS.longValue() +
+                        " Token/s for " + accountAddress +
+                        " address");
+
+                command.cli.progressBar.start();
+
+                String status= command.cli.getNeverminedAPI().getTokensAPI()
+                        .request(DEFAULT_NUMBER_TOKENS)
+                        .getStatus();
+
+                if (status.equals(TRANSACTION_SUCCESS))
+                    command.printSuccess();
+            }
+
 
         } catch (EthereumException | ServiceException e) {
             command.printError("Error during token request");

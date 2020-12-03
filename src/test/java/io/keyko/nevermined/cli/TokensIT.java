@@ -20,6 +20,15 @@ public class TokensIT extends TestsBase {
     }
 
     @Test
+    public void tokenRequest() throws CLIException {
+        String[] args= {"tokens", "request"};
+        CommandResult result = (CommandResult) CommandLine.call(
+                new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
+        assertTrue(result.isSuccess());
+    }
+
+
+    @Test
     public void tokenAndtransferRequest() throws CLIException {
         String[] args= {"tokens", "request", "--tokens", "1"};
         CommandResult result = (CommandResult) CommandLine.call(
