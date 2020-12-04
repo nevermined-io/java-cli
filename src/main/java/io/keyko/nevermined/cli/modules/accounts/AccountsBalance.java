@@ -37,8 +37,8 @@ public class AccountsBalance implements Callable {
             balance = command.cli.getNeverminedAPI().getAccountsAPI()
                     .balance(new Account(accountAddress, null));
 
-            command.println("\tPOA Ether: " + command.getItem(String.valueOf(balance.getEth())) + " ETH");
-            command.println("\tTokens: " + command.getItem(String.valueOf(balance.getNeverminedTokens()))
+            command.println("\tNetwork ETH: " + command.getItem(String.valueOf(balance.getEth())) + " ETH");
+            command.println("\tNVM: " + command.getItem(String.valueOf(balance.getNeverminedTokens()))
                     + " Tokens = " + command.getItem(String.valueOf(balance.getDrops()) + " drops"));
 
         } catch (EthereumException e) {

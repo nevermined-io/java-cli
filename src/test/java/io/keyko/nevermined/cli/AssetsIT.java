@@ -20,7 +20,7 @@ public class AssetsIT extends TestsBase {
     public static void setup() throws CLIException {
         logger.info("Requesting for some tokens before running the tests");
 
-        String[] args= {"tokens", "request", "--tokens", "10"};
+        String[] args= {"tokens", "request"};
         CommandResult result = (CommandResult) CommandLine.call(
                 new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
         assertTrue(result.isSuccess());

@@ -115,7 +115,7 @@ ncli accounts list
 ncli accounts balance --address 0x123
 
 # Request some tokens
-ncli tokens request --tokens 5 --eth
+ncli tokens request 
 
 # Transfers tokens to other account
 ncli tokens transfer 0x123 5
