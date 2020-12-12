@@ -17,10 +17,10 @@ ncli config clean
 # create account
 ncli accounts new -m -p secret -d /tmp
 # request some eth so that we can pay for gas
-ncli tokens request --eth
+ncli tokens request --token eth
 
 # request some tokens from faucet
-ncli tokens request --tokens 10
+ncli tokens request --token nvm --nvm 10
 
 # [DATA_PROVIDER0 --> NEVERMINED] Publishing compute to the data asset for asset0
 ncli assets publish-dataset \
