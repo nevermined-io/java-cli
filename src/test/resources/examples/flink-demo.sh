@@ -16,11 +16,11 @@ ncli config clean
 
 # create account
 ncli accounts new -m -p secret -d /tmp
-# request some eth so that we can pay for gas
-ncli tokens request --eth
+# request some eth so that we can pay for gas and nvm
+ncli tokens request --token eth
 
 # request some tokens from faucet
-ncli tokens request --tokens 10
+ncli tokens request --token nvm --nvm 10
 
 # Publish compute to the data asset
 ncli assets publish-dataset \
@@ -30,7 +30,7 @@ ncli assets publish-dataset \
     --author "Keyko" \
     --dateCreated "2020-09-29T12:11:15Z" \
     --contentType text/text \
-    --urls "https://raw.githubusercontent.com/keyko-io/nevermined-tools/master/README.md" \
+    --urls "https://raw.githubusercontent.com/nevermined-io/tools/master/README.md" \
     | cap
 COMPUTE_DID=$(did)
 
@@ -43,7 +43,7 @@ ncli assets publish-algorithm \
     --language "java" \
     --entrypoint 'start-cluster.sh && flink run -c io.keyko.nevermined.examples.WordCountJob ./nevermined-flink-example.jar --input $NEVERMINED_INPUTS_PATH --output $NEVERMINED_OUTPUTS_PATH/result.csv' \
     --container "flink:1.11.2-scala_2.12-java11" \
-    --url "https://github.com/keyko-io/nevermined-docs/raw/master/resources/nevermined-flink-example.jar" \
+    --url "https://github.com/nevermined-io/docs/raw/master/resources/nevermined-flink-example.jar" \
     | cap
 ALGORITHM_DID=$(did)
 

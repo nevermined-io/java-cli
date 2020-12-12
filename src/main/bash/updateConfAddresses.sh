@@ -2,6 +2,7 @@
 
 FILE_CONFIG=$1
 NETWORK=${2:-"spree"}
+ARTIFACTS=${3:-"$HOME/.nevermined/nevermined-contracts/artifacts"}
 
 RETRY_COUNT=0
 COMMAND_STATUS=1
@@ -28,7 +29,7 @@ declare -a contracts=(
 )
 
 until [ $COMMAND_STATUS -eq 0 ] || [ $RETRY_COUNT -eq 240 ]; do
-  cat ~/.nevermined/nevermined-contracts/artifacts/ready
+  cat $ARTIFACTS/ready
   COMMAND_STATUS=$?
   if [ $COMMAND_STATUS -eq 0 ]; then
     break
@@ -44,7 +45,7 @@ fi
 
 for c in "${contracts[@]}"
 do
-   address=$(jq -r .address "${HOME}/.nevermined/nevermined-contracts/artifacts/$c.$NETWORK.json")
+   address=$(jq -r .address "${ARTIFACTS}/$c.$NETWORK.json")
    echo "Setting up $c address to $address"
    sed -i  "s/contract.$c.address=.*/contract.$c.address=\"$address\"/g" $FILE_CONFIG
 

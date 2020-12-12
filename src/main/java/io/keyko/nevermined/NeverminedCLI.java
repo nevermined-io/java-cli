@@ -19,12 +19,13 @@ import java.util.concurrent.Callable;
         footer = "\nbuilt by Keyko (https://keyko.io)\n",
         subcommands = {
             ConfigCommand.class,
+            AssetsCommand.class,
+            ComputeCommand.class,
+            ProvenanceCommand.class,
             AccountsCommand.class,
             TokensCommand.class,
-            AssetsCommand.class,
             UtilsCommand.class,
-            NetworkCommand.class,
-            ComputeCommand.class
+            NetworkCommand.class
         })
 public class NeverminedCLI extends SDKBase implements Callable {
 

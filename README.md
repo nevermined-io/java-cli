@@ -1,11 +1,11 @@
-[![banner](https://raw.githubusercontent.com/keyko-io/assets/master/images/logo/nevermined_logo_1.png)](https://nevermined.io)
+[![banner](https://raw.githubusercontent.com/nevermined-io/assets/main/images/logo/banner_logo.png)](https://nevermined.io)
 
 # Nevermined Command Line Interface (CLI)
 
 > CLI for interacting with Nevermined Data Platform
 > [nevermined.io](https://nevermined.io)
 
-![Build](https://github.com/keyko-io/nevermined-cli/workflows/Build/badge.svg)
+![Build](https://github.com/nevermined-io/cli/workflows/Build/badge.svg)
 
 ---
 
@@ -115,7 +115,7 @@ ncli accounts list
 ncli accounts balance --address 0x123
 
 # Request some tokens
-ncli tokens request --tokens 5 --eth
+ncli tokens request 
 
 # Transfers tokens to other account
 ncli tokens transfer 0x123 5
@@ -131,7 +131,7 @@ ncli assets publish-dataset --service compute --title "test" --dateCreated "2019
 # Publishing a new algorithm
 ncli assets publish-algorithm --title "test" --dateCreated "2019-10-10T17:00:000Z" --author aitor --contentType text/text \ 
     --price 0 --language python --entrypoint "python word_count.py" --container python:3.8-alpine \
-    --url https://raw.githubusercontent.com/keyko-io/nevermined-sdk-py/examples/word_count.py
+    --url https://raw.githubusercontent.com/nevermined-io/sdk-py/examples/word_count.py
 
 # Publishing a new workflow
 ncli assets publish-workflow --title "test" --dateCreated "2019-10-10T17:00:000Z" --author aitor \ 
@@ -142,19 +142,19 @@ ncli assets publish-workflow --title "test" --dateCreated "2019-10-10T17:00:000Z
 ncli assets import metadata.json
 
 # Resolves a did
-ncli assets resolve did:op:123
+ncli assets resolve did:nv:123
 
 # Search for assets
 ncli assets search query
 
 # Order
-ncli assets order did:op:123
+ncli assets order did:nv:123
 
 # Get an asset
-ncli assets get did:op:123
+ncli assets get did:nv:123
 
 # Get an asset having already a previous purchased order (via service agreement id) 
-ncli assets get did:op:123 -s 0x12321
+ncli assets get did:nv:123 -s 0x12321
 
 # Execute a remote compute service
 ncli assets exec did:nv:01234
@@ -167,6 +167,38 @@ ncli network describe NeverminedToken
 
 # Call Contract method
 ncli network exec NeverminedToken request 1
+
+
+## Provenance Methods
+
+# Register Provenance asset usage 
+ncli provenance used did:nv:123 --provenanceId 1234 --agent 0xabcd --activity 0423 --signature 0x49324 --attributes access
+
+# Register Provenance asset derivation 
+ncli provenance derivation --newAsset did:nv:123 --derivedFrom did:nv:456 --provenanceId 1234 --agent 0xabcd --activity 0534 --attributes copy 
+
+# Register Provenance asset association 
+ncli provenance association did:nv:123 --provenanceId 1234 --agent 0xabcd --activity 0534 --attributes "gave access to xxx"
+
+# Register Provenance asset delegation 
+ncli provenance delegation did:nv:123 --provenanceId 1234 --delegatedAgent 0xabcd --activity 0534 --signature 0x0123 --attributes "was delegated to yyy"
+
+# Get Provenance entry details given a provenance id
+ncli provenance inspect 1234
+
+# Get Provenance history about a DID
+ncli provenance history did:nv:1234
+
+# Check if an address is a provenance delegate
+ncli provenance is-delegate 0xb0b did:nv:1234 
+
+# Add an address as a delegate of a did
+ncli provenance add-delegate 0xb0b did:nv:1234
+
+# Remove an address as a delegate of a did
+ncli provenance remove-delegate  0xb0b did:nv:1234
+
+## Others 
 
 # Get resource remote information
 ncli utils info http://xxx.com/file.zip

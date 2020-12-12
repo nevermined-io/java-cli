@@ -16,6 +16,17 @@ public abstract class TestsBase {
     public static final String TESTS_MAIN_CONFIG_FILE = "src/test/resources/application.conf";
     public static final String TESTS_NETWORK_FOLDER = "src/test/resources/";
 
+    final static String[] PUBLISH_DATASET_PROVENANCE_ARGS = {"assets", "publish-dataset",
+            "--service", "access",
+            "--title", "provenance dataset test",
+            "--dateCreated", "2020-11-11T17:00:000Z",
+            "--author", "aitor",
+            "--license", "CC-BY",
+            "--contentType", "text/txt",
+            "--price", "1",
+            "--urls", "https://raw.githubusercontent.com/nevermined-io/docs/master/docs/README.md"};
+
+
     final String[] PUBLISH_DATASET_ARGS = {"assets", "publish-dataset",
             "--service", "access",
             "--title", "you can access to this",
@@ -24,7 +35,7 @@ public abstract class TestsBase {
             "--license", "CC-BY",
             "--contentType", "text/txt",
             "--price", "5",
-            "--urls", "https://raw.githubusercontent.com/keyko-io/nevermined-docs/master/docs/README.md"};
+            "--urls", "https://raw.githubusercontent.com/nevermined-io/docs/master/docs/README.md"};
 
     final String[] PUBLISH_ALGORITHM_ARGS = {"assets", "publish-algorithm",
             "--title", "word count",
@@ -34,7 +45,7 @@ public abstract class TestsBase {
             "--language", "python",
             "--entrypoint", "python word_count.py",
             "--container", "python:3.8-alpine",
-            "--url", "https://raw.githubusercontent.com/keyko-io/nevermined-sdk-py/examples/word_count.py"};
+            "--url", "https://raw.githubusercontent.com/nevermined-io/sdk-py/examples/word_count.py"};
 
     String[] PUBLISH_WORKFLOW_ARGS = {};
     {
