@@ -22,7 +22,7 @@
           "requirements": {
             "serverInstances": 1,
             "container": {
-              "image": "rmarques/xain-fl",
+              "image": "keykoio/xain-fl",
               "tag": "latest",
               "checksum": "sha256:cb57ecfa6ebbefd8ffc7f75c0f00e57a7fa739578a429b6f72a0df19315deadc"
             }
