@@ -37,8 +37,7 @@ public class ComputeStatus implements Callable {
          do {
             try {
                 computeStatus = command.cli.getNeverminedAPI().getAssetsAPI()
-                        .getComputeStatus(serviceAgreementId, executionId, command.cli.getMainAddress(),
-                                command.serviceEndpointsBuilder());
+                        .getComputeStatus(serviceAgreementId, executionId, command.serviceEndpointsBuilder());
             } catch (ServiceException e) {
                 logger.debug(e.getMessage());
                 command.printError("Unable to get status");

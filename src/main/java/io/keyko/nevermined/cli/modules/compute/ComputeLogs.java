@@ -33,8 +33,7 @@ public class ComputeLogs implements Callable {
         List<io.keyko.nevermined.models.gateway.ComputeLogs> computeLogs;
         try {
             computeLogs = command.cli.getNeverminedAPI().getAssetsAPI()
-                    .getComputeLogs(serviceAgreementId, executionId, command.cli.getMainAddress(),
-                            command.serviceEndpointsBuilder());
+                    .getComputeLogs(serviceAgreementId, executionId, command.serviceEndpointsBuilder());
         } catch (ServiceException e) {
             logger.debug(e.getMessage());
             command.printError("Unable to fetch logs: " + e.getMessage());
