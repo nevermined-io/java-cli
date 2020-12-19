@@ -30,6 +30,9 @@ public class NftBalance implements Callable {
 
     CommandResult balance() throws CLIException {
         try {
+            if (null == address || address.isEmpty())
+                address = command.cli.getMainConfig().getString("account.main.address");
+
             command.printHeader("Getting balance of NFT's associated to a DID:");
             command.println("DID: " + did +
                     "\nAddress: " + address);
