@@ -1,10 +1,16 @@
 package io.keyko.nevermined.cli;
 
+import com.google.common.base.Charsets;
 import io.keyko.nevermined.NeverminedCLI;
+import io.keyko.nevermined.cli.helpers.Constants;
 import io.keyko.nevermined.models.contracts.ProvenanceEntry;
 import io.keyko.nevermined.models.contracts.ProvenanceEvent;
+import io.keyko.nevermined.models.service.ProviderConfig;
+import org.apache.commons.io.FileUtils;
 import picocli.CommandLine;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import static io.keyko.nevermined.cli.helpers.CommandLineHelper.isValidSignature;
@@ -35,7 +41,7 @@ public class NeverminedBaseCommand {
             getOut().print(line);
         else
             getOut().print(
-                CommandLine.Help.Ansi.AUTO.string(line)
+                    CommandLine.Help.Ansi.AUTO.string(line)
             );
         getOut().flush();
     }
@@ -140,6 +146,33 @@ public class NeverminedBaseCommand {
 
     public PrintWriter getErr() {
         return spec.commandLine().getErr();
+    }
+
+
+    public ProviderConfig serviceEndpointsBuilder()  {
+
+        return new ProviderConfig(
+                cli.getNetworkConfig().getString("gateway.url") + Constants.ACCESS_URI,
+                cli.getNetworkConfig().getString("metadata-internal.url") + Constants.METADATA_URI,
+                cli.getNetworkConfig().getString("gateway.url"),
+                cli.getNetworkConfig().getString("metadata-internal.url") + Constants.PROVENANCE_URI,
+                cli.getNetworkConfig().getString("secretstore.url"),
+                cli.getNetworkConfig().getString("provider.address")
+        )
+                .setExecuteEndpoint(cli.getNetworkConfig().getString("gateway.url") + Constants.EXECUTE_URI);
+    }
+
+    public boolean setupNewAccountAsDefault(String address, String password, String filePath) throws IOException {
+
+        String defaultConfigContent= FileUtils.readFileToString(new File(Constants.MAIN_CONFIG_FILE), Charsets.UTF_8);
+        String newConfigContent= defaultConfigContent
+                .replaceAll("account.main.address=\"(.*?)\"", "account.main.address=\""+ address +"\"")
+                .replaceAll("account.main.password=\"(.*?)\"", "account.main.password=\""+ password +"\"")
+                .replaceAll("account.main.credentialsFile=\"(.*?)\"", "account.main.credentialsFile=\""+ filePath +"\"");
+
+        FileUtils.writeStringToFile(new File(Constants.MAIN_CONFIG_FILE), newConfigContent, Charsets.UTF_8);
+
+        return true;
     }
 
 }

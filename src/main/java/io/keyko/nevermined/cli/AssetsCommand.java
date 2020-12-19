@@ -1,8 +1,6 @@
 package io.keyko.nevermined.cli;
 
-import io.keyko.nevermined.cli.helpers.Constants;
 import io.keyko.nevermined.cli.modules.assets.*;
-import io.keyko.nevermined.models.service.ProviderConfig;
 import picocli.CommandLine;
 
 @CommandLine.Command(
@@ -29,18 +27,6 @@ public class AssetsCommand extends NeverminedBaseCommand implements Runnable {
     }
 
 
-    public ProviderConfig serviceEndpointsBuilder()  {
 
-        return new ProviderConfig(
-                cli.getNetworkConfig().getString("gateway.url") + Constants.ACCESS_URI,
-                cli.getNetworkConfig().getString("metadata-internal.url") + Constants.METADATA_URI,
-                cli.getNetworkConfig().getString("gateway.url"),
-                cli.getNetworkConfig().getString("metadata-internal.url") + Constants.PROVENANCE_URI,
-                cli.getNetworkConfig().getString("secretstore.url"),
-                cli.getNetworkConfig().getString("provider.address")
-        )
-                .setExecuteEndpoint(cli.getNetworkConfig().getString("gateway.url") + Constants.EXECUTE_URI);
-
-    }
 
 }

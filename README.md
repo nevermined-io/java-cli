@@ -114,6 +114,9 @@ ncli accounts list
 # Get account balance 
 ncli accounts balance --address 0x123
 
+# Import the credentials from a mnemonic
+ncli accounts import --mnemonic "car house green ..." --index 0 --password
+
 # Request some tokens
 ncli tokens request 
 

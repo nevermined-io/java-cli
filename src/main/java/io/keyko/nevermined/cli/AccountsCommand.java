@@ -1,6 +1,7 @@
 package io.keyko.nevermined.cli;
 
 import io.keyko.nevermined.cli.modules.accounts.AccountsBalance;
+import io.keyko.nevermined.cli.modules.accounts.AccountsImport;
 import io.keyko.nevermined.cli.modules.accounts.AccountsList;
 import io.keyko.nevermined.cli.modules.accounts.AccountsNew;
 import picocli.CommandLine;
@@ -10,7 +11,9 @@ import picocli.CommandLine;
         subcommands = {
                 AccountsNew.class,
                 AccountsList.class,
-                AccountsBalance.class},
+                AccountsBalance.class,
+                AccountsImport.class
+        },
         description = "Allowing to interact with the accounts.")
 public class AccountsCommand extends NeverminedBaseCommand implements Runnable {
 
