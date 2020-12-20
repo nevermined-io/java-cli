@@ -75,4 +75,8 @@ EXECUTION_ID=$(eid)
 ncli compute status \
     --serviceAgreementId $SERVICE_AGREEMENT_ID \
     --executionId $EXECUTION_ID \
-    --follow
+    --follow | cap
+OUTPUT_DID=$(did)
+
+# Download the outputs
+ncli assets download-my-asset $OUTPUT_DID
