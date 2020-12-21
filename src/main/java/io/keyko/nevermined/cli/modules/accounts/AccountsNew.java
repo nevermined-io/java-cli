@@ -52,7 +52,7 @@ public class AccountsNew implements Callable {
 
             if (makeMainAccount)    {
                 command.println("Over-writing config file");
-                if (!setupNewAccountAsDefault(address, password, filePath + File.separator + accountPath)) {
+                if (!command.setupNewAccountAsDefault(address, password, filePath + File.separator + accountPath)) {
                     command.getErr().println("Unable to setup account " + address + " as default in the configuration");
                     return CommandResult.errorResult();
                 }
@@ -75,22 +75,4 @@ public class AccountsNew implements Callable {
         return newAccount();
     }
 
-    private boolean setupNewAccountAsDefault(String address, String password, String filePath)  {
-
-        try {
-            String defaultConfigContent= FileUtils.readFileToString(new File(Constants.MAIN_CONFIG_FILE), Charsets.UTF_8);
-            String newConfigContent= defaultConfigContent
-                    .replaceAll("account.main.address=\"(.*?)\"", "account.main.address=\""+ address +"\"")
-                    .replaceAll("account.main.password=\"(.*?)\"", "account.main.password=\""+ password +"\"")
-                    .replaceAll("account.main.credentialsFile=\"(.*?)\"", "account.main.credentialsFile=\""+ filePath +"\"");
-
-            FileUtils.writeStringToFile(new File(Constants.MAIN_CONFIG_FILE), newConfigContent, Charsets.UTF_8);
-
-            return true;
-        } catch (IOException ex)    {
-            command.printError("Unable to setup account as default: " + ex.getMessage());
-        }
-
-        return false;
-    }
 }

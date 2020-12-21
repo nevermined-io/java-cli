@@ -7,9 +7,16 @@ import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.web3j.crypto.CipherException;
+import org.web3j.crypto.Credentials;
+import org.web3j.crypto.WalletUtils;
 import picocli.CommandLine;
 
+import java.io.File;
+import java.io.IOException;
+
 import static io.keyko.nevermined.cli.TestsBase.TESTS_CONFIG_FOLDER;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class AccountsIT {
@@ -50,7 +57,18 @@ public class AccountsIT {
         result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), argsNoAccount);
 
         assertTrue(result.isSuccess());
+    }
 
+    @Test
+    public void importAccount() throws CLIException, IOException, CipherException {
+        String[] args= {"accounts", "import",
+                "--mnemonic", "taxi music thumb unique chat sand crew more leg another off lamp"
+        };
+        CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
+        assertTrue(result.isSuccess());
+        final Credentials credentials = WalletUtils.loadCredentials("", new File(result.getMessage()));
+        assertEquals(
+                "0xe2DD09d719Da89e5a3D0F2549c7E24566e947260".toLowerCase(), credentials.getAddress().toLowerCase());
     }
 
 }

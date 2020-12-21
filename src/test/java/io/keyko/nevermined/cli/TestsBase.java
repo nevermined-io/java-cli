@@ -11,6 +11,7 @@ public abstract class TestsBase {
 
     protected static final Logger logger = LogManager.getLogger(TestsBase.class);
     protected static final Config config = ConfigFactory.load();
+    protected static final String TEST_ADDRESS = config.getString("account.main.address");
 
     public static final String TESTS_CONFIG_FOLDER = "src/test/resources/";
     public static final String TESTS_MAIN_CONFIG_FILE = "src/test/resources/application.conf";
@@ -27,7 +28,7 @@ public abstract class TestsBase {
             "--urls", "https://raw.githubusercontent.com/nevermined-io/docs/master/docs/README.md"};
 
 
-    final String[] PUBLISH_DATASET_ARGS = {"assets", "publish-dataset",
+    final static String[] PUBLISH_DATASET_ARGS = {"assets", "publish-dataset",
             "--service", "access",
             "--title", "you can access to this",
             "--dateCreated", "2012-10-10T17:00:000Z",
@@ -37,7 +38,7 @@ public abstract class TestsBase {
             "--price", "5",
             "--urls", "https://raw.githubusercontent.com/nevermined-io/docs/master/docs/README.md"};
 
-    final String[] PUBLISH_ALGORITHM_ARGS = {"assets", "publish-algorithm",
+    final static String[] PUBLISH_ALGORITHM_ARGS = {"assets", "publish-algorithm",
             "--title", "word count",
             "--dateCreated", "2012-10-10T17:00:000Z",
             "--author", "aitor",

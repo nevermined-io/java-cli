@@ -114,6 +114,9 @@ ncli accounts list
 # Get account balance 
 ncli accounts balance --address 0x123
 
+# Import the credentials from a mnemonic
+ncli accounts import --mnemonic "car house green ..." --index 0 --password
+
 # Request some tokens
 ncli tokens request 
 
@@ -136,7 +139,6 @@ ncli assets publish-algorithm --title "test" --dateCreated "2019-10-10T17:00:000
 # Publishing a new workflow
 ncli assets publish-workflow --title "test" --dateCreated "2019-10-10T17:00:000Z" --author aitor \ 
     --container python:3.8-alpine --inputs did:nv:123,did:nv:456 --transformation did:nv:abc    
-
 
 # Imports an asset from a JSON file
 ncli assets import metadata.json
@@ -168,6 +170,19 @@ ncli network describe NeverminedToken
 # Call Contract method
 ncli network exec NeverminedToken request 1
 
+## NFT Methods
+# Mint 10 NFTs associated to a DID
+ncli nft mint did:nv:aabb 10
+
+# Burn 5 NFTs associated to a DID
+ncli nft burn did:nv:aabb 5
+
+# Get NFT balance for an account and DID
+ncli nft balance did:nv:aabb 0x1234
+
+# Transfer 4 NFTs from one DID to a different address
+ncli nft transfer did:nv:aabb 0x5678 4
+
 
 ## Provenance Methods
 
@@ -197,6 +212,7 @@ ncli provenance add-delegate 0xb0b did:nv:1234
 
 # Remove an address as a delegate of a did
 ncli provenance remove-delegate  0xb0b did:nv:1234
+
 
 ## Others 
 

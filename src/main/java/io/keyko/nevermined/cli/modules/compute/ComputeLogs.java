@@ -4,6 +4,7 @@ import io.keyko.nevermined.cli.ComputeCommand;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
 import io.keyko.nevermined.exceptions.ServiceException;
+import io.keyko.nevermined.models.service.ProviderConfig;
 import picocli.CommandLine;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class ComputeLogs implements Callable {
 
         List<io.keyko.nevermined.models.gateway.ComputeLogs> computeLogs;
         try {
+
             computeLogs = command.cli.getNeverminedAPI().getAssetsAPI()
                     .getComputeLogs(serviceAgreementId, executionId, command.serviceEndpointsBuilder());
         } catch (ServiceException e) {
