@@ -61,6 +61,8 @@ public class AccountsNew implements Callable {
                         + command.getItem(Constants.MAIN_CONFIG_FILE));
             }
 
+            command.println("\nRemember to ask for some tokens and ETH for your new account:\nncli tokens request\n");
+
         } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException | CipherException | IOException e) {
             command.printError("Unable to create account: " + e.getMessage());
             logger.debug(e.getMessage());

@@ -96,11 +96,11 @@ public class SDKBase {
     }
 
     private void printNoValidAccountMessage(String errorMessage)    {
-        log.error("WARNING:\nIt looks the existing configuration doesn't include a valid account. " +
+        log.error("\nWARNING:\nIt looks the existing configuration doesn't include a valid account. " +
                 "You can create a new account running:\n" +
                 "ncli accounts new -m --password PASSWORD\n\n" +
                 "That command will create a new account to interact with the network and will " +
-                "leave everything ready in your configuration.");
+                "leave everything ready in your configuration.\n");
     }
 
     public NeverminedAPI getNeverminedAPI() throws CLIException {

@@ -1,6 +1,11 @@
 # Compiled class file
 *.class
 
+# Generated doc
+docs/*.htm*
+docs/*.1
+docs/commands/*
+
 # Log file
 *.log
 
@@ -30,5 +35,6 @@ target
 /.classpath
 
 
+site/
 keeper/src/main/java/
 keeper/src/main/resources/
