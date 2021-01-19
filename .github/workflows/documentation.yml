@@ -15,7 +15,7 @@ jobs:
           python-version: 3.x
       - name: Install packages
         run: |
-          apt-get install -y asciidoctor pandoc
+          sudo apt-get install -y asciidoctor pandoc
           pip install mkdocs-material markdown-captions mkdocs-markdownextradata-plugin
       - name: Generates documentation
         run: |
