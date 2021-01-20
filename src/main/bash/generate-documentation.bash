@@ -3,6 +3,8 @@
 ASCIIDOCTOR_FOLDER=target/generated-docs
 DOCS_FOLDER=docs/commands
 
+rm -rf $DOCS_FOLDER
+
 for docbook in $ASCIIDOCTOR_FOLDER/*.xml; do
     if [ -f "$docbook" ]; then
 
