@@ -25,3 +25,4 @@ RUN alias ncli='java $NEVERMINED_OPTS -jar cli-shaded.jar'
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 #ENTRYPOINT ["tail", "-f", "/dev/null"]
+
