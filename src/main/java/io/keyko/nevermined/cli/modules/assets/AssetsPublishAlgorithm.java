@@ -10,7 +10,6 @@ import picocli.CommandLine;
 
 import java.text.ParseException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
@@ -79,7 +78,7 @@ public class AssetsPublishAlgorithm extends AssetsBuilder implements Callable {
 
 
             command.printSuccess();
-            command.println("Algorithm published: " + command.getItem(ddo.getDid().toString()));
+            command.println("Algorithm published: " + command.getItem(ddo.getDID().did));
 
         } catch (ParseException e) {
             command.printError("Error parsing date. Expected format: " + DDO.DATE_PATTERN);

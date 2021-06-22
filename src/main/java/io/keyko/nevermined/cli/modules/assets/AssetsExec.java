@@ -54,10 +54,10 @@ public class AssetsExec implements Callable {
 
                 if (index >= 0)
                     orderResult = command.cli.getNeverminedAPI().getAssetsAPI()
-                            .orderDirect(assetDid, index);
+                            .order(assetDid, index);
                 else {
                     orderResult = command.cli.getNeverminedAPI().getAssetsAPI()
-                            .orderDirect(assetDid, Service.ServiceTypes.COMPUTE);
+                            .order(assetDid, Service.ServiceTypes.COMPUTE);
                     index = orderResult.getServiceIndex();
                 }
                 serviceAgreementId = orderResult.getServiceAgreementId();
@@ -86,7 +86,7 @@ public class AssetsExec implements Callable {
             command.printError("Unable to execute service");
             logger.debug(e.getMessage());
             return CommandResult.errorResult();
-        } catch (ServiceException | OrderException | EscrowRewardException e) {
+        } catch (ServiceException | OrderException | EscrowPaymentException e) {
             command.printError("Unable to order asset");
             logger.debug(e.getMessage());
             return CommandResult.errorResult();

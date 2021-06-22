@@ -5,7 +5,7 @@ import io.keyko.nevermined.cli.helpers.Logger;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
 import io.keyko.nevermined.exceptions.DIDFormatException;
-import io.keyko.nevermined.exceptions.EscrowRewardException;
+import io.keyko.nevermined.exceptions.EscrowPaymentException;
 import io.keyko.nevermined.exceptions.OrderException;
 import io.keyko.nevermined.exceptions.ServiceException;
 import io.keyko.nevermined.models.DID;
@@ -44,7 +44,7 @@ public class AssetsOrder implements Callable {
             DID assetDid= new DID(did);
 
             orderResult = command.cli.getNeverminedAPI().getAssetsAPI()
-                    .orderDirect(assetDid, serviceIndex);
+                    .order(assetDid, serviceIndex);
 
             if (!orderResult.isAccessGranted()) {
                 command.printError("Access not granted");
@@ -54,7 +54,7 @@ public class AssetsOrder implements Callable {
             command.println("Access Granted. ServiceAgreementId: "
                     + command.getItem(orderResult.getServiceAgreementId()));
 
-        } catch (DIDFormatException | OrderException | EscrowRewardException | ServiceException e) {
+        } catch (DIDFormatException | OrderException | EscrowPaymentException | ServiceException e) {
             command.printError("Error ordering asset");
             logger.debug(e.getMessage());
             return CommandResult.errorResult();

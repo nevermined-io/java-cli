@@ -1,10 +1,10 @@
 package io.keyko.nevermined.cli.modules.nft;
 
-import io.keyko.nevermined.cli.NftCommand;
+import io.keyko.nevermined.cli.NFTCommand;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
 import io.keyko.nevermined.exceptions.DIDFormatException;
-import io.keyko.nevermined.exceptions.NftException;
+import io.keyko.nevermined.exceptions.NFTException;
 import io.keyko.nevermined.models.DID;
 import picocli.CommandLine;
 
@@ -12,12 +12,12 @@ import java.math.BigInteger;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
-        name = "balance",
-        description = "Gets the balance of the NFT associated to a DID")
-public class NftBalance implements Callable {
+        name = "mint",
+        description = "Allows a DID owner to mint a NFT associated with the DID")
+public class NFTMint implements Callable {
 
     @CommandLine.ParentCommand
-    NftCommand command;
+    NFTCommand command;
 
     @CommandLine.Mixin
     io.keyko.nevermined.cli.helpers.Logger logger;
@@ -26,40 +26,36 @@ public class NftBalance implements Callable {
     String did;
 
     @CommandLine.Parameters(index = "1")
-    String address;
+    BigInteger amount;
 
-    CommandResult balance() throws CLIException {
+    CommandResult mint() throws CLIException {
         try {
-            if (null == address || address.isEmpty())
-                address = command.cli.getMainConfig().getString("account.main.address");
-
-            command.printHeader("Getting balance of NFT's associated to a DID:");
+            command.printHeader("Minting NFT's associated to a DID:");
             command.println("DID: " + did +
-                    "\nAddress: " + address);
+                    "\nAmount to mint: " + amount.longValue());
 
             command.cli.progressBar.start();
 
-            BigInteger balance = command.cli.getNeverminedAPI().getAssetsAPI()
-                    .balance(address, new DID(did));
+            boolean status= command.cli.getNeverminedAPI().getNFTsAPI()
+                    .mint(new DID(did), amount);
 
-            command.printSuccess();
-            return CommandResult.successResult().setMessage(balance.toString());
-
+            if (status)
+                command.printSuccess();
         } catch (DIDFormatException e) {
             command.printError("Invalid DID");
             logger.debug(e.getMessage());
             return CommandResult.errorResult();
-        } catch (NftException e) {
-            command.printError("Error getting NFT balance");
+        } catch (NFTException e) {
+            command.printError("Error minting NFT");
             logger.debug(e.getMessage());
             return CommandResult.errorResult();
         } finally {
             command.cli.progressBar.doStop();
         }
-    }
+        return CommandResult.successResult();    }
 
     @Override
     public CommandResult call() throws CLIException {
-        return balance();
+        return mint();
     }
 }

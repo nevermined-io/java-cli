@@ -24,7 +24,7 @@ import java.util.concurrent.Callable;
             ProvenanceCommand.class,
             AccountsCommand.class,
             TokensCommand.class,
-            NftCommand.class,
+            NFTCommand.class,
             UtilsCommand.class,
             NetworkCommand.class
         })

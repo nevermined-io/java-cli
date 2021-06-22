@@ -60,7 +60,7 @@ public class AssetsDownloadMyAsset implements Callable {
                 return CommandResult.errorResult();
             }
 
-        } catch (DIDFormatException | ConsumeServiceException | DDOException | EthereumException e) {
+        } catch (DIDFormatException | DDOException | EthereumException | DownloadServiceException e) {
             command.printError("Unable to get to files");
             logger.debug(e.getMessage());
             return CommandResult.errorResult();
