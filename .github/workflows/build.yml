@@ -45,4 +45,5 @@ jobs:
           rm -rf ~/.local/share/nevermined-cli
           mvn clean package
           bash src/main/bash/updateConfAddresses.sh spree src/main/resources/networks/spree.conf
+          bash src/main/bash/updateConfAddresses.sh spree src/test/resources/networks/spree.conf
           mvn verify -P integration-test
