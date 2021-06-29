@@ -54,9 +54,9 @@ public class AccountsImport implements Callable {
             if (null == filePath || filePath.isEmpty())
                 filePath= Constants.ACCOUNTS_FOLDER;
 
-            password = "";
+//            password = "";
             final Credentials credentials = AccountsHelper.loadCredentialsFromMnemonic(mnemonic, password, index);
-            final String walletFileName = WalletUtils.generateWalletFile(password, credentials.getEcKeyPair(), new File(filePath), true);
+            final String walletFileName = filePath + File.separator + WalletUtils.generateWalletFile(password, credentials.getEcKeyPair(), new File(filePath + File.separator), true);
             String address= credentials.getAddress();
 
             command.println("Account for address " + address + " created at " + walletFileName);
@@ -72,7 +72,7 @@ public class AccountsImport implements Callable {
                         + command.getItem(Constants.MAIN_CONFIG_FILE));
             }
 
-            return CommandResult.successResult().setMessage(filePath + walletFileName);
+            return CommandResult.successResult().setMessage(walletFileName);
 
         } catch (CipherException | IOException e) {
             command.printError("Unable to import account: " + e.getMessage());
