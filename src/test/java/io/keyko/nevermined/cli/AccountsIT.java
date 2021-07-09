@@ -62,7 +62,8 @@ public class AccountsIT {
     @Test
     public void importAccount() throws CLIException, IOException, CipherException {
         String[] args= {"accounts", "import",
-                "--mnemonic", "taxi music thumb unique chat sand crew more leg another off lamp"
+                "--mnemonic", "taxi music thumb unique chat sand crew more leg another off lamp",
+                "--destination", "/tmp"
         };
         CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
         assertTrue(result.isSuccess());

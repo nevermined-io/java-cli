@@ -2,6 +2,7 @@ FROM maven:3.6.3-jdk-11
 LABEL maintainer="Keyko Team <root@keyko.io>"
 
 RUN apt-get update && apt-get install -y gettext-base jq
+RUN curl -L https://dl.min.io/client/mc/release/linux-amd64/mc -o /usr/bin/mc && chmod +x /usr/bin/mc
 
 WORKDIR /
 ENV HOME /root
@@ -24,3 +25,4 @@ RUN alias ncli='java $NEVERMINED_OPTS -jar cli-shaded.jar'
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 #ENTRYPOINT ["tail", "-f", "/dev/null"]
+

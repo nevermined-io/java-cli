@@ -1,13 +1,18 @@
 package io.keyko.nevermined.cli.modules.assets;
 
+import io.keyko.nevermined.api.helper.AccountsHelper;
 import io.keyko.nevermined.cli.AssetsCommand;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
 import io.keyko.nevermined.exceptions.DDOException;
+import io.keyko.nevermined.models.AssetRewards;
 import io.keyko.nevermined.models.DDO;
 import io.keyko.nevermined.models.asset.AssetMetadata;
+import io.keyko.nevermined.models.service.ProviderConfig;
+import io.keyko.nevermined.models.service.ServiceDescriptor;
 import picocli.CommandLine;
 
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
@@ -29,8 +34,8 @@ public class AssetsPublishDataset extends AssetsBuilder implements Callable {
     // --author aitor --license CC-BY --contentType text/csv --price 10
     // --url https://google.com/robots.txt
 
-    @CommandLine.Option(names = { "-s", "--service" }, required = true, description = "access or compute", defaultValue = "access")
-    String service;
+    @CommandLine.Option(names = { "-s", "--services" }, required = true, description = "comma separated list of services to attach to the new asset", defaultValue = "access")
+    String services;
 
     @CommandLine.Option(names = { "-t", "--title" }, required = true, description = "the dataset title")
     String title;
@@ -55,6 +60,16 @@ public class AssetsPublishDataset extends AssetsBuilder implements Callable {
     @CommandLine.Option(names = { "-u", "--urls" }, required = true, description = "the asset urls. It could be a comma separated list of urls")
     String urls;
 
+    @CommandLine.Option(names = { "--cap" }, defaultValue = "0", description = "minting cap")
+    String cap;
+
+    @CommandLine.Option(names = { "--royalties" }, defaultValue = "0", description = "royalties in the secondary market (between 0 and 100)")
+    String royalties;
+
+    @CommandLine.Option(names = { "--tokenAddress" }, defaultValue = AccountsHelper.ZERO_ADDRESS, description = "contract address of the ERC20 contract to use. If not given the payment can be made in ETH")
+    String tokenAddress;
+
+
     CommandResult publish() throws CLIException {
 
         DDO ddo;
@@ -64,25 +79,30 @@ public class AssetsPublishDataset extends AssetsBuilder implements Callable {
             command.cli.progressBar.start();
 
             final List<String> listUrls = Arrays.asList(urls.split(","));
+            final List<String> listServices = Arrays.asList(services.split(","));
+            final ProviderConfig providerConfig = command.serviceEndpointsBuilder();
 
             final AssetMetadata assetMetadata = assetMetadataBuilder(title, dateCreated, author, license, price, listUrls, contentType);
 
-            if (service.toLowerCase().equals("compute"))    {
-                ddo = command.cli.getNeverminedAPI().getAssetsAPI()
-                        .createComputeService(assetMetadata, command.serviceEndpointsBuilder());
+            AssetRewards assetRewards;
+            if (new BigInteger(price).compareTo(BigInteger.ZERO) >0)
+                assetRewards = new AssetRewards(command.cli.getMainAddress(), price);
+            else
+                assetRewards = new AssetRewards();
+            assetRewards.tokenAddress = tokenAddress;
 
-            } else if (service.toLowerCase().equals("access"))    {
-                ddo = command.cli.getNeverminedAPI().getAssetsAPI()
-                        .create(assetMetadata, command.serviceEndpointsBuilder());
+            List<ServiceDescriptor> descriptors = buildServicesDescriptors(
+                    command.cli.getNetworkConfig(),
+                    providerConfig,
+                    listServices,
+                    assetRewards,
+                    command.cli.getMainAddress());
 
-            }   else {
-                command.printError("The service has to be access or compute");
-                return CommandResult.errorResult();
-            }
-
+            ddo = command.cli.getNeverminedAPI().getAssetsAPI().create(
+                    assetMetadata, descriptors, providerConfig, new BigInteger(cap), new BigInteger(royalties));
 
             command.printSuccess();
-            command.println("Dataset published: " + command.getItem(ddo.getDid().toString()));
+            command.println("Dataset published: " + command.getItem(ddo.getDID().toString()));
 
         } catch (ParseException e) {
             command.printError("Error parsing date. Expected format: " + DDO.DATE_PATTERN);

@@ -20,41 +20,31 @@ public class ContractsReflections {
 
 
     public static final HashMap<String, Class> CONTRACT_CLASSES = new HashMap<>() {{
-        put("EscrowAccessSecretStoreTemplate", EscrowAccessSecretStoreTemplate.class);
-        put("TemplateStoreLibrary", TemplateStoreLibrary.class);
-        put("AgreementTemplate", AgreementTemplate.class);
-        put("TemplateStoreManager", TemplateStoreManager.class);
-        put("NeverminedToken", NeverminedToken.class);
-        put("Dispenser", Dispenser.class);
-        put("HashLockCondition", HashLockCondition.class);
-        put("LockRewardCondition", LockRewardCondition.class);
-        put("Condition", Condition.class);
-        put("SignCondition", SignCondition.class);
-        put("ConditionStoreLibrary", ConditionStoreLibrary.class);
-        put("EscrowReward", EscrowReward.class);
-        put("AccessSecretStoreCondition", AccessSecretStoreCondition.class);
+        put("AccessCondition", AccessCondition.class);
+        put("AccessTemplate", AccessTemplate.class);
+        put("AgreementStoreManager", AgreementStoreManager.class);
+        put("ComputeExecutionCondition", ComputeExecutionCondition.class);
         put("ConditionStoreManager", ConditionStoreManager.class);
         put("DIDRegistry", DIDRegistry.class);
-        put("AgreementStoreManager", AgreementStoreManager.class);
-        put("AgreementStoreManager", AgreementStoreManager.class);
-        put("EpochLibraryProxy", EpochLibraryProxy.class);
+        put("DIDSalesTemplate", DIDSalesTemplate.class);
+        put("Dispenser", Dispenser.class);
+        put("EscrowComputeExecutionTemplate", EscrowComputeExecutionTemplate.class);
+        put("EscrowPaymentCondition", EscrowPaymentCondition.class);
+        put("HashLockCondition", HashLockCondition.class);
+        put("NeverminedToken", NeverminedToken.class);
+        put("NFTAccessCondition", NFTAccessCondition.class);
+        put("NFTAccessTemplate", NFTAccessTemplate.class);
+        put("NFTHolderCondition", NFTHolderCondition.class);
+        put("NFTLockCondition", NFTLockCondition.class);
+        put("NFTSalesTemplate", NFTSalesTemplate.class);
+        put("LockPaymentCondition", LockPaymentCondition.class);
+        put("SignCondition", SignCondition.class);
+        put("TemplateStoreManager", TemplateStoreManager.class);
+        put("ThresholdCondition", ThresholdCondition.class);
+        put("TransferDIDOwnershipCondition", TransferDIDOwnershipCondition.class);
+        put("TransferNFTCondition", TransferNFTCondition.class);
+        put("WhitelistingCondition", WhitelistingCondition.class);
     }};
-
-/*    Reflections reflections;
-
-    public ContractsReflections(String prefix) {
-        //reflections = new Reflections(prefix);
-        reflections= new Reflections(
-                new ConfigurationBuilder()
-                        .setUrls(ClasspathHelper.forPackage(prefix))
-                        .setScanners(
-                                new SubTypesScanner(),
-                                new TypeAnnotationsScanner(),
-                                new MethodParameterScanner())
-                        .filterInputsBy(
-                                new FilterBuilder().includePackage(prefix)));
-
-    }*/
 
     public static boolean contractExists(String contractName)   {
         return CONTRACT_CLASSES.containsKey(contractName);

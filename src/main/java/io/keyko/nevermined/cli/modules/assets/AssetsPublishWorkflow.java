@@ -68,7 +68,7 @@ public class AssetsPublishWorkflow extends AssetsBuilder implements Callable {
                         .create(assetMetadata, command.serviceEndpointsBuilder());
 
             command.printSuccess();
-            command.println("Workflow published: " + command.getItem(ddo.getDid().toString()));
+            command.println("Workflow published: " + command.getItem(ddo.getDID().did));
 
         } catch (ParseException e) {
             command.printError("Error parsing date. Expected format: " + DDO.DATE_PATTERN);

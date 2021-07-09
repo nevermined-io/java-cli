@@ -59,10 +59,10 @@ public class AssetsGet implements Callable {
 
                 if (serviceIndex >= 0)
                     orderResult = command.cli.getNeverminedAPI().getAssetsAPI()
-                        .orderDirect(assetDid, serviceIndex);
+                            .order(assetDid, serviceIndex);
                 else {
                     orderResult = command.cli.getNeverminedAPI().getAssetsAPI()
-                            .orderDirect(assetDid, Service.ServiceTypes.ACCESS);
+                            .order(assetDid, Service.ServiceTypes.ACCESS);
                     serviceIndex = orderResult.getServiceIndex();
                 }
                 serviceAgreementId = orderResult.getServiceAgreementId();
@@ -77,10 +77,10 @@ public class AssetsGet implements Callable {
             Boolean status = false;
             if (fileIndex >= 0)
                 status = command.cli.getNeverminedAPI().getAssetsAPI()
-                        .consume(serviceAgreementId, assetDid, serviceIndex, fileIndex, path);
+                        .download(serviceAgreementId, assetDid, serviceIndex, fileIndex, path);
             else
                 status = command.cli.getNeverminedAPI().getAssetsAPI()
-                        .consume(serviceAgreementId, assetDid, serviceIndex, path);
+                        .download(serviceAgreementId, assetDid, serviceIndex, path);
 
             if (status) {
                 command.printSuccess();
@@ -90,11 +90,11 @@ public class AssetsGet implements Callable {
                 return CommandResult.errorResult();
             }
 
-        } catch (DIDFormatException | ConsumeServiceException | DDOException | EthereumException e) {
+        } catch (DownloadServiceException | DIDFormatException | DDOException | EthereumException e) {
             command.printError("Unable to get to files");
             logger.debug(e.getMessage());
             return CommandResult.errorResult();
-        } catch (ServiceException | OrderException | EscrowRewardException e) {
+        } catch (ServiceException | OrderException | EscrowPaymentException e) {
             command.printError("Unable to order asset");
             logger.debug(e.getMessage());
             return CommandResult.errorResult();

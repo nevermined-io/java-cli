@@ -20,11 +20,11 @@ ncli accounts new -m -p secret -d /tmp
 ncli tokens request --token eth
 
 # request some tokens from faucet
-ncli tokens request --token nvm --nvm 10
+ncli tokens request --token nvm --nvm 100
 
 # Publish compute to the data asset
 ncli assets publish-dataset \
-    --service compute \
+    --services compute \
     --price 1 \
     --title "Nevermined Tools" \
     --author "Keyko" \

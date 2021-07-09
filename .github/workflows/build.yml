@@ -4,9 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v2
@@ -16,7 +14,7 @@ jobs:
         with:
           java-version: 11
 
-      - name: Install minikube v1.12.0
+      - name: Install minikube v1.22.0
         run: |
           wget https://storage.googleapis.com/minikube/releases/v1.22.0/minikube-linux-amd64
           chmod +x minikube-linux-amd64
@@ -26,14 +24,18 @@ jobs:
         run: |
           docker system prune --all --volumes -f
 
+      #- name: Setup upterm session
+      #  uses: lhotari/action-upterm@v1
+
       - name: Start Nevermined
         run: |
           docker login -u ${{ secrets.NEVERMINED_DOCKER_USERNAME }} -p ${{ secrets.NEVERMINED_DOCKER_TOKEN}}
           git clone https://github.com/keyko-io/nevermined-tools
           cd nevermined-tools
+          # git checkout jcortejoso-patch-1
           rm -rf "${HOME}/.nevermined/nevermined-contracts/artifacts"
           # start nevermined with the compute stack
-          ./start_nevermined.sh --latest --no-marketplace --local-spree-node --compute &
+          ./start_nevermined.sh --latest --no-marketplace --local-spree-node --compute --spree-embedded-contracts &
           # wait for the compute api to be online.
           # the compute api is the last service to come online
           ./scripts/wait_for_compute_api.sh
@@ -42,7 +44,8 @@ jobs:
       - name: Run tests
         run: |
           sudo chown $USER:$USER -R ~/.local
-          rm -rf ~/.local/nevermined-cli
+          rm -rf ~/.local/share/nevermined-cli
           mvn clean package
-          bash src/main/bash/updateConfAddresses.sh src/main/resources/networks/spree.conf
+          bash src/main/bash/updateConfAddresses.sh spree src/main/resources/networks/spree.conf
+          bash src/main/bash/updateConfAddresses.sh spree src/test/resources/networks/spree.conf
           mvn verify -P integration-test

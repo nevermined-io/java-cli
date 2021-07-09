@@ -18,7 +18,7 @@ public abstract class TestsBase {
     public static final String TESTS_NETWORK_FOLDER = "src/test/resources/";
 
     final static String[] PUBLISH_DATASET_PROVENANCE_ARGS = {"assets", "publish-dataset",
-            "--service", "access",
+            "--services", "access",
             "--title", "provenance dataset test",
             "--dateCreated", "2020-11-11T17:00:000Z",
             "--author", "aitor",
@@ -29,14 +29,15 @@ public abstract class TestsBase {
 
 
     final static String[] PUBLISH_DATASET_ARGS = {"assets", "publish-dataset",
-            "--service", "access",
+            "--services", "access",
             "--title", "you can access to this",
             "--dateCreated", "2012-10-10T17:00:000Z",
             "--author", "aitor",
             "--license", "CC-BY",
             "--contentType", "text/txt",
             "--price", "5",
-            "--urls", "https://raw.githubusercontent.com/nevermined-io/docs/master/docs/README.md"};
+            "--urls", "https://raw.githubusercontent.com/nevermined-io/docs/master/README.md"};
+
 
     final static String[] PUBLISH_ALGORITHM_ARGS = {"assets", "publish-algorithm",
             "--title", "word count",
@@ -63,7 +64,7 @@ public abstract class TestsBase {
     }
 
     String[] PUBLISH_COMPUTE_ARGS = {"assets", "publish-dataset",
-            "--service", "compute",
+            "--services", "compute",
             "--title", "you can compute this",
             "--dateCreated", "2012-10-10T17:00:000Z",
             "--author", "aitor",

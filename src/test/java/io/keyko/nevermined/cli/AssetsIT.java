@@ -1,11 +1,10 @@
 package io.keyko.nevermined.cli;
 
-import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.NeverminedCLI;
+import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
 import io.keyko.nevermined.exceptions.DIDFormatException;
 import io.keyko.nevermined.models.DDO;
-import io.keyko.nevermined.models.DID;
 import io.keyko.nevermined.models.asset.OrderResult;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -125,7 +124,7 @@ public class AssetsIT extends TestsBase {
 
     @Test
     public void assetsImportAndAccess() throws CLIException {
-        String[] args= {"assets", "import", "src/test/resources/metadata/example-1.json", "--service", "access"};
+        String[] args= {"assets", "import", "src/test/resources/metadata/example-1.json", "--services", "access", "--price", "1"};
         CommandResult result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), args);
         assertTrue(result.isSuccess());
         String did= ((DDO) result.getResult()).id;

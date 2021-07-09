@@ -3,19 +3,15 @@ package io.keyko.nevermined.cli;
 import io.keyko.nevermined.NeverminedCLI;
 import io.keyko.nevermined.cli.models.CommandResult;
 import io.keyko.nevermined.cli.models.exceptions.CLIException;
-import io.keyko.nevermined.exceptions.DIDFormatException;
 import io.keyko.nevermined.models.DDO;
-import io.keyko.nevermined.models.asset.OrderResult;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import picocli.CommandLine;
 
-import java.math.BigInteger;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import static org.junit.Assert.*;
-
-public class NftIT extends TestsBase {
+public class NFTIT extends TestsBase {
 
     private static String did;
 
@@ -53,7 +49,7 @@ public class NftIT extends TestsBase {
         String[] argsBalance= {"nft", "balance", did, TEST_ADDRESS};
         result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), argsBalance);
         assertTrue(result.isSuccess());
-        assertEquals("6", result.getMessage());
+        assertEquals("5", result.getMessage());
 
         String[] argsBalanceSomeoneElse= {"nft", "balance", did, someoneElse};
         result = (CommandResult) CommandLine.call(new NeverminedCLI(TESTS_CONFIG_FOLDER), argsBalanceSomeoneElse);

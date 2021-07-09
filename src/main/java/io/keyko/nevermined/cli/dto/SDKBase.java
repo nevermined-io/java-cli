@@ -16,9 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Properties;
 
 public class SDKBase {
@@ -61,6 +59,7 @@ public class SDKBase {
             String networkFile= pathNetworkFolder + File.separator + networkName + ".conf";
             if (!fileExists(networkFile))    {
                 copyResourceFileToPath("src/main/resources/networks/" + networkName + ".conf", networkFile);
+                configureContractAddressesFromArtifacts(networkName, networkFile);
             }
 
             if (!fileExists(networkFile))    {
@@ -68,7 +67,6 @@ public class SDKBase {
                 log.error("Please, copy the config file to the " + networkFile + " path");
                 throw new CLIException("Unable load the contract config file: " + networkFile);
             }
-
             networkConfig= ConfigFactory.parseFile(new File(networkFile));
 
         } catch (Exception e) {
@@ -189,6 +187,40 @@ public class SDKBase {
             return true;
         } catch (IOException e) {
             log.error("Unable to copy " + inputPath + " to " + outputPath);
+            log.error(e.getMessage());
+        }
+        return false;
+    }
+
+    public static boolean configureContractAddressesFromArtifacts(String networkName, String confFile)  {
+        try {
+            log.info("Loading contract addresses of " + networkName + " network into " + confFile);
+            ProcessBuilder processBuilder = new ProcessBuilder();
+            processBuilder.command(
+                    "bash",
+                    "src/main/bash/updateConfAddresses.sh",
+                    networkName,
+                    confFile);
+            Process process = processBuilder.start();
+
+            BufferedReader reader =
+                    new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                log.info(line);
+            }
+
+            int exitVal = process.waitFor();
+            if (exitVal == 0) {
+                log.info("Network addresses copied to config file");
+                return true;
+            } else {
+                log.error("Unable to generate configuration");
+            }
+            return false;
+        } catch (IOException | InterruptedException e) {
+            log.error("Unable to parse network config");
             log.error(e.getMessage());
         }
         return false;
