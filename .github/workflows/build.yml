@@ -31,6 +31,7 @@ jobs:
           docker login -u ${{ secrets.NEVERMINED_DOCKER_USERNAME }} -p ${{ secrets.NEVERMINED_DOCKER_TOKEN}}
           git clone https://github.com/keyko-io/nevermined-tools
           cd nevermined-tools
+          git checkout jcortejoso-patch-1
           rm -rf "${HOME}/.nevermined/nevermined-contracts/artifacts"
           # start nevermined with the compute stack
           ./start_nevermined.sh --latest --no-marketplace --local-spree-node --compute --spree-embedded-contracts &
