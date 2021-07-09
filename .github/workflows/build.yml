@@ -4,9 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v2
@@ -25,6 +23,9 @@ jobs:
       - name: Reclaim some disk space
         run: |
           docker system prune --all --volumes -f
+
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
 
       - name: Start Nevermined
         run: |
